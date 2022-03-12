@@ -176,22 +176,17 @@ flora_palette <- c(
 
 p <- treemap_df %>% 
   filter(gattung != "Unknown") %>% 
+  mutate(color = case_when(
+    gattung == "Other" ~ "grey43",
+    as.character(gattung_art) == str_c(as.character(gattung), " ") ~ "#c2f0cf",
+    TRUE ~ "grey89")) %>% 
   ggplot(aes(area = n, fill = gattung, subgroup = gattung)) +
   geom_treemap(color = "white") +
-  geom_treemap_text(aes(label = gattung_art, 
-                        color = gattung != "Other"
-                        # color = case_when(
-                        #   gattung != "Other" ~ "Other",
-                        #   as.character(gattung_art) == str_c(as.character(gattung), " ") ~ "foo",
-                        #   TRUE ~ "bar")
-  ), 
+  geom_treemap_text(aes(label = gattung_art, color = color), 
                     place = "center",
                     reflow = TRUE, grow = TRUE, family = "Bodoni Moda") + # 
   geom_treemap_subgroup_border(color = "white") +
-  # geom_treemap_subgroup_text(alpha = 0.2) +
-  # colorspace::scale_fill_discrete_sequential("Greens") +
-  # scale_color_manual(values = c("Other" = "grey43", "foo" = "red", "bar" = "grey89")) +
-  scale_color_manual(values = c("FALSE" = "grey43", "TRUE" = "grey89")) +
+  scale_color_identity() +
   scale_fill_manual(values = rep(rev(flora_palette), 2)) +
   guides(
     # fill = guide_legend("Species", nrow = 2)
