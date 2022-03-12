@@ -1,0 +1,393 @@
+Food and soft drinks
+Food products
+Bread and cereal products
+Rice, including rice preparations
+Flour and other cereal products
+Bread and rolls
+Other bakery products
+Pizza, quiches and the like
+Pasta
+Breakfast preparations
+Other cereal products
+Meat and meat products
+Beef and veal
+Pork
+Lamb and sheep meat, goat meat
+Poultry meat
+Other meat products
+Offal and other slaughter by-products
+Meat and sausage products
+Other meat, processed and prepared
+Fish, fish products and seafood
+Fish and fish fillets, fresh or chilled
+Fish and fish fillets, frozen
+Seafood, fresh or chilled
+Seafood, frozen
+Fish, dried, smoked or salted
+Canned and other preparations of fish
+Dairy products and eggs
+Whole milk
+Semi-skimmed milk
+Preserved milk
+Yogurt
+Cheese and curd
+Other dairy products
+Eggs
+Edible fats and oils
+Butter
+Margarine and other vegetable fats
+Olive oil
+Other edible oils of vegetable origin
+Other edible fats of animal origin
+Fruit
+Fruit, fresh or chilled
+Fruit, frozen
+Dried fruit, nuts and similar products
+Canned fruit
+Vegetables
+Vegetables (excluding potatoes), fresh or chilled
+Vegetables (excluding potatoes), frozen
+Dried vegetables and preserved vegetables
+Potatoes, fresh, chilled and processed
+Chips and sticks
+Sugar, jam, honey and other sweets
+Sugar
+Jam, marmalade, honey and similar products
+Chocolates
+Confectionery
+Ice cream
+Sweeteners and other sweetening agents
+Foodstuffs, n.e.c.
+Sauces, seasonings and condiments
+Table salt, culinary herbs and spices
+Infant and toddler food
+Prepared meals, n.e.c.
+Soups and other food preparations
+Non-alcoholic beverages
+Coffee, tea and cocoa
+Coffee and similar products
+Tea and tea-like products
+Cocoa and cocoa powder
+Mineral water, soft drinks and juices
+Mineral water
+Soft drinks (excluding mineral water)
+Fruit and vegetable juices
+Alcoholic beverages and tobacco products
+Alcoholic beverages
+Spirits
+Liqueurs and other spirituous beverages
+Soft mixed drinks, under 6% alcohol content
+Wine
+Grape wine
+Wine from other fruits
+Wine, over 15% alcohol content
+Other beverages containing wine
+Beer
+Bottom fermented beer
+Wheat beer, altbier and other beer
+Non-alcoholic beer, malt beer and the like
+Mixed beer drinks
+Tobacco products
+Cigarettes
+Cigars and cigarillos
+Tobacco
+Clothing and footwear
+Clothing
+Clothing fabrics
+Clothing items
+Clothing for men
+Clothing for women
+Clothing for children
+Other clothing articles and accessories
+Other clothing articles
+Clothing accessories
+Dry cleaning and other services for clothing
+Dry cleaning, washing and ironing of garments
+Alteration and repair of clothing
+Shoes
+Shoes and shoe accessories
+Shoes for men
+Shoes for women
+Shoes for children
+Repair of shoes
+Housing, water, electricity, gas and other fuels
+Apartment rent, incl. rental value of owner-occupied apartment
+Net rent
+Other rents
+Garage and other rents
+Maintenance and repair of dwelling/apartment
+Products for maintenance and repair of dwelling
+Products for maintenance and repair of dwelling
+Services for maintenance and repair of the dwelling
+Sanitary services
+Electrician services
+Heating and air conditioning services
+services of painters and decorators
+Services of carpenters
+Smaller services of other craftsmen
+Water supply and other services for the dwelling
+Water supply
+Garbage collection
+Sewage disposal
+Other services for the dwelling, n.e.c.
+Property tax, gardening and similar services
+Chimney, sidewalk and street cleaning services
+Electricity, gas and other fuels
+Electricity
+Gas, including apportionment
+Natural gas, including apportionment
+Liquid gas
+Heating oil, including apportionment
+Solid fuels
+Coal
+Other solid fuels
+District heating and similar
+District heating and similar
+Furniture, lighting, appliances and other household accessories
+Furniture, lighting, carpets and other floor coverings
+Furniture and lighting fixtures
+Home furniture
+Garden and camping furniture
+Lighting
+Other furniture and furnishings
+Carpets and other elastic floor coverings
+Carpets
+Other elastic floor coverings
+Laying of elastic floor coverings
+Repair of furniture, lighting fixtures, resilient floor coverings Floor coverings
+Home textiles
+Curtains, drapery, furniture and similar fabrics Fabrics
+bedding and bed linen
+Table and bathroom linen
+Other home textiles
+Household appliances
+Electrical and other major household appliances
+Refrigerators and freezers
+Washing machines, dishwashers, etc.
+Cooking appliances
+Space heaters and air conditioners
+Vacuum cleaners and other cleaning equipment
+Other large household appliances, n.e.c.
+Small electrical household appliances
+Food processing machinery
+Coffee, tea and similar small appliances
+Electric irons
+Electric toasters and grills
+Other small electrical appliances
+Repair of household appliances
+Glassware, tableware and other consumer goods
+Tableware, glassware and crystalware
+Cutlery, cutlery and silverware
+Kitchen and household appliances, non-electric
+Tools and equipment for house and garden
+Motor-driven large tools and the like for home and garden
+Motor-driven large tools and equipment
+Hire of motor-driven large tools and equipment
+Garden tools, hand tools and similar consumer goods
+Non-electric small tools
+Other consumer goods for household management
+Goods and services for household management
+Consumer goods for household management
+Cleaning and maintenance products
+Other consumer goods
+Services of domestic staff and other domestic services
+Services of domestic staff
+Cleaning services
+Other domestic services
+Health
+Medical products, appliances and equipment
+Pharmaceutical products
+Other medical products
+Pregnancy tests, condoms and the like
+Other medical products n.e.c.
+Therapeutic appliances and equipment
+Eyeglasses and contact lenses
+Hearing aids
+Rep. of therapeutic appliances and equipment
+Other therapeutic appliances and equipment
+Outpatient health services
+Medical services
+General medical services
+Medical services of specialized medicine
+Dental services
+Services of non-physician health professionals
+Services of medical laboratories and X-ray centers
+Med. Physiotherapy, ambulance services, etc.
+Other services of non-physician health professionals
+Inpatient health services
+Transport
+Purchase of vehicles
+Passenger cars (excluding mobile homes)
+New passenger cars
+Used passenger cars
+Motorcycles
+Bicycles
+Goods and services for vehicles
+Spare parts and accessories for vehicles
+Tires
+Other parts and spare parts for vehicles
+Accessories for vehicles
+Fuels and lubricants for vehicles
+Diesel fuel
+Gasoline
+Other fuels
+Lubricants and the like
+Maintenance and repair of vehicles
+Other services for vehicles
+Rent of garages and parking places for vehicles
+Road tolls and parking fees
+Driving school, vehicle inspection, vehicle tax, etc.
+Passenger and freight transport
+Passenger transport by rail
+Passenger transport by railroad
+Passenger transport by road
+Passenger transportation by buses and coaches
+Passenger transportation by cab and carpools
+Passenger transportation by air
+Domestic flights
+International flights
+Passenger transportation by ship
+Passenger transportation by ocean-going and coastal vessels
+Passenger transportation by inland vessels
+Combined passenger transport services
+Expenditure on other transport services
+Removals and storage services
+Postal and telecommunication services
+Mail and parcel services
+Mail services
+Parcel services
+Telephones and other communication equipment
+Landline telephones
+Cell phones without contract and without SIM card
+Telecommunication services
+Wired telecommunication services
+Wireless telecommunication services
+Access to online services and the Internet
+Combined telecommunication services
+Leisure, entertainment and culture
+Audio, photographic, IT equipment and accessories
+Radio, television and similar equipment
+Receiving, reproducing and other equipment for sound
+Receiving, reproducing and other equipment for sound and image
+Portable image, sound players and television sets
+Other receiving, recording and reproducing equipment
+Photographic and cinematographic equipment, optical equipment and accessories
+Cameras
+Accessories and parts for photographic and cinematographic equipment
+Optical equipment
+Information processing equipment
+Personal computers
+Accessories for information processing equipment
+Computer software
+Sound, image and other data carriers
+Audio, video and other data carriers, recorded
+CD's, DVD's and similar, unrecorded
+Other recording media
+Repair of audio, photographic, IT equipment and accessories
+Other consumer durables for leisure and culture
+Durable consumer goods for outdoor recreation
+Motor homes, camping trailers and other trailers
+Boats, outboard motors and equipment for boats
+Equipment for recreational horses and ponies
+Other consumer durables for outdoor recreation
+Durable consumer goods for indoor recreation
+Musical instruments
+Rep. of durable goods for leisure and culture
+Other goods for leisure and garden, pets
+Games, toys and hobby goods
+Toys and hobby goods
+Other toys and festive goods
+Goods for sports, camping and recreation
+Sports goods
+Equipment for camping and outdoor recreation
+Garden products, plants and flowers
+Garden products
+Plants and flowers
+Pets, including goods and consumables
+Pets
+Goods for pets
+Veterinary and other services for pets
+Recreational and cultural services
+Sports, recreation and leisure services
+Attendance at sports and recreational events, etc.
+Recreational and sporting services
+Cultural services
+Visits to cinemas, theaters, concerts, circuses, etc.
+Visits to museums, libraries, gardens, etc.
+Radio and television licence fees
+Rent of cultural goods and accessories
+Photographic services
+Games of chance
+Printed matter, stationery and drawing materials
+Books
+Entertainment literature
+School and textbooks
+Other books
+E-book downloads
+Newspapers and magazines
+Daily and weekly newspapers
+Magazines and periodicals
+Other printed matter
+Stationery and drawing materials
+Paper products
+Other stationery and drawing materials
+Package tours
+Package tours within the country
+Package tours abroad
+Education
+Elementary and primary education services
+Elementary education services
+Primary education services
+Secondary education services
+Tertiary education services
+Educational services of non-classified institutions
+Restaurant and accommodation services
+Hospitality services
+Restaurants, cafes, street vendors and the like
+Food and beverages in restaurant, cafe, bar and the like
+Food and beverages in fast food restaurants and the like
+Catering services of canteens and cafeterias
+Overnight stays
+Overnight stays in hotels, inns and the like
+Overnight stays in vacation villages, camping etc.
+Overnight stays in other accommodation
+Other goods and services
+Personal care
+Hairdressing and other personal care services
+Hairdressing services for men and children
+Hairdressing services for ladies
+Other personal care services
+Electrical appliances for personal hygiene
+Other articles and products for personal care
+Non-electrical consumer goods for personal care
+Consumer goods for personal care
+Personal effects, n.e.c.
+Jewelry and watches
+Jewelry
+Bracelets and other watches
+Repair of jewelry and watches
+Other personal effects
+Travel items and other bags
+Equipment for babies
+Other personal effects, n.e.c.
+Services of social institutions
+Service homes for children, after-school care
+Service homes for the elderly, etc. Facilities
+Home care services Care for the elderly and disabled
+Insurance services
+Insurance services for the home
+Insurance services for health
+Private accident and health insurance services
+Insurance services for transport
+Insurance services for private transport
+Insurance service for travel and luggage
+Other insurance services
+Financial services n.e.c.
+Other financial services n.e.c.
+Bank and savings bank fees and similar
+Fees for investment advice, tax advice, etc.
+Other services, n.e.c.
+Administrative fees
+Legal services, lawyer's and notary's fees
+Funeral services
+Other fees and services
