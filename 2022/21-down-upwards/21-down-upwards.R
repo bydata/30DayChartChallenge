@@ -1,4 +1,5 @@
 library(tidyverse)
+library(lubridate)
 library(ggtext)
 library(here)
 
@@ -16,15 +17,23 @@ df_raw <- read_csv2(here(base_path, files),
 
 glimpse(df_raw)
 
+
+# mapping of month names DE <-> EN
 months <- 1:12
 months_de <- locale(date_names = "de")$date_names$mon
 names(months) <- months_de
+
+# Check product codes
+unique(df$product_code)
+
 
 
 df <- df_raw %>% 
   select(year = Zeit, month = `2_Auspraegung_Label`, product_code = `3_Auspraegung_Code`, 
          product_label = `3_Auspraegung_Label`, index = `PREIS1__Verbraucherpreisindex__2015=100`) %>% 
-  mutate(month = months[month]) %>% 
+  mutate(month = months[month],
+         year_month = ymd(paste(year, str_pad(month, 2, pad = "0"), "01", sep = "-")),
+         category_level = str_length(str_remove(product_code, "CC13-")) - 1) %>% 
   filter(!is.na(index))
 
 glimpse(df)
@@ -44,15 +53,3 @@ length(product_names_en) == length(product_names_de)
 # Translate product names in dataframe
 df <- df %>% 
   mutate(product_label_en = product_names_en[product_label])
-
-
-## Which products have become most expensive since 2015?
-df %>% 
-  filter(year == 2022, month == 2) %>% 
-  arrange(-index)
-
-
-
-
-
-
