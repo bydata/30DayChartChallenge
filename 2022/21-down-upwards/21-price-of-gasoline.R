@@ -65,7 +65,7 @@ df_annual %>%
            hjust = 0, vjust = 0, label.size = 0, fill = NA, family = "Gill Sans", color = text_color) +
   annotate("segment", x = as_date("2005-01-01"), xend = as_date("2005-01-01"),
            y = 103, yend = 120, size = 0.2, color = text_color) +
-  scale_y_continuous(breaks = seq(100, 180, 20)) +
+  scale_y_continuous(breaks = seq(100, 180, 20), position = "right") +
   labs(
     title = toupper("Price of Gasoline."),
     # subtitle = subtitle,
