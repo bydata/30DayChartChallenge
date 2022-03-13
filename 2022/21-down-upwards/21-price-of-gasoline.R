@@ -50,21 +50,14 @@ text_color <- colorspace::lighten("#3B3330", 0.3)
 
 df_annual %>% 
   ggplot(aes(date, index)) +
-  # ggfx::with_outer_glow(
-  #   geom_line(size = 1.2, col = "#4F433E"),
-  #   color = "#504541", sigma = 5
-  #   ) +
   geom_line(size = 1.2, col = "#82746C") +
-  # ggfx::with_halftone_dither(
-  #   geom_line(size = 3, col = bp_color),
-  #   black = FALSE, angled = FALSE
-  # ) +
   annotate("richtext", label = subtitle, x = start_date, y = 190,
            hjust = 0, vjust = 1, label.size = 0, fill = "white", family = "Gill Sans", color = text_color) +
   annotate("richtext", label = "Release of Silent Alarm (2005)", x = as_date("2005-01-01"), y = 100,
            hjust = 0, vjust = 0, label.size = 0, fill = NA, family = "Gill Sans", color = text_color) +
   annotate("segment", x = as_date("2005-01-01"), xend = as_date("2005-01-01"),
            y = 103, yend = 120, size = 0.2, color = text_color) +
+  scale_x_date(expand = c(0, 0)) +
   scale_y_continuous(breaks = seq(100, 180, 20), position = "right") +
   labs(
     title = toupper("Price of Gasoline."),
