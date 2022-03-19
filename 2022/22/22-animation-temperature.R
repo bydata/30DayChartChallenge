@@ -6,80 +6,83 @@ library(gganimate)
 
 base_path <- here("2022", "22")
 
-#' Download historical weather data from 
-#' https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/historical/
-
-df_raw <- read_csv2(here(base_path, "produkt_klima_tag_19570701_20201231_02667.txt"))
-colnames(df_raw) <- tolower(colnames(df_raw))
-
-precipitation <- df_raw %>% 
-  transmute(
-    date = lubridate::as_date(as.character(mess_datum)),
-    rsk = as.numeric(rsk),
-    rsk = na_if(rsk, -999)
-  ) %>% 
-  na.omit() 
-
-temperature <- df_raw %>% 
-  transmute(
-    date = lubridate::as_date(as.character(mess_datum)),
-    # Tagesmaximum der Lufttemperatur in 2m Höhe	
-    txk = as.numeric(txk),
-    txk = na_if(txk, -999),
-    # Tagesmittelwert der Lufttemperatur in 2m Höhe
-    tmk = as.numeric(txk),
-    tmk = na_if(tmk, -999)
-  ) %>% 
-  na.omit() 
+#' Download historical weather data (DWD) 
+data_urls <- paste0(
+  "https://opendata.dwd.de/climate_environment/CDC/regional_averages_DE/monthly/air_temperature_mean/regional_averages_tm_",
+  str_pad(1:12, 2, "left", "0"),
+  ".txt")
+df_raw <- read_delim(data_urls, delim = ";", trim_ws = TRUE,
+                     locale = locale(decimal_mark = "."), skip = 1, id = NULL)
 
 
-precipitation %>% 
-  ggplot(aes(rsk)) +
-  geom_histogram()
-
-precipitation %>% 
-  filter(rsk > 0) %>% 
-  ggplot(aes(rsk)) +
-  geom_histogram()
-
-precipitation %>% 
-  mutate(day_of_year = yday(date)) %>% 
-  ggplot(aes(day_of_year, rsk)) +
-  geom_point(alpha = 0.5, size = 0.4)
-
-
-temperature_plot_df <- temperature %>% 
-  mutate(day_of_year = yday(date),
-         year = year(date)) %>% 
-  filter(year > min(year)) %>% 
+df_long <- df_raw %>% 
+  mutate(Monat = as.numeric(str_remove(Monat, "^0"))) %>% 
+  select(-`...20`) %>% 
+  rename(year = 1, month = Monat) %>% 
+  pivot_longer(cols = -c(year, month), names_to = "territory", values_to = "avg_temp") %>% 
+  filter(territory == "Deutschland") %>% 
+  # calculate avg. temperature for each year
   group_by(year) %>% 
-  mutate(tmk_year = mean(cur_data()$tmk)) %>% 
-  ungroup()
+  mutate(annual_avg_temp = mean(cur_data()$avg_temp)) %>% 
+  ungroup() %>% 
+  arrange(year, month) %>% 
+  mutate(month_name = fct_inorder(month.name[month]))
 
-# average temperature for 1961-1990
-avg_tmp_30yrs <- mean(temperature_plot_df$tmk[temperature_plot_df$year >= 1961 & temperature_plot_df$year <= 1990])
+first_year <- min(df_long$year)
+last_year <- max(df_long$year)
 
-temperature_plot_df %>% 
-  ggplot(aes(day_of_year, tmk, group = year, col = tmk_year)) +
+# Baseline temperature (1951-1980)
+baseline_temp <- df_long %>% 
+  filter(year >= 1951, year <= 1980) %>% 
+  summarize(baseline_temp = mean(avg_temp)) %>% 
+  pull(baseline_temp)
+
+
+p <- df_long %>% 
+  ggplot(aes(month_name, avg_temp, group = year, col = annual_avg_temp)) +
   geom_line(size = 0.6, alpha = 1) +
-  # geom_smooth(se = FALSE, span = 0.2,
-  #             size = 0.4, alpha = 0.8) +
-  # geom_text(data = . %>% filter(day_of_year == 1),
-  #           aes(y = 40, label = year),
-  #           col = "grey50", size = 12, family = "Fira Sans", fontface = "bold",
-  #           hjust = 0) + 
-  scale_color_gradient2(low = "blue", mid = "grey80", high = "red", midpoint = avg_tmp_30yrs) +
+  geom_text(data = . %>% filter(month == 1), 
+            aes(label = year),
+            hjust = 1, family = "Fira Sans", fontface = "bold",
+            nudge_y = 2) +
+  # scale_x_discrete(expand = c(0, 0)) +
+  scale_color_gradient2(low = "blue", mid = "grey95", high = "red", midpoint = baseline_temp) +
+  coord_polar() +
+  guides(col = guide_colorbar(title.position = "top")) +
   labs(
-    subtitle = "{closest_state}"
+    title = glue::glue("Average monthly temperature in Germany {first_year} to {last_year}"),
+    caption = "Baseline: 1951-1980. **Source:** DWD CDC | **Visualization:** Ansgar Wolsing",
+    y = "Avg. monthly temperature",
+    col = "Avg. annual temperature"
   ) +
-  theme_minimal() +
+  theme_minimal(base_family = "Fira Sans") +
   theme(
     plot.background = element_rect(color = NA, fill = "grey1"),
     panel.grid = element_blank(),
     panel.grid.major.y = element_line(color = "grey30", size = 0.2),
-    text = element_text(color = "grey93"),
+    text = element_text(color = "grey89"),
     plot.subtitle = element_text(size = 20),
-    legend.text = element_text(color = "grey87")
-  ) +
-  transition_states(year) +
-  shadow_mark(size = size / 5, alpha = 0.75 * alpha)
+    legend.text = element_text(color = "grey87"),
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(hjust = 0.7, color = "grey60"),
+    axis.text = element_text(color = "grey40"),
+    plot.title = element_markdown(color = "grey99"),
+    plot.title.position = "plot",
+    plot.caption = element_markdown(hjust = 0),
+    legend.position = "bottom",
+    legend.key.height = unit(2, "mm"),
+    legend.key.width = unit(8, "mm"),
+    legend.title.align = 0.5,
+    axis.ticks.y = element_line(size = 0.1),
+  ) 
+
+p_anim <- p +
+  transition_time(year) +
+  shadow_mark(size = size / 5, alpha = 0.75 * alpha, exclude_layer = 2) # exclude geom_text
+
+animate(p_anim, res = 200, width = 1200, height = 1200,
+        # duration = (last_year - first_year) * 10, 
+        fps = 6,
+        end_pause = 20)
+anim_save(here(base_path, "22-temp.gif"))
+
