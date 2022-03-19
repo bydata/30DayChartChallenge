@@ -87,7 +87,7 @@ covid_df_long %>%
   # country annotation
   geom_richtext(data = country_annotations,
             aes(x = as_date("2022-02-01"), y = 107.5, label = label),
-            size = 4, label.size = 0, fill = NA, family = "PT Sans Caption",
+            size = 4, label.size = 0, fill = NA, family = "Outfit",
             color = "#68625D", hjust = 0, vjust = 1, lineheight = 1
             ) +
   scale_x_date(breaks = as_date(c("2022-02-01", "2022-03-01")), 
@@ -106,27 +106,28 @@ covid_df_long %>%
     subtitle = plot_titles$subtitle,
     caption = plot_titles$caption
   ) +
-  theme_minimal(base_family = "PT Sans Caption", base_size = 16) + # PT Sans, Yantramanav Medium
+  theme_minimal(base_family = "Outfit Medium", base_size = 16) + 
   theme(
     plot.background = element_rect(color = NA, fill = "#FEF1E7"),
     panel.grid = element_blank(),
     panel.grid.major.y = element_line(color = "#E3DACE", size = 0.3),
     text = element_text(color = "#68625D", lineheight = 1.3),
-    plot.title = element_textbox(color = "black", size = 18, width = 1),
+    plot.title = element_textbox(color = "black", family = "Outfit Medium", 
+                                 face = "plain", size = 18, width = 1),
     plot.title.position = "plot",
     plot.subtitle = element_markdown(),
     plot.caption = element_markdown(
       hjust = 0, size = 10, color = "#5E5751"),
     axis.title = element_blank(),
     axis.text.x = element_text(hjust = 0, color = "#68625D"),
-    axis.text.y.left = element_markdown(face = "bold"),
+    axis.text.y.left = element_markdown(family = "Outfit SemiBold"),
     axis.ticks.x = element_line(size = 0.3),
     axis.ticks.length.x = unit(1.8, "mm"),                     # set length of axis ticks
     plot.margin = margin(t = 12, b = 2, l = 1, r = 1),
     strip.text = element_blank()                               # remove default facet titles
   )
 
-# Add black thin rectangle in the top left corner
+ # Add black thin rectangle in the top left corner
 grid.rect(
   x = 0, y = 1, width = 0.165, height = 0.018,
   gp = gpar(fill = "black")
