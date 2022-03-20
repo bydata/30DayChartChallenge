@@ -20,7 +20,7 @@ df <- map_df(seq_along(trends), ~pluck(trends, .x , "interest_over_time")) %>%
 df %>%
   filter(geo == "world") %>% 
   ggplot(aes(date, hits)) +
-  geom_line(size = 1.2, color = "grey12") +
+  geom_line(size = 1.5, color = "grey12") +
   annotate("tile",
            x = seq(as_datetime("2021-10-08"), as_datetime("2022-01-05"), "16 days"),
            y = 8, width = 14.5 * 86400, height = 10,
@@ -29,8 +29,8 @@ df %>%
   annotate("richtext",
            label = c("W", "O", "R", "D", "L", "E"),
            x = seq(as_datetime("2021-10-08"), as_datetime("2022-01-05"), "16 days"),
-           y = 8,
-           hjust = 0.5, vjust = 0.5, size = 6, family = "Helvetica Neue",
+           y = 7.5,
+           hjust = 0.5, vjust = 0.5, size = 7, family = "Helvetica Neue",
            fontface = "bold", color = "white",
            fill = NA, label.size = 0,
            # fill = c("#797C7E", "#79A86B", "#797C7E", "#C6B566", "#79A86B", "#797C7E"),
@@ -41,11 +41,15 @@ df %>%
             x = as_datetime("2021-10-01"),  y = 95, 
            family = "Helvetica Neue", fontface = "bold", size = 8, hjust = 0
            ) +
+  annotate("text", x =  as_datetime("2021-10-01"), y = 80, 
+  label = str_wrap("The plot shows normalized Google Search hits for \"Wordle\"
+  in web searches worldwide from October 2021 to March 2022. A value of 100 denotes 
+  maximum search interest.", 
+                   width = 58),
+  family = "Helvetica Neue", size = 3, hjust = 0, color = "grey30") +
   scale_y_continuous(position = "right") +
   labs(
-    caption = "The plot shows normalized Google Search hits for \"Wordle\" in
-    web searches worldwide from October 2021 to March 2022. A value of 100 denotes maximum search interest.<br><br>
-    **Source:** Google Trends | **Visualization:** Ansgar Wolsing
+    caption = "**Source:** Google Trends | **Visualization:** Ansgar Wolsing
     ",
     x = NULL, y = "Normalized search interest"
   ) +
