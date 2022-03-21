@@ -53,9 +53,11 @@ color_text_deaths <- "#BE4045"
 plot_titles <- list(
   title = "Cases are translating into deaths at much higher rates in
   Hong Kong than in New Zealand, where elderly vaccination rates are much higher  ",
-  subtitle = glue::glue("Daily <b style='color:{color_text_cases}'>cases</b> per 100,000 people,
-  and daily <b style='color:{color_text_deaths}'>deaths</b> per 2 million
-  "),
+  subtitle = glue::glue("Daily
+  <b style='color:{color_text_cases}; font-family: \"Outfit Bold\"'>cases</b>
+  per 100,000 people, and daily
+  <b style='color:{color_text_deaths}; font-family: \"Outfit Bold\"'>deaths</b>
+  per 2 million"),
   caption = "Cases shifted forward (14 days) to account for lag between infection and death.<br>
   Original plot by John Burn-Murdoch (Financial Times).
   Data: Johns Hopkins University, Our World in Data")
@@ -115,8 +117,8 @@ covid_df_long %>%
     plot.title = element_textbox(color = "black", family = "Outfit Medium", 
                                  face = "plain", size = 18, width = 1),
     plot.title.position = "plot",
-    plot.subtitle = element_markdown(),
-    plot.caption = element_markdown(
+    plot.subtitle = element_markdown(family = "Outfit"),
+    plot.caption = element_markdown( family = "Outfit",
       hjust = 0, size = 10, color = "#5E5751"),
     axis.title = element_blank(),
     axis.text.x = element_text(hjust = 0, color = "#68625D"),
