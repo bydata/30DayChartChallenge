@@ -27,7 +27,8 @@ highest_interest <- highest_interest %>%
   add_row(date = as_date("2008-11-01"), hits = NA) %>% 
   add_row(date = as_date("2011-03-01"), hits = NA) %>% 
   add_row(date = as_date("2011-04-01"), hits = NA) %>% 
-  add_row(date = as_date("2011-05-01"), hits = NA)
+  add_row(date = as_date("2011-05-01"), hits = NA) %>% 
+  add_row(date = as_date("2013-09-01"), hits = NA)
 
 
 # retrieve the Google Trends data for the months with the highest search interest
@@ -45,7 +46,7 @@ trends_monthly_results <- transpose(trends_monthly) %>%
 
 
 # Custom text annotation function
-annotate_text <- function(x, y, label, hjust = 1, nudge_y = 4, ...) {
+annotate_text <- function(x, y, label, hjust = 1, nudge_y = 5, ...) {
   annotate("richtext", x = x, y = y + nudge_y,
            label = label,  hjust = hjust, size = 3, fill = NA, label.size = 0, 
            col = "grey90", family = "Fira Sans", ...)
@@ -77,7 +78,7 @@ df %>%
   ggplot(aes(date, hits)) +
   
   # area to highlight Corona pandemic
-  annotate("rect", xmin = as_datetime("2020-02-01"), xmax = as_datetime("2022-03-31"),
+  annotate("rect", xmin = as_datetime("2020-01-01"), xmax = as_datetime("2022-03-31"),
            ymin = 0, ymax = 102, fill = alpha("white", 0.2)
   ) +
   
@@ -99,9 +100,12 @@ df %>%
   scale_y_continuous(position = "right") +
   
   labs(
-    title = "Google Search Queries for \"What will happen\" in the United States",
-    caption = "**Source:** Google Trends, Web search United States 2004-2022 |
-    **Visualization:** Ansgar Wolsing"
+    title = "Google Search Queries for **\"What will happen\"** in the United States",
+    caption = "The plot shows normalized Google Search hits for \"What will happen\"
+           in web searches from the United States 2004-2022. A value of 100 denotes 
+           maximum search interest.<br><br>
+           **Source:** Google Trends | **Visualization:** Ansgar Wolsing",
+    y = "Normalized search interest"
   ) +
   
   theme_minimal(base_family = "Fira Sans") +
@@ -112,8 +116,9 @@ df %>%
     panel.grid = element_blank(),
     axis.title.x = element_blank(),
     axis.ticks = element_line(color = "grey75", size = 0.2),
+    plot.title = element_markdown(color = "white"),
     plot.title.position = "plot",
-    plot.caption = element_markdown(size = 7, hjust = 1, margin = margin(t = 6))
+    plot.caption = element_textbox_simple(size = 7, hjust = 0, margin = margin(t = 8))
   )
 ggsave(here(base_path, "27-what-will-happen.png"), width = 7, height = 5)
 
