@@ -34,19 +34,16 @@ df %>%
            fontface = "bold", color = "white",
            fill = NA, label.size = 0,
            # fill = c("#797C7E", "#79A86B", "#797C7E", "#C6B566", "#79A86B", "#797C7E"),
-           label.padding = unit(0.5, "lines")
-           ) +
+           label.padding = unit(0.5, "lines")) +
   annotate("text",
            label = "The Rising Popularity of...",
-            x = as_datetime("2021-10-01"),  y = 95, 
-           family = "Helvetica Neue", fontface = "bold", size = 8, hjust = 0
-           ) +
+           x = as_datetime("2021-10-01"),  y = 95, 
+           family = "Helvetica Neue", fontface = "bold", size = 8, hjust = 0) +
   annotate("text", x =  as_datetime("2021-10-01"), y = 80, 
-  label = str_wrap("The plot shows normalized Google Search hits for \"Wordle\"
-  in web searches worldwide from October 2021 to March 2022. A value of 100 denotes 
-  maximum search interest.", 
-                   width = 58),
-  family = "Helvetica Neue", size = 3, hjust = 0, color = "grey30") +
+           label = str_wrap("The plot shows normalized Google Search hits for \"Wordle\"
+           in web searches worldwide from October 2021 to March 2022. A value of 100 denotes 
+           maximum search interest.", width = 58),
+           family = "Noto Serif", size = 3, hjust = 0, color = "grey30") +
   scale_y_continuous(position = "right") +
   labs(
     caption = "**Source:** Google Trends | **Visualization:** Ansgar Wolsing
@@ -58,7 +55,7 @@ df %>%
     plot.background = element_rect(color = NA, fill = "white"),
     panel.grid = element_blank(),
     plot.caption = element_textbox_simple(hjust = 0, width = 1, lineheight = 1.2,
-                                   margin = margin(t = 8, b = 4, l = 10)),
+                                          margin = margin(t = 8, b = 4, l = 10)),
     text = element_text(color = "grey30"),
     axis.title.y = element_text(hjust = 0.2),
     axis.text = element_text(color = "grey50")
