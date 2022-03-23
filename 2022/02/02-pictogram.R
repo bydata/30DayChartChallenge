@@ -47,7 +47,7 @@ states_area <- tibble(
 #   "Thüringen", 16171,
 # )
 
-max_rows <- 4
+max_cols <- 5
 
 df <- states_area %>% 
   filter(!state %in% c("Saarland", "Bremen", "Hamburg", "Berlin")) %>% 
@@ -57,8 +57,8 @@ df <- states_area %>%
   complete(factor_id = seq_len(factor_id)) %>% 
   ungroup() %>% 
   select(state, factor_id) %>% 
-  mutate(x = (factor_id - 1) %% max_rows + 1,
-         y = (factor_id + (max_rows - 1)) %/% max_rows)  %>% 
+  mutate(x = (factor_id - 1) %% max_cols + 1,
+         y = (factor_id + (max_cols - 1)) %/% max_cols)  %>% 
   arrange(state, factor_id, x, y)
 
 
@@ -117,7 +117,7 @@ plot_picto <- function(plot_titles, highlight_color = "#347CE9") {
 
 plot_titles_en <- list(
   title = "How many times does <span style='color: #347CE9'>Saarland</span> fit into other German federal states?",
-  subtitle = "In German news media, the size of the Saarland is often used as a reference
+  subtitle = "In German news media, the size of the Saarland often serves as a reference
   for comparing larger areas. 
   For instance, ",
   caption = "Germany city-states Berlin, Bremen, and Hamburg excluded.<br>
