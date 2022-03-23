@@ -120,14 +120,14 @@ plot_titles_en <- list(
   subtitle = "In German news media, the size of the Saarland often serves as a reference
   for comparing larger areas. 
   For instance, ",
-  caption = "Germany city-states Berlin, Bremen, and Hamburg excluded.<br>
-    Shape Saarland and state areas: NaturalEarth data | 
+  caption = "Germany city-states Berlin, Bremen, and Hamburg excluded. 
+    Geometry of Saarland and state areas: NaturalEarth data. <br>
   <b style='font-family: Helvetica Neue Bold'>Visualization:</b> Ansgar Wolsing"
 )
 
 
 plot_picto(plot_titles_en)
-ggsave(here(base_path, "plot-picto-saarland-en.png"), dpi = 300, width = 5, height = 5)
+ggsave(here(base_path, "plot-picto-saarland-en.png"), dpi = 300, width = 5.75, height = 5)
 
 
 
