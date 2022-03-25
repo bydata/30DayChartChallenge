@@ -123,7 +123,7 @@ p <- df_plot %>%
   ggplot(aes(x, y)) +
   # geom_point(aes(fill = champion), size = 8, shape = 21, color = "white") +
   geom_richtext(aes(label = club_logo),
-                label.size = 0.1, color = "grey60") +
+                label.size = 0, color = "grey60", fill = NA) +
   geom_text(
     data = data.frame(x = rep(10.75, 6), y = 2:7,label = seq(1970, 2020, 10),
                       order = rep("time", 6)),
@@ -152,6 +152,6 @@ p <- df_plot %>%
 p_anim <- p +
   transition_states(order, state_length = 2)
 
-animate(p_anim, res = 200, detail = 2, width = 5, height = 4, units = "in",
-        rewind = FALSE, start_pause = 5, end_pause = 5)
+animate(p_anim, res = 300, detail = 2, width = 4.5, height = 4, units = "in",
+        rewind = FALSE, start_pause = 2, end_pause = 5)
 anim_save(here(base_path, "01-bundesliga.gif"))
