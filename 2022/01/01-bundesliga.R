@@ -148,8 +148,8 @@ p <- df_plot %>%
     axis.title = element_blank(),
     axis.text = element_blank(),
     text = element_text(color = "grey30"),
-    plot.title = element_text(face = "bold"),
-    plot.subtitle = element_text(margin = margin(t = 4, b = 8)),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5, margin = margin(t = 4, b = 8)),
     plot.caption = element_markdown()
   )
 
