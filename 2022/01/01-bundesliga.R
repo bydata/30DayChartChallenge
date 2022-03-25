@@ -2,6 +2,7 @@ library(tidyverse)
 library(gganimate)
 library(ggtext)
 library(here)
+library(glue)
 
 base_path <- here("2022", "01")
 
@@ -50,7 +51,6 @@ champions <- tribble(
   2004, "Werder Bremen",
   2005, "Bayern München",
   2006, "Bayern München",
-  
   2007, "VfB Stuttgart",
   2008, "Bayern München",
   2009, "VfL Wolfsburg",
@@ -62,19 +62,27 @@ champions <- tribble(
   2015, "Bayern München",
   2016, "Bayern München",
   2017, "Bayern München",
-  2018, "Bayern München"
+  2018, "Bayern München",
+  2019, "Bayern München",
+  2020, "Bayern München",
+  2021, "Bayern München"
 )
 champions
 
 nrow(champions)
+unique(champions$champion)
+length(unique(champions$champion))
 
 # prepare dataframe into to grids (time, title count) for the plot 
-max_cols <- 8
+max_cols <- 10
+offset_start <- 3
+image_size <- 15
+
 df_plot <- champions %>% 
   # create grid by year
   mutate(id = row_number(),
-         grid_time_x = (row_number() - 1) %% max_cols + 1,
-         grid_time_y = (row_number() + (max_cols - 1)) %/% max_cols) %>% 
+         grid_time_x = (row_number() + offset_start - 1) %% max_cols + 1,
+         grid_time_y = (row_number() + offset_start + (max_cols - 1)) %/% max_cols) %>% 
   # create grid by number of titles
   add_count(champion, name = "total_titles") %>% 
   arrange(-total_titles, year) %>% 
@@ -89,13 +97,20 @@ df_plot <- champions %>%
               names_from = "name", values_from = "value") %>% 
   # make order a factor with time first, then title count
   mutate(order = factor(order, levels = c("time", "count"))) %>% 
-  arrange(year) 
+  arrange(year) %>% 
+  mutate(club_logo = sprintf(
+    "<img src='%s' width='%d' height='%d'>",
+    here(base_path, "icons", paste0(champion, ".png")),
+    image_size, image_size)
+    )
+
 
 # with facets
 df_plot %>% 
   ggplot(aes(x, y)) +
-  geom_point(aes(color = champion), size = 5) +
+  geom_richtext(aes(label = club_logo)) +
   scale_y_reverse() +
+  scale_fill_brewer(palette = "Set3") +
   facet_wrap(vars(order)) +
   theme_minimal() +
   theme(
@@ -104,13 +119,39 @@ df_plot %>%
   )
 
 # animated
-df_plot %>% 
+p <- df_plot %>% 
   ggplot(aes(x, y)) +
-  geom_point(aes(color = champion), size = 8) +
-  scale_y_reverse() +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom"
+  # geom_point(aes(fill = champion), size = 8, shape = 21, color = "white") +
+  geom_richtext(aes(label = club_logo),
+                label.size = 0.1, color = "grey60") +
+  geom_text(
+    data = data.frame(x = rep(10.75, 6), y = 2:7,label = seq(1970, 2020, 10),
+                      order = rep("time", 6)),
+    aes(x, y, label = label),
+    family = "Fira Sans", color = "grey60", fontface = "bold", hjust = 0
   ) +
-  transition_states(order)
+  scale_x_continuous(expand = expansion(add = c(0.5, 1))) +
+  scale_y_reverse(expand = expansion(add = c(0.5, 0.5))) +
+  labs(
+    title = "All Champions in the German Bundesliga",
+    subtitle = "1963/'64 to 2020/'21",
+    caption = "**Visualization:** Ansgar Wolsing"
+  ) + 
+  theme_minimal(base_family = "Fira Sans") +
+  theme(
+    legend.position = "bottom",
+    panel.grid = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    text = element_text(color = "grey30"),
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(margin = margin(t = 4, b = 8)),
+    plot.caption = element_markdown()
+  )
 
+p_anim <- p +
+  transition_states(order, state_length = 2)
+
+animate(p_anim, res = 200, detail = 2, width = 5, height = 4, units = "in",
+        rewind = FALSE, start_pause = 5, end_pause = 5)
+anim_save(here(base_path, "01-bundesliga.gif"))
