@@ -153,7 +153,7 @@ p <- df_plot %>%
     text = element_text(color = "grey30"),
     plot.title = element_text(face = "bold", hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5, margin = margin(t = 4, b = 8)),
-    plot.caption = element_markdown()
+    plot.caption = element_markdown(color = "grey45", size = 6)
   )
 
 
