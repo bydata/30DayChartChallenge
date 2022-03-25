@@ -105,8 +105,7 @@ df_plot <- champions %>%
   mutate(club_logo = sprintf(
     "<img src='%s' width='%d' height='%d'>",
     here(base_path, "icons", paste0(champion, ".png")),
-    image_size, image_size)
-    )
+    image_size, ifelse(champion == "Hamburger SV", round(image_size * 192/260), image_size)))
 
 
 ## Static plot -----------------------------------------------------------------
@@ -176,7 +175,7 @@ p_with_annotations <- p +
                               ymin = c(0.5, 5.5), 
                               ymax = c(3.5, 6.5)),
             aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax =  ymax), inherit.aes = FALSE,
-            color = "grey40", fill = NA, size = 0.3
+            color = "grey40", fill = NA, size = 0.2
             )
 
 p_anim <- p_with_annotations +
