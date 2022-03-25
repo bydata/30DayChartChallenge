@@ -109,6 +109,8 @@ df_plot <- champions %>%
     )
 
 
+## Static plot -----------------------------------------------------------------
+
 # with facets
 df_plot %>% 
   ggplot(aes(x, y)) +
@@ -122,7 +124,8 @@ df_plot %>%
     panel.spacing.x = unit(1.5, "cm")
   )
 
-# animated
+## Animated plot -----------------------------------------------------------------
+
 p <- df_plot %>% 
   ggplot(aes(x, y)) +
   # geom_point(aes(fill = champion), size = 8, shape = 21, color = "white") +
@@ -153,9 +156,33 @@ p <- df_plot %>%
     plot.caption = element_markdown()
   )
 
-p_anim <- p +
-  transition_states(order, state_length = 2)
 
+# Add some more annotations
+annotations <- tribble(
+  ~x, ~y, ~order, ~hjust, ~label,
+   5,  6.75, "count", 0,      "4 clubs won the title once",
+  4,  1, "time", 1,       str_wrap("1. FC Köln won the first Bundesliga title", width = 30),
+  2.5,  7, "time", 0,       "The last 9 titles went to Munich",
+  1,  0.25, "count", 0,       "30 titles"
+)
+
+p_with_annotations <- p + 
+  geom_text(data = annotations,
+                  aes(x, y, label = label, hjust = hjust, group = label),
+              family = "Fira Sans Light", size = 3) +
+  geom_rect(data = data.frame(order = c("count", "count"), 
+                              xmin = c(0.5, 4.5), 
+                              xmax = c(max_cols + 0.5, 8.5),
+                              ymin = c(0.5, 5.5), 
+                              ymax = c(3.5, 6.5)),
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax =  ymax), inherit.aes = FALSE,
+            color = "grey40", fill = NA, size = 0.3
+            )
+
+p_anim <- p_with_annotations +
+  transition_states(order, state_length = 2) +
+  enter_appear(early = FALSE, exclude_layer = "text")
 animate(p_anim, res = 300, detail = 2, width = 4.5, height = 4, units = "in",
         rewind = FALSE, start_pause = 2, end_pause = 5)
 anim_save(here(base_path, "01-bundesliga.gif"))
+
