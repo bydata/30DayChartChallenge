@@ -73,9 +73,13 @@ nrow(champions)
 unique(champions$champion)
 length(unique(champions$champion))
 
-# prepare dataframe into to grids (time, title count) for the plot 
+## prepare dataframe into to grids (time, title count) for the plot  -----------
+
+# how many logos per row?
 max_cols <- 10
-offset_start <- 3
+# shift start by n
+offset_start <- 4
+# width and height for club logos
 image_size <- 15
 
 df_plot <- champions %>% 
@@ -125,12 +129,12 @@ p <- df_plot %>%
   geom_richtext(aes(label = club_logo),
                 label.size = 0, color = "grey60", fill = NA) +
   geom_text(
-    data = data.frame(x = rep(10.75, 6), y = 2:7,label = seq(1970, 2020, 10),
+    data = data.frame(x = rep(-1, 6), y = 2:7,label = seq(1970, 2020, 10),
                       order = rep("time", 6)),
     aes(x, y, label = label),
     family = "Fira Sans", color = "grey60", fontface = "bold", hjust = 0
   ) +
-  scale_x_continuous(expand = expansion(add = c(0.5, 1))) +
+  scale_x_continuous(expand = expansion(add = c(0, 0.5))) +
   scale_y_reverse(expand = expansion(add = c(0.5, 0.5))) +
   labs(
     title = "All Champions in the German Bundesliga",
