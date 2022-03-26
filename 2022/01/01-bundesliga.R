@@ -167,7 +167,7 @@ annotations <- tribble(
 
 p_with_annotations <- p + 
   geom_text(data = annotations,
-                  aes(x, y, label = label, hjust = hjust, group = label),
+                  aes(x, y, label = label, hjust = hjust, group = order),
               family = "Fira Sans Light", size = 3) +
   geom_rect(data = data.frame(order = c("count", "count"), 
                               xmin = c(0.5, 4.5), 
@@ -179,7 +179,7 @@ p_with_annotations <- p +
             )
 
 p_anim <- p_with_annotations +
-  transition_states(order, state_length = 2) +
+  transition_states(order, state_length = 3) +
   enter_appear(early = FALSE, exclude_layer = "text")
 animate(p_anim, res = 300, detail = 2, width = 4.5, height = 4, units = "in",
         rewind = FALSE, start_pause = 2, end_pause = 5)
