@@ -145,35 +145,24 @@ greyscale_pal <- function(n, lower = 30, upper = 80, reverse = FALSE) {
 }
 
 highlight_color <- "#B14625"
-color_palette <- c(greyscale_pal(7, 40, 70), highlight_color)
+color_palette <- c(rev(greyscale_pal(7, 40, 70)), highlight_color)
 
 plot_titles <- list(
-  title = "Title goes here",
-  subtitle = glue(
-    "**Taylor Swift's** new version of
-  <b style='color:{highlight_color}'>\"All Too Well\"</b>
-  is the longest track to ever top the Billboard Hot 100 with a duration of 
-  10 minutes and 13 seconds.
-  The song replaces **Don McLean's song \"American Pie\"** (8 minutes and 36 seconds), 
-  which became no. 1 on 15 January 1972, after nearly 50 years.
+  title = glue("<b style='color:{highlight_color}'>\"All Too Well\"</b> 
+  is the Longest Song in U.S. Chart History"),
+  subtitle = "**Taylor Swift's** new version of
+  \"All Too Well\" is the longest track to ever top the Billboard Hot 100 with a duration of 
+  10 minutes and 13 seconds. The song replaces **Don McLean's song \"American Pie\"** 
+  (8 minutes and 36 seconds), which became no. 1 on 15 January 1972, after nearly 50 years.
   <br>
-  The longest no. 1 song in each decade is highlighted."
-  ),
+  The longest no. 1 song in each decade is highlighted.",
   caption = "Source: **Billboard Hot 100 (Kaggle), Spotify API** |
-    Visualization: **Ansgar Wolsing**"
-)
+    Visualization: **Ansgar Wolsing**")
 
 
 tracks_df %>% 
-  filter(duration_ms < 615000) %>% 
+  # filter(duration_ms < 615000) %>% 
   ggplot(aes(x = factor(decade), y = duration_s)) +
-  
-  # geom_tile(
-  #   data = . %>% filter(decade == 2020),
-  #   aes(y = 386, width = 1, height = 640),
-  #   fill = "grey89"
-  # ) +
-  
   ggbeeswarm::geom_beeswarm(
     aes(fill = factor(decade),
         size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2),
@@ -216,7 +205,6 @@ tracks_df %>%
   ) +
   # scale_fill_manual(values = rev(MetBrewer::met.brewer("VanGogh2"))) +
   scale_fill_manual(values = color_palette) +
-  
   scale_size_identity() +
   scale_shape_identity() +
   coord_flip() +
@@ -244,4 +232,4 @@ tracks_df %>%
     plot.caption = element_markdown(size = 6)
   )
 ggsave(here(base_path, "09-all-too-well.png"),
-       dpi = 300, width = 6, height = 6)
+       dpi = 300, width = 6.5, height = 6)
