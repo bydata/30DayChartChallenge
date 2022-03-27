@@ -165,18 +165,13 @@ tracks_df %>%
   ggplot(aes(x = factor(decade), y = duration_s)) +
   ggbeeswarm::geom_beeswarm(
     aes(fill = factor(decade),
-        size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2),
-        shape = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 23, 21)),
-    cex = 0.75, # shape = 21, 
-    col = "white", alpha = 0.95, # size = 2,
-    show.legend = FALSE) +
+        size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2)),
+    cex = 0.75, shape = 21, col = "white", alpha = 0.95, show.legend = FALSE) +
   
   # Annotations for songs
   ggrepel::geom_text_repel(
     data = filter(longest_no1_per_decade, !str_detect(label, "Taylor Swift")),
-    aes(label = label,
-        # fontface = ifelse(str_detect(label, "Taylor Swift"), "bold", "plain")
-        ),
+    aes(label = label),
     size = 2.5, family = "Raleway", color = "grey40", lineheight = 0.8,
     min.segment.length = unit(0.1, "mm"), segment.size = 0.2, segment.color = "grey50",
     direction = "y", hjust = 0, nudge_y = 40
@@ -193,20 +188,16 @@ tracks_df %>%
   # Labels for decades
   annotate("text",
            x = seq_along(seq(1950, 2020, 10)) + 0.3,
-           y = 100,
-           label = paste0(seq(1950, 2020, 10), "s"),
-           family = "Raleway SemiBold",
-           color = "grey50", size = 4
-  ) +
+           y = 100, label = paste0(seq(1950, 2020, 10), "s"),
+           family = "Raleway SemiBold", color = "grey50", size = 4
+           ) +
   
   scale_y_continuous(position = "right",
                      breaks = seq(120, 600, 120),
                      labels = paste(seq(120, 600, 120) / 60, "00 min", sep = ":")
   ) +
-  # scale_fill_manual(values = rev(MetBrewer::met.brewer("VanGogh2"))) +
   scale_fill_manual(values = color_palette) +
   scale_size_identity() +
-  scale_shape_identity() +
   coord_flip() +
   labs(
     title = plot_titles$title,
