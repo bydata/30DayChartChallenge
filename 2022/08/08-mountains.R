@@ -54,33 +54,35 @@ font_family <- "Playfair Display"
 # Zugspitze
 zugspitze_elevation <- elevations$elevation[elevations$name == "Zugspitze"]
 # How many peaks above 1000 / 2000 m?
-peaks_above_1000m <- length(which(elevations$elevation >= 1000))
-peaks_above_2000m <- length(which(elevations$elevation >= 2000))
+peaks_above_1000m <- length(which(elevations$elevation > 1000))
+peaks_above_2000m <- length(which(elevations$elevation > 2000))
 
 
 elevations %>% 
   ggplot(aes(elevation)) +
   geom_histogram(bins = 50, fill = "grey30", col = "white") +
-  annotate("text", x = zugspitze_elevation, y = 1000, label = glue("Zugspitze ({zugspitze_elevation} m)"),
+  annotate("text", x = zugspitze_elevation, y = 1000, 
+           label = glue("Zugspitze ({scales::number(zugspitze_elevation, big.mark=',')} m)"),
            size = 3, angle = 90, hjust = 0, family = font_family) +
   annotate("segment", x = zugspitze_elevation, xend = zugspitze_elevation, y = 960, yend = 20,
            lty = "solid", size = 0.3) +
   annotate("text", x = 1000, y = 1000, 
-           label = glue("{peaks_above_1000m} peaks at or above 1,000 m"),
+           label = glue("{scales::number(peaks_above_1000m, big.mark=',')} peaks above 1,000 m"),
            size = 3, angle = 90, hjust = 0, family = font_family, lineheight = 0.8) +
   annotate("segment", x = 1000, xend = 1000, y = 960, yend = 200,
            lty = "solid", size = 0.3) +
   annotate("text", x = 2000, y = 1000, 
-           label = glue("{scales::number(peaks_above_2000m)} peaks at or above 2,000 m"),
+           label = glue("{scales::number(peaks_above_2000m)} peaks above 2,000 m"),
            size = 3, angle = 90, hjust = 0, family = font_family, lineheight = 0.8) +
   annotate("segment", x = 2000, xend = 2000, y = 960, yend = 100,
            lty = "solid", size = 0.3) +
+  scale_x_continuous(breaks = seq(0, 3000, 1000), labels = c("0", "1,000", "2,000", "3,000m")) +
   scale_y_continuous(expand = expansion(add = c(20, 100))) +
   labs(
     title = "Elevation of Mountains in Germany",
     subtitle = "Number of hills/mountains",
     caption = "Source: OpenStreetMap contributors. Visualization: Ansgar Wolsing",
-    x = "elevation (m)", y = NULL
+    x = "elevation", y = NULL
   ) +
   theme_minimal(base_family = font_family, base_size = 8) +
   theme(
