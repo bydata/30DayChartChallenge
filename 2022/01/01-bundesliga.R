@@ -123,11 +123,10 @@ df_plot %>%
     panel.spacing.x = unit(1.5, "cm")
   )
 
-## Animated plot -----------------------------------------------------------------
+## BASE plot -----------------------------------------------------------------
 
-p <- df_plot %>% 
+p_base <- df_plot %>% 
   ggplot(aes(x, y)) +
-  # geom_point(aes(fill = champion), size = 8, shape = 21, color = "white") +
   geom_richtext(aes(label = club_logo),
                 label.size = 0, color = "grey60", fill = NA) +
   geom_text(
@@ -137,12 +136,7 @@ p <- df_plot %>%
     family = "Fira Sans", color = "grey60", fontface = "bold", hjust = 0
   ) +
   scale_x_continuous(expand = expansion(add = c(0, 0.5))) +
-  scale_y_reverse(expand = expansion(add = c(0.5, 0.5))) +
-  labs(
-    title = "All Champions in the German Bundesliga",
-    subtitle = "1963/'64 to 2020/'21",
-    caption = "**Visualization:** Ansgar Wolsing"
-  ) + 
+  scale_y_reverse(expand = expansion(add = c(0.5, 0.5))) + 
   theme_minimal(base_family = "Fira Sans") +
   theme(
     legend.position = "bottom",
@@ -156,17 +150,19 @@ p <- df_plot %>%
   )
 
 
+## ENGLISH PLOT ----------------------------------------------------------------
+
 # Add some more annotations
-annotations <- tribble(
+annotations_en <- tribble(
   ~x, ~y, ~order, ~hjust, ~label,
-   5,  6.75, "count", 0,      "4 clubs won the title once",
+   5,  6.75, "count", 0,  "4 clubs won the title once",
   4,  1, "time", 1,       str_wrap("1. FC Köln won the first Bundesliga title", width = 30),
-  2.5,  7, "time", 0,       "The last 9 titles went to Munich",
-  1,  0.25, "count", 0,       "30 titles"
+  2.5,  7, "time", 0,     "The last 9 titles went to Munich",
+  1,  0.25, "count", 0,   "30 titles"
 )
 
-p_with_annotations <- p + 
-  geom_text(data = annotations,
+p_with_annotations_en <- p + 
+  geom_text(data = annotations_en,
                   aes(x, y, label = label, hjust = hjust, group = order),
               family = "Fira Sans Light", size = 3) +
   geom_rect(data = data.frame(order = c("count", "count"), 
@@ -176,12 +172,54 @@ p_with_annotations <- p +
                               ymax = c(3.5, 6.5)),
             aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax =  ymax), inherit.aes = FALSE,
             color = "grey40", fill = NA, size = 0.2
-            )
+            ) +
+  labs(
+    title = "All Champions in the German Bundesliga",
+    subtitle = "1963/'64 to 2020/'21",
+    caption = "**Visualization:** Ansgar Wolsing"
+  )
 
-p_anim <- p_with_annotations +
+p_anim_en <- p_with_annotations_en +
   transition_states(order, state_length = 3) +
   enter_appear(early = FALSE, exclude_layer = "text")
-animate(p_anim, res = 300, detail = 2, width = 4.5, height = 4, units = "in",
+animate(p_anim_en, res = 200, detail = 2, width = 4.5, height = 4, units = "in",
         rewind = FALSE, start_pause = 2, end_pause = 5)
-anim_save(here(base_path, "01-bundesliga.gif"))
+anim_save(here(base_path, "01-bundesliga-en.gif"))
 
+
+
+## GERMAN PLOT -----------------------------------------------------------------
+
+# Add some more annotations
+annotations_de <- tribble(
+  ~x, ~y, ~order, ~hjust, ~label,
+  5,  6.75, "count", 0,  "4 Vereine gewannen den Titel einmal",
+  4,  1, "time", 1,       str_wrap("1. FC Köln erster Bundesliga-Meister", width = 20),
+  2.5,  7, "time", 0,     "Die vergangenen 9 Titel gingen nach München",
+  1,  0.25, "count", 0,   "30 Titel"
+)
+
+p_with_annotations_de <- p + 
+  geom_text(data = annotations_de,
+            aes(x, y, label = label, hjust = hjust, group = order),
+            family = "Fira Sans Light", size = 3) +
+  geom_rect(data = data.frame(order = c("count", "count"), 
+                              xmin = c(0.5, 4.5), 
+                              xmax = c(max_cols + 0.5, 8.5),
+                              ymin = c(0.5, 5.5), 
+                              ymax = c(3.5, 6.5)),
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax =  ymax), inherit.aes = FALSE,
+            color = "grey40", fill = NA, size = 0.2
+  ) +
+  labs(
+    title = "Alle Meister der deutschen Fußball-Bundesliga",
+    subtitle = "1963/'64 bis 2020/'21",
+    caption = "**Visualisierung:** Ansgar Wolsing"
+  )
+
+p_anim_de <- p_with_annotations_de +
+  transition_states(order, state_length = 3) +
+  enter_appear(early = FALSE, exclude_layer = "text")
+animate(p_anim_de, res = 200, detail = 2, width = 4.5, height = 4, units = "in",
+        rewind = FALSE, start_pause = 2, end_pause = 5)
+anim_save(here(base_path, "01-bundesliga-de.gif"))
