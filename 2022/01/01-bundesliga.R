@@ -75,6 +75,9 @@ length(unique(champions$champion))
 
 ## prepare dataframe into to grids (time, title count) for the plot  -----------
 
+#' Manually download club logos as pngs (filenames according to club names) 
+#' and place them in the "icons" directory.
+
 # how many logos per row?
 max_cols <- 10
 # shift start by n
