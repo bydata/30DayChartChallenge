@@ -66,10 +66,10 @@ p <- df_2020_waffle %>%
       margin = margin(t = 8, b = 6)
     ),
     plot.caption = element_markdown(hjust = 0, color = "grey46", size = 8),
-    strip.text = element_markdown(hjust = 0, lineheight = 1.2,
+    strip.text = element_markdown(hjust = 0, lineheight = 1.2, size = 8,
                                   margin = margin(t = 8, b = 2, l = 2)),
     # panel.spacing.y = unit(4.5, "mm")
   )
-ggsave(here(base_path, "01-waffle-renewable.png"), width = 5.5, height = 7)
+ggsave(here(base_path, "01-waffle-renewable.png"), width = 6, height = 7.2)
   
   
