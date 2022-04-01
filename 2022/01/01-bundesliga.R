@@ -161,7 +161,7 @@ annotations_en <- tribble(
   1,  0.25, "count", 0,   "30 titles"
 )
 
-p_with_annotations_en <- p + 
+p_with_annotations_en <- p_base + 
   geom_text(data = annotations_en,
                   aes(x, y, label = label, hjust = hjust, group = order),
               family = "Fira Sans Light", size = 3) +
@@ -182,7 +182,7 @@ p_with_annotations_en <- p +
 p_anim_en <- p_with_annotations_en +
   transition_states(order, state_length = 3) +
   enter_appear(early = FALSE, exclude_layer = "text")
-animate(p_anim_en, res = 200, detail = 2, width = 4.5, height = 4, units = "in",
+animate(p_anim_en, res = 300, detail = 2, width = 4.5, height = 4, units = "in",
         rewind = FALSE, start_pause = 2, end_pause = 5)
 anim_save(here(base_path, "01-bundesliga-en.gif"))
 
@@ -199,7 +199,7 @@ annotations_de <- tribble(
   1,  0.25, "count", 0,   "30 Titel"
 )
 
-p_with_annotations_de <- p + 
+p_with_annotations_de <- p_base + 
   geom_text(data = annotations_de,
             aes(x, y, label = label, hjust = hjust, group = order),
             family = "Fira Sans Light", size = 3) +
@@ -220,6 +220,6 @@ p_with_annotations_de <- p +
 p_anim_de <- p_with_annotations_de +
   transition_states(order, state_length = 3) +
   enter_appear(early = FALSE, exclude_layer = "text")
-animate(p_anim_de, res = 200, detail = 2, width = 4.5, height = 4, units = "in",
+animate(p_anim_de, res = 300, detail = 2, width = 4.5, height = 4, units = "in",
         rewind = FALSE, start_pause = 2, end_pause = 5)
 anim_save(here(base_path, "01-bundesliga-de.gif"))
