@@ -31,16 +31,6 @@ trees_2020_sf %>%
   ggplot(aes(ANZAHL)) +
   geom_boxplot()
 
-trees_2020_sf %>%
-  st_drop_geometry() %>%
-  filter(ANZAHL <= 100) %>%
-  ggplot(aes(ANZAHL)) +
-  geom_histogram(binwidth = 1)
-
-trees_2020_sf %>%
-  st_drop_geometry() %>%
-  filter(ANZAHL == 0) %>%
-  count(beschreibu)
 
 # Replace NA with 1 for ANZAHL (number of trees)
 trees_2020_sf_prep <- trees_2020_sf %>%
@@ -48,74 +38,9 @@ trees_2020_sf_prep <- trees_2020_sf %>%
          ANZAHL2 = ifelse(ANZAHL2 == 0, 1, ANZAHL2))
 
 
-## Reduce to a smaller circle around the city center
-cgn_centroid <- # st_centroid(shape_cgn) %>%
-  st_point(c(6.93, 50.94558)) %>%
-  st_sfc() %>%
-  st_sf(crs = "EPSG:4326") %>%
-  st_transform(crs = "EPSG:3857")
-
-cgn_circle <- st_buffer(cgn_centroid, dist = 7500)
-
-
-trees_2020_sf_prep_intersect <- st_intersection(
-  cgn_circle,
-  st_transform(trees_2020_sf_prep, "EPSG:3857"))
-
-
-# Number of trees (sum, not number of rows)
-n_trees_cgn <- sum(trees_2020_sf_prep$ANZAHL2)
-n_trees_cgn_circle <- sum(trees_2020_sf_prep_intersect$ANZAHL2)
-n_trees_cgn_fmt <- scales::number(n_trees_cgn, big.mark = ",")
-n_trees_cgn_circle_fmt <- scales::number(n_trees_cgn_circle, big.mark = ",")
-
-base_font <- "Lato"
-span_tag <- glue("<span style='font-family:{base_font} Bold'>")
-plot_titles <- list(
-  title = "<span style='color:deeppink'>TREES</span> OF COLOGNE",
-  subtitle = glue("{span_tag}{n_trees_cgn_fmt} trees</span> are registered in the
-  (yet to be completed) tree cadastre of the Municipality of Cologne.
-  {span_tag}{n_trees_cgn_circle_fmt} trees</span> are displayed in this visualization."),
-  caption = glue("Data: {span_tag}Municipality of Cologne</span>, Tree Cadastre |
-  Visualization: {span_tag}Ansgar Wolsing</span>"))
-
-p <- ggplot() +
-  geom_sf(data = cgn_circle,
-          fill = "grey12", col = "grey70", size = 1.25) +
-  geom_sf(data = trees_2020_sf_prep_intersect,
-          aes(size = ANZAHL2),
-          col = "deeppink", alpha = 0.6,
-          show.legend = FALSE) +
-  geom_sf(data = cgn_circle,
-          fill = NA, col = "grey97", size = 1) +
-  scale_size_continuous(range = c(0.0005, 0.25)) +
-  coord_sf() +
-  labs(title = plot_titles$title,
-       subtitle = plot_titles$subtitle,
-       caption = plot_titles$caption) +
-  cowplot::theme_map() +
-  theme(
-    plot.background = element_rect(color = NA, fill = "black"),
-    text = element_text(family = paste(base_font, "Light"), color = "grey90",
-                        lineheight = 1.33),
-    plot.title = element_markdown(color = "white", family = "Bangers",
-                                  face = "plain", hjust = 0.5, size = 40,
-                                  margin = margin(t = 6, b = 18)),
-    plot.subtitle = element_textbox_simple(hjust = 0.5, halign = 0.5,
-                                           margin = margin(t = 0, b = 12)),
-    plot.caption = element_markdown(hjust = 0.5, size = 9,
-                                    margin = margin(t = 12, b = 4))
-    
-  )
-ggsave(here(base_path, "04-flora_trees.png"), plot = p,
-       dpi = 600, width = 8, height = 8)
-
-
-
 trees_2020_sf_prep %>% 
   st_drop_geometry() %>% 
   count(Gattung, sort = TRUE) 
-
 
 trees_2020_sf_prep %>% 
   st_drop_geometry() %>% 
@@ -128,19 +53,15 @@ trees_2020_sf_prep %>%
 trees_2020_sf_prep %>% 
   st_drop_geometry() %>% 
   filter(!is.na(Gattung), Gattung != "unbekannt") %>% 
-  # transmute(gattung_art = paste0(Gattung, ifelse(!is.na(Art), paste("", Art), "")),
-  #           ANZAHL2) %>% 
   count(Gattung, sort = TRUE) %>% 
   slice_max(n, n = 10) %>% 
-  # mutate(gattung_art = fct_reorder(gattung_art, n)) %>% 
   mutate(Gattung = fct_reorder(Gattung, n)) %>% 
   ggplot(aes(Gattung, n)) +
   geom_segment(aes(xend = Gattung, y = 0, yend = n, size = n),
                col = "#4C332C") +
-  # geom_col(aes(fill = n)) +
   geom_point(aes(size = n, col = n)) +
-  colorspace::scale_color_continuous_sequential("Greens", trans = "pseudo_log",
-                                               aesthetics = list("fill", "color")) +
+  colorspace::scale_color_continuous_sequential(
+    "Greens", trans = "pseudo_log", aesthetics = list("fill", "color")) +
   coord_flip() +
   theme_minimal() +
   theme(
@@ -156,7 +77,6 @@ treemap_df <- trees_2020_sf_prep %>%
   transmute(Gattung = ifelse(Gattung == "Verschiedene", "Other", Gattung),
             gattung = ifelse(is.na(Gattung) | Gattung == "unbekannt", "Unknown", Gattung),
             gattung = fct_lump_min(gattung, min = 2000, other_level = "Other"),
-            # gattung_art = paste(Gattung, ifelse(!is.na(Art), Art, "Other")),
             art = ifelse(!is.na(Art), Art, ""),
             gattung_art = paste(Gattung, art, sep = " "),
             gattung_art = fct_lump_min(gattung_art, min = 50, other_level = "Other"),
@@ -177,23 +97,22 @@ flora_palette <- c(
 p <- treemap_df %>% 
   filter(gattung != "Unknown") %>% 
   mutate(color = case_when(
-    gattung == "Other" ~ "grey43",
+    gattung == "Other" ~ "grey32",
     as.character(gattung_art) == str_c(as.character(gattung), " ") ~ "#c2f0cf",
     TRUE ~ "grey89")) %>% 
   ggplot(aes(area = n, fill = gattung, subgroup = gattung)) +
   geom_treemap(color = "white") +
   geom_treemap_text(aes(label = gattung_art, color = color), 
                     place = "center",
-                    reflow = TRUE, grow = TRUE, family = "Bodoni Moda") + # 
+                    reflow = TRUE, grow = FALSE, family = "Helvetica Neue") + # 
   geom_treemap_subgroup_border(color = "white") +
   scale_color_identity() +
   scale_fill_manual(values = rep(rev(flora_palette), 2)) +
   guides(
-    # fill = guide_legend("Species", nrow = 2)
     fill = "none"
   ) +
   theme(
-    plot.background = element_rect(color = NA, fill = "#ede5ca"),
+    plot.background = element_rect(color = NA, fill = "white"), # "#ede5ca"),
     legend.position = "bottom",
     legend.direction = "horizontal",
     legend.background = element_rect(fill = NA, color = NA)

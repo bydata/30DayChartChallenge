@@ -55,24 +55,15 @@ df %>%
   uncount(rep) 
   
 
-
-
-# https://www.pinterest.de/pin/498562621254655108/
+# Credit: https://www.pinterest.de/pin/498562621254655108/
 flora_palette <- c(
   "#BDA679", "#162231", "#6F7C47", "#8B7356", "#A1B36F", "#6E5542", 
   "#4F5F6F", "#3B191E", "#576148", "#30302E", "#8799A8", "#434318"
 )
 
 
-# https://cran.r-project.org/web/packages/wordcloud2/vignettes/wordcloud.html
-# https://de.wikipedia.org/wiki/Datei:Maple_leaf_--_Unknown.svg
-
+# Source: https://de.wikipedia.org/wiki/Datei:Maple_leaf_--_Unknown.svg
 maple_leaf_file <- here(base_path, "maple_leaf.png")
-
-# Image of Cologne Cathedral, credit: Jahobr, CC0, via Wikimedia Commons
-cathedral_img_url <- "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/CologneCathedralSilhouette.svg/1000px-CologneCathedralSilhouette.svg.png"
-cathedral_file <- here(base_path, "cathedral.png")
-download.file(cathedral_img_url, destfile = cathedral_file)
 
 df_plot <- df %>% 
   as_tibble() %>% 
@@ -91,10 +82,11 @@ tree_rows <- df_plot %>%
   pull(n)
 tree_rows
 
+# create a palette with values for each individual row
 wordcloud_palette <- map2(flora_palette, tree_rows[seq_along(flora_palette)], rep) %>% 
   unlist()
 
-
+# create the wordcloud
 df_plot %>%
   wordcloud2(
     figPath = maple_leaf_file,
@@ -109,6 +101,7 @@ df_plot %>%
   )
 
 
+# Maybe a bar chart instead?
 df %>%
   mutate(gattung2 = ifelse(n < 500, "Other", gattung)) %>% 
   count(gattung2, wt = n, sort = TRUE) %>%
