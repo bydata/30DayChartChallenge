@@ -21,10 +21,10 @@ Code: [2022/01/waffle\_renewable.R](2022/01/waffle_renewable.R)
 
 Code: [2022/02/02-pictogram.R](2022/02/02-pictogram.R)
 
-![](2022/02/Group%201%20(1).png)
+![](2022/02/saarland-pictogram-edited-en.png)
 
 #### Day 03 \| Historical
 
 Code: [2022/03/03-historical.R](2022/03/03-historical.R)
 
-![](2022/03/03-historical2.png)
+![](2022/03/03-historical-wframe.png)
