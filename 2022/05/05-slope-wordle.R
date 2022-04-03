@@ -20,7 +20,7 @@ df <- map_df(seq_along(trends), ~pluck(trends, .x , "interest_over_time")) %>%
 df %>%
   filter(geo == "world") %>% 
   ggplot(aes(date, hits)) +
-  geom_line(size = 1.25, color = "grey12") +
+  geom_area(size = 1.25, color = "grey12", fill = "grey93") +
   annotate("text",
            label = "The Rising Popularity of",
            x = as_datetime("2021-10-01"),  y = 95, 
@@ -38,12 +38,12 @@ df %>%
            fontface = "bold", color = "white",
            fill = NA, label.size = 0,
            label.padding = unit(0.5, "lines")) +
-  geom_textbox(aes(x =  as_datetime("2021-10-01"), y = 65),
+  geom_textbox(aes(x =  as_datetime("2021-10-01"), y = 25),
                stat = "unique", 
            label = "The plot shows normalized **Google Web Search** hits for \"Wordle\"
            in web searches worldwide from October 2021 to March 2022. A value of 100 denotes 
            maximum search interest.",
-           width = unit(0.6, "npc"),
+           width = unit(0.5, "npc"),
            box.size = 0,  box.r = unit(0, "mm"), box.padding = unit(0, "mm"),
            family = "Noto Serif", size = 3, hjust = 0, color = "grey30") +
   scale_x_datetime(date_breaks = "1 months", date_labels = "%b") +
@@ -51,7 +51,7 @@ df %>%
   labs(
     caption = "**Source:** Google Trends | **Visualization:** Ansgar Wolsing",
     x = NULL, y = "Normalized search interest") +
-  theme_minimal() +
+  theme_minimal(base_family = "Noto Serif") +
   theme(
     plot.background = element_rect(color = NA, fill = "white"),
     panel.grid = element_blank(),
