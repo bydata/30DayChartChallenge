@@ -97,22 +97,30 @@ flora_palette <- c(
 p <- treemap_df %>% 
   filter(gattung != "Unknown") %>% 
   mutate(color = case_when(
-    gattung == "Other" ~ "grey32",
-    as.character(gattung_art) == str_c(as.character(gattung), " ") ~ "#c2f0cf",
-    TRUE ~ "grey89")) %>% 
+    # gattung == "Other" ~ "grey32",
+    as.character(gattung_art) == str_c(as.character(gattung), " ") ~ "grey89", # "#c2f0cf",
+    TRUE ~ "grey97")) %>% 
   ggplot(aes(area = n, fill = gattung, subgroup = gattung)) +
   geom_treemap(color = "white") +
-  geom_treemap_text(aes(label = gattung_art, color = color), 
-                    place = "center",
-                    reflow = TRUE, grow = FALSE, family = "Helvetica Neue") + # 
+  geom_treemap_text(
+    aes(label = gattung_art,
+        alpha = ifelse(as.character(gattung_art) == str_c(as.character(gattung), " "), 0, 1)), 
+    place = "topleft", reflow = TRUE, color = "grey99",
+    grow = FALSE, family = "Source Serif Pro Light"
+  ) + 
+  geom_treemap_text(
+    aes(label = gattung_art,
+        alpha = ifelse(as.character(gattung_art) == str_c(as.character(gattung), " "), 1, 0)), 
+    place = "topleft", reflow = TRUE, color = "grey99",
+    grow = FALSE, family = "Source Serif Pro SemiBold"
+  ) +
   geom_treemap_subgroup_border(color = "white") +
   scale_color_identity() +
-  scale_fill_manual(values = rep(rev(flora_palette), 2)) +
-  guides(
-    fill = "none"
-  ) +
+  scale_alpha_identity() +
+  scale_fill_manual(values = rep(flora_palette, 2)) +
+  guides( fill = "none") +
   theme(
-    plot.background = element_rect(color = NA, fill = "white"), # "#ede5ca"),
+    plot.background = element_rect(color = NA, fill = "white"),
     legend.position = "bottom",
     legend.direction = "horizontal",
     legend.background = element_rect(fill = NA, color = NA)

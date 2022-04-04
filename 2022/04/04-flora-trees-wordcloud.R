@@ -91,7 +91,7 @@ df_plot %>%
   wordcloud2(
     figPath = maple_leaf_file,
     size = 0.1,
-    fontFamily = "Helvetica",
+    fontFamily = "Source Serif Pro",
     fontWeight = 500,
     maxRotation = pi / 2,
     color = wordcloud_palette,

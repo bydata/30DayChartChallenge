@@ -13,17 +13,18 @@ source(here(base_path, "04-flora-trees-wordcloud.R"))
 # Create a blank image with titles
 ggplot() +
   labs(title = "Tree Genera and Species in Cologne",
-       subtitle = "*Source:* Open Data Cologne, Tree Cadastre<br>
+       subtitle = "*Note:* Trees of unknown genera not shown.<br>
+       *Source:* Open Data Cologne, Tree Cadastre<br>
        *Visualization:* Ansgar Wolsing") +
   theme_void() +
   theme(
    plot.background = element_rect(color = NA, fill = "white"),
    plot.margin = margin(20, 20, 20, 20),
    plot.title = element_text(
-     size = 32, family = "Fira Sans SemiBold",
-     margin = margin(b = 36)),
+     size = 32, family = "Source Serif Pro SemiBold",
+     margin = margin(b = 24)),
    plot.subtitle = ggtext::element_markdown(
-     size = 16, color = "grey30", family = "Fira Sans Light", lineheight = 1.4)
+     size = 12, color = "grey20", family = "Source Serif Pro", lineheight = 1.4)
   )
 ggsave(here(base_path, "04-trees-title.png"), width = 8, height = 2)
 
