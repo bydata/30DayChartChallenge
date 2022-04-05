@@ -69,14 +69,12 @@ df %>%
   geom_point(data = . %>% filter(highlight != "other")) +
   ggrepel::geom_text_repel(
     data = . %>% filter(highlight != "other"),
-    aes(x = ifelse(Year == min(Year), 1 - 0.4, 2 + 0.4),
+    aes(x = ifelse(Year == min(Year), 1 - 0.25, 2 + 0.25),
         label = glue::glue("{Entity} ({scales::number(Hours, accuracy = 1)})"),
         hjust = ifelse(Year == min(Year), 1, 0)), 
     size = 2.5, nudge_x = 0, direction = "y", family = "Fira Sans",
     segment.size = 0) +
-  scale_x_discrete(
-    # expand = expansion(add = c(0.75, 0.75)), 
-    position = "top") +
+  scale_x_discrete(position = "top") +
   scale_size_identity() +
   coord_cartesian(clip = "off") +
   scale_color_manual(
@@ -85,8 +83,9 @@ df %>%
   guides(col = "none") +
   labs(title = "Average Annual Working Hours 1970 and 2017",
        subtitle = "Working hours per worker have <b style='color:#092044'>decreased</b> 
-       in most countries, with a few significant <b style='color:#C33C2E'>exceptions</b> 
-       like Bangladesh and China. There are still significant inequalities in working times
+       in most countries, which can be interpreted as a sign of progress. 
+       Notable exceptions where working hours <b style='color:#C33C2E'>increased</b>, are
+       Bangladesh and China. There are still significant inequalities in working times
        between countries.",
        caption = "**Source:** Huberman & Minns (2007); PWT 9.1 (2019), Our World in Data |
        **Visualization:** Ansgar Wolsing") +
@@ -102,8 +101,9 @@ df %>%
     plot.margin = margin(t = 6, l = 16, r = 16, b = 4),
     plot.title = element_text(family = "Playfair Display", size = 14, color = "grey12"),
     plot.subtitle = element_textbox_simple(
-      margin = margin(t = 6, b = 8)
+      margin = margin(t = 6, b = 12)
     ),
-    plot.caption = element_markdown(hjust = 0)
+    plot.caption = element_markdown(
+      hjust = 0, margin = margin(t = 8))
   )
 ggsave(here(base_path, "06-owid-slope.png"), width = 5, height = 5)
