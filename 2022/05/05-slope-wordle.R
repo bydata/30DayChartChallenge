@@ -46,7 +46,7 @@ df %>%
            width = unit(0.5, "npc"),
            box.size = 0,  box.r = unit(0, "mm"), box.padding = unit(0, "mm"),
            family = "Noto Serif", size = 3, hjust = 0, color = "grey30") +
-  scale_x_datetime(date_breaks = "1 months", date_labels = "%b") +
+  scale_x_datetime(date_breaks = "1 months", date_labels = "%b", expand = expansion(add = c(5 * 86400, 0))) +
   scale_y_continuous(position = "right") +
   labs(
     caption = "**Source:** Google Trends | **Visualization:** Ansgar Wolsing",
