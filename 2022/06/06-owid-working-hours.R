@@ -69,7 +69,7 @@ df %>%
   geom_point(data = . %>% filter(highlight != "other")) +
   ggrepel::geom_text_repel(
     data = . %>% filter(highlight != "other"),
-    aes(x = ifelse(Year == min(Year), 1 - 0.25, 2 + 0.25),
+    aes(x = ifelse(Year == min(Year), 1 - 0.35, 2 + 0.35),
         label = glue::glue("{Entity} ({scales::number(Hours, accuracy = 1)})"),
         hjust = ifelse(Year == min(Year), 1, 0)), 
     size = 2.5, nudge_x = 0, direction = "y", family = "Fira Sans",
