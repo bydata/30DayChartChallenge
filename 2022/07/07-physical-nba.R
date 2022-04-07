@@ -94,7 +94,7 @@ p_height + p_weight +
     title = "NBA Player Heights and Weights",
     subtitle = glue::glue("{scales::number(n_players, big.mark = ',')} NBA professional from 1951 to 2019"),
     caption = "Positions Guard-Forward and Forward-Guard as well as Forward-Center and Center-Forward 
-    merged. Source: NBA, Kaggle. Visualization: Ansgar Wolsing"
+    merged.<br>Source: NBA, Kaggle. Visualization: Ansgar Wolsing"
   )
 ggsave(here(base_path, "07-physical-nba-height-weight.png"), width = 7, height = 4)
 
