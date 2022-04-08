@@ -33,8 +33,10 @@ write_rds(osm_features_intersect, here(base_path, "data", glue("osm_features_int
 osm_features_intersect %>% 
   transmute(elevation = as.numeric(ele)) %>% 
   ggplot() +
-  geom_sf(aes(col = elevation), size = 0.1, alpha = 0.8) +
-  coord_sf(crs = 4326)
+  geom_sf(aes(col = elevation), size = 0.05, alpha = 0.8) +
+  scale_color_continuous(trans = "pseudo_log") +
+  coord_sf(crs = 4326) +
+  theme_void()
 
 osm_features_intersect %>% 
   sf::st_drop_geometry() %>% 
