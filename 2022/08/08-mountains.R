@@ -13,13 +13,18 @@ st_crs(shape_de) <- "EPSG:4326"
 
 # Query the OSM API
 # https://wiki.openstreetmap.org/wiki/Tag:natural%3Dpeak
-mountain_feature_values <- c("peak", "hill", "ridge")
-feature_query <- glue("\"natural\"=\"{mountain_feature_values}\"" )
-osm_features <- opq(bbox = st_bbox(shape_de), timeout = 1200) %>% 
-  add_osm_features(features = feature_query) %>% 
-  osmdata_sf()
-write_rds(osm_features, here(base_path, "data", glue("osm_features_{Sys.Date()}.rds")))
-
+osm_filepath <- here(base_path, "data", glue("osm_features_{Sys.Date()}.rds"))
+# very time-consuming, only activate if needed
+if (FALSE) {
+  mountain_feature_values <- c("peak", "hill", "ridge")
+  feature_query <- glue("\"natural\"=\"{mountain_feature_values}\"" )
+  osm_features <- opq(bbox = st_bbox(shape_de), timeout = 1200) %>% 
+    add_osm_features(features = feature_query) %>% 
+    osmdata_sf()  
+  write_rds(osm_features, osm_filepath)
+} else {
+  osm_features <- read_rds(here(base_path, "data", "osm_features_2022-03-27.rds"))
+}
 
 # Make sure there are only features within DE in the dataset
 osm_features_intersect <- st_intersection(osm_features$osm_points, shape_de)
@@ -44,10 +49,6 @@ elevations <- osm_features_intersect %>%
 elevations
   
 
-elevations %>% 
-  ggplot(aes(elevation)) +
-  stat_density(geom = "area", col = "green", fill = alpha("green", 0.8))
-
 
 font_family <- "Playfair Display"
  
@@ -56,7 +57,6 @@ zugspitze_elevation <- elevations$elevation[elevations$name == "Zugspitze"]
 # How many peaks above 1000 / 2000 m?
 peaks_above_1000m <- length(which(elevations$elevation > 1000))
 peaks_above_2000m <- length(which(elevations$elevation > 2000))
-
 
 elevations %>% 
   ggplot(aes(elevation)) +
@@ -77,10 +77,10 @@ elevations %>%
   annotate("segment", x = 2000, xend = 2000, y = 960, yend = 100,
            lty = "solid", size = 0.3) +
   scale_x_continuous(breaks = seq(0, 3000, 1000), labels = c("0", "1,000", "2,000", "3,000m")) +
-  scale_y_continuous(expand = expansion(add = c(20, 100))) +
+  scale_y_continuous(breaks = seq(0, 3000, 500), expand = expansion(add = c(20, 100))) +
   labs(
-    title = "Elevation of Mountains in Germany",
-    subtitle = "Number of hills/mountains",
+    title = "Elevation of Mountains and Hills in Germany",
+    subtitle = "Number of mountains/hills",
     caption = "Source: OpenStreetMap contributors. Visualization: Ansgar Wolsing",
     x = "elevation", y = NULL
   ) +
