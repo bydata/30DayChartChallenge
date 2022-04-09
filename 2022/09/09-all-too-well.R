@@ -189,7 +189,6 @@ tracks_df %>%
     aes(fill = factor(decade),
         size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2)),
     cex = 0.75, shape = 21, col = "white", alpha = 0.95, show.legend = FALSE) +
-  
   # Annotations for songs
   ggrepel::geom_text_repel(
     data = filter(longest_no1_per_decade, !str_detect(label, "Taylor Swift")),
@@ -206,14 +205,12 @@ tracks_df %>%
     direction = "y", hjust = 0, nudge_y = -180,
     fontface = "bold"
   ) +
-  
   # Labels for decades
   annotate("text",
            x = seq_along(seq(1950, 2020, 10)) + 0.3,
            y = 100, label = paste0(seq(1950, 2020, 10), "s"),
            family = "Raleway SemiBold", color = "grey50", size = 4
            ) +
-  
   scale_y_continuous(position = "right",
                      breaks = seq(120, 600, 120),
                      labels = paste(seq(120, 600, 120) / 60, "00 min", sep = ":")
@@ -260,7 +257,6 @@ tracks_df %>%
     direction = "y", hjust = 0, nudge_y = -180,
     fontface = "bold"
   ) +
-  
   # Labels for decades
   annotate("text",
            x = seq_along(seq(1950, 2020, 10)) + 0.3,
@@ -284,3 +280,8 @@ tracks_df %>%
 ggsave(here(base_path, "09-all-too-well-dist.png"),
        dpi = 300, width = 6.5, height = 7)
 
+
+library(magick)
+img1 <- image_read(here(base_path, "09-all-too-well-dist.png"))
+img2 <- image_read(here(base_path, "09-all-too-well.png"))
+image_morph(c(img1, img2))
