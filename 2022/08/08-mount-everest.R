@@ -38,7 +38,6 @@ climbers %>%
   geom_bar() +
   scale_y_continuous(position = "right") +
   theme_minimal()
-ggsave(here(base_path, "08-mteverest-barchart.png"), width = 6, height = 5)
 
 climbers %>% 
   ggplot(aes(year)) +
@@ -63,7 +62,7 @@ annotations <- tibble(
   y    = c( 100,  200,  400,  500,  300),
   label = c(
     "<b>1953</b> | First successful ascent",
-    "<b>1980</b> | Reinhold Messer - first ascent<br>without supplementary oxygen",
+    "<b>1980</b> | Reinhold Messner - first ascent<br>without supplementary oxygen",
     "Climbing Mt. Everest becomes<br>increasingly popular",
     "<b>2014/15</b> | Due to avalanches<br>with multiple people killed,<br>
     there were no ascents in 2015",
@@ -130,4 +129,4 @@ dev.off()
 
 # combine plot and Mt. Everest photo
 img_combined <- image_composite(img_everest_edited, img_plot)
-image_write(img_combined, here(base_path, "08-mteverest.png"))
+image_write(img_combined, here(base_path, "08-mount-everest.png"))
