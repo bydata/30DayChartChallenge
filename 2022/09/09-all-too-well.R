@@ -238,7 +238,6 @@ tracks_df %>%
              aes(fill = factor(decade), 
                  size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2)),
              shape = 21, stroke = 1, color = "grey80", show.legend = FALSE) +
-  # stat_interval() +
   stat_halfeye(aes(fill = factor(decade)), 
                show.legend = FALSE) +
   # Annotations for songs
@@ -279,9 +278,3 @@ tracks_df %>%
   )
 ggsave(here(base_path, "09-all-too-well-dist.png"),
        dpi = 300, width = 6.5, height = 7)
-
-
-library(magick)
-img1 <- image_read(here(base_path, "09-all-too-well-dist.png"))
-img2 <- image_read(here(base_path, "09-all-too-well.png"))
-image_morph(c(img1, img2))
