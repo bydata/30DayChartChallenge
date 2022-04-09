@@ -79,17 +79,22 @@ song1 <- search_spotify("Barbra Streisand - No More Tears (Enough Is Enough)",
                         type = "track", limit = 1)
 
 # initialize parallel computing with purrr
-# http://zevross.com/blog/2019/02/12/dramatically-speed-up-your-r-purrr-functions-with-the-furrr-package/
-future::plan(multisession)
+#' Takes some time. Only run if needed
+if (FALSE) {
+  # http://zevross.com/blog/2019/02/12/dramatically-speed-up-your-r-purrr-functions-with-the-furrr-package/
+  future::plan(multisession)
+  
+  tic("Get tracks")
+  tracks <- map(no1_uniq$artist_song, search_spotify, type = "track", limit = 1)
+  tracks <- set_names(tracks, glue("{no1_uniq$artist} - {no1_uniq$song}"))
+  # count the missing songs
+  tracks %>% keep(is_empty) %>% names()
+  toc()
+  write_rds(tracks, here(base_path, "data", "tracks.rds"))
+} else {
+  tracks <- read_rds(here(base_path, "data", "tracks.rds"))
+}
 
-tic("Get tracks")
-tracks <- map(no1_uniq$artist_song, search_spotify, type = "track", limit = 1)
-tracks <- set_names(tracks, glue("{no1_uniq$artist} - {no1_uniq$song}"))
-# count the missing songs
-tracks %>% keep(is_empty) %>% names()
-toc()
-
-write_rds(tracks, here(base_path, "data", "tracks.rds"))
 
 
 empty_tracks <- tracks %>% 
@@ -106,22 +111,18 @@ tracks_df <- bind_rows(tracks, .id = "artist_song") %>%
 
 
 tracks_df %>% 
-  filter(duration_ms < 615000) %>% 
   ggplot(aes(duration_s)) +
   geom_histogram(fill = "deeppink", alpha = 0.6) +
   theme_light()
 
-
 tracks_df %>% 
-  filter(duration_ms < 615000) %>% 
   ggplot(aes(x = 1, y = duration_s)) +
   ggbeeswarm::geom_beeswarm(col = "grey30", 
                             alpha = 0.6, size = 2) +
   coord_flip() +
   theme_light()
 
-
-
+# identify songs which are the longest in their decade
 longest_no1_per_decade <- tracks_df %>% 
   filter(duration_ms < 615000) %>% 
   group_by(decade) %>% 
@@ -133,6 +134,29 @@ longest_no1_per_decade <- tracks_df %>%
                    "Taylor Swift\nAll Too Well (Taylor's Version)", 
                    label))
 
+
+## Custom ggplot2 theme
+theme_set(theme_minimal(base_family = "Raleway", base_size = 9))
+theme_update(
+  plot.background = element_rect(color = NA, fill = "white"),
+  plot.margin = margin(t = 10, b = 10, l = 6, r = 6),
+  panel.grid = element_blank(),
+  axis.title.x = element_text(size = 7),
+  axis.title.y = element_blank(),
+  axis.text.x = element_text(size = 6),
+  axis.text.y = element_blank(),
+  axis.ticks.x = element_line(color = "grey60", size = 0.3),
+  text = element_text(color = "grey35"),
+  plot.title = element_markdown(
+    color = "black", family = "Raleway SemiBold", size = 16),
+  plot.subtitle = element_textbox_simple(
+    margin = margin(t = 6, b = 6), width = unit(0.9, "npc"), hjust = 0
+  ),
+  plot.caption = element_markdown(size = 6)
+)
+
+
+# Greyscale palette function
 greyscale_pal <- function(n, lower = 30, upper = 80, reverse = FALSE) {
   stopifnot("n must not exceed the difference of `upper` and `lower` + 1." = 
               n <= abs(upper - lower) + 1)
@@ -159,9 +183,7 @@ plot_titles <- list(
   caption = "Source: **Billboard Hot 100 (Kaggle), Spotify API** |
     Visualization: **Ansgar Wolsing**")
 
-
 tracks_df %>% 
-  # filter(duration_ms < 615000) %>% 
   ggplot(aes(x = factor(decade), y = duration_s)) +
   ggbeeswarm::geom_beeswarm(
     aes(fill = factor(decade),
@@ -172,14 +194,14 @@ tracks_df %>%
   ggrepel::geom_text_repel(
     data = filter(longest_no1_per_decade, !str_detect(label, "Taylor Swift")),
     aes(label = label),
-    size = 2.5, family = "Raleway", color = "grey40", lineheight = 0.8,
+    size = 2.5, family = "Raleway", color = "grey30", lineheight = 0.8,
     min.segment.length = unit(0.1, "mm"), segment.size = 0.2, segment.color = "grey50",
     direction = "y", hjust = 0, nudge_y = 40
   ) +
   ggrepel::geom_text_repel(
     data = filter(longest_no1_per_decade, str_detect(label, "Taylor Swift")),
     aes(label = label),
-    size = 3, family = "Raleway", color = "grey40", lineheight = 0.8,
+    size = 3, family = "Raleway", color = "grey30", lineheight = 0.8,
     min.segment.length = unit(0.1, "mm"), segment.size = 0.2, segment.color = "grey50",
     direction = "y", hjust = 0, nudge_y = -180,
     fontface = "bold"
@@ -204,23 +226,61 @@ tracks_df %>%
     subtitle = plot_titles$subtitle,
     caption = plot_titles$caption,
     y = "Track duration"
-  ) + 
-  theme_minimal(base_family = "Raleway", base_size = 9) +
-  theme(
-    plot.background = element_rect(color = NA, fill = "white"),
-    panel.grid = element_blank(),
-    axis.title.x = element_text(size = 7),
-    axis.title.y = element_blank(),
-    axis.text.x = element_text(size = 6),
-    axis.text.y = element_blank(),
-    axis.ticks.x = element_line(color = "grey60", size = 0.3),
-    text = element_text(color = "grey35"),
-    plot.title = element_markdown(
-      color = "black", family = "Raleway SemiBold", size = 16),
-    plot.subtitle = element_textbox_simple(
-      margin = margin(t = 6, b = 6)
-    ),
-    plot.caption = element_markdown(size = 6)
   )
 ggsave(here(base_path, "09-all-too-well.png"),
-       dpi = 300, width = 6.5, height = 6)
+       dpi = 300, width = 6.5, height = 7)
+
+
+## With distribution strips instead of individual points -------------------
+
+library(ggdist)
+
+tracks_df %>% 
+  ggplot(aes(x = factor(decade), y = duration_s)) +
+  geom_point(data = longest_no1_per_decade,
+             aes(fill = factor(decade), 
+                 size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2)),
+             shape = 21, stroke = 1, color = "grey80", show.legend = FALSE) +
+  # stat_interval() +
+  stat_halfeye(aes(fill = factor(decade)), 
+               show.legend = FALSE) +
+  # Annotations for songs
+  ggrepel::geom_text_repel(
+    data = filter(longest_no1_per_decade, !str_detect(label, "Taylor Swift")),
+    aes(label = label),
+    size = 2.5, family = "Raleway", color = "grey30", lineheight = 0.8,
+    min.segment.length = unit(0.1, "mm"), segment.size = 0.2, segment.color = "grey50",
+    direction = "y", hjust = 0, nudge_y = 40
+  ) +
+  ggrepel::geom_text_repel(
+    data = filter(longest_no1_per_decade, str_detect(label, "Taylor Swift")),
+    aes(label = label),
+    size = 3, family = "Raleway", color = "grey30", lineheight = 0.8,
+    min.segment.length = unit(0.1, "mm"), segment.size = 0.2, segment.color = "grey50",
+    direction = "y", hjust = 0, nudge_y = -180,
+    fontface = "bold"
+  ) +
+  
+  # Labels for decades
+  annotate("text",
+           x = seq_along(seq(1950, 2020, 10)) + 0.3,
+           y = 100, label = paste0(seq(1950, 2020, 10), "s"),
+           family = "Raleway SemiBold", color = "grey50", size = 4
+  ) +
+  
+  scale_y_continuous(position = "right",
+                     breaks = seq(120, 600, 120),
+                     labels = paste(seq(120, 600, 120) / 60, "00 min", sep = ":")
+  ) +
+  scale_fill_manual(values = color_palette, aesthetics = c("fill", "color")) +
+  scale_size_identity() +
+  coord_flip() +
+  labs(
+    title = plot_titles$title,
+    subtitle = plot_titles$subtitle,
+    caption = plot_titles$caption,
+    y = "Track duration"
+  )
+ggsave(here(base_path, "09-all-too-well-dist.png"),
+       dpi = 300, width = 6.5, height = 7)
+
