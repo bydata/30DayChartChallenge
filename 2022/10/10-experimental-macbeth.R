@@ -7,9 +7,11 @@ library(here)
 
 base_path <- here("2022", "10")
 
+# download text from Project Gutenberg
 macbeth_url <- "https://www.gutenberg.org/cache/epub/1129/pg1129.txt"
 macbeth_lines <- read_lines(macbeth_url)
 
+# Lines where the manuscript starts and ends
 start_line <- 282
 end_line <- 2899
 exclude_lines <- 2358:2365
@@ -96,6 +98,7 @@ plot_titles <- list(
   caption = "Project Gutenberg. Visualization: Ansgar Wolsing"
 )
 
+# highlight key events - used for text and lines
 story_annotations <- tibble(
   x    = c(13.5, 1.2, 7, 5, 14, 22),
   xend = c(19,   1.2, 7, 5, 14, 22),
@@ -111,6 +114,7 @@ story_annotations <- tibble(
     "Macduff<br>kills<br>Macbeth"
     )
 )
+
 
 p <-word_count_speakers %>% 
   mutate(speaker_grp = ifelse(speaker_grp %in% c("All", few_appearances_speakers), "Other", speaker_grp),
