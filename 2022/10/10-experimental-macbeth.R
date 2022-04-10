@@ -167,21 +167,3 @@ word_count_speakers %>%
     plot.caption = element_markdown(hjust = 1)
   )
 ggsave(here(base_path, "10-experimental-macbeth.png"), width = 8, height = 7)
-
-
-
-
-word_count_speakers %>% 
-  mutate(speaker_grp = ifelse(speaker_grp %in% c("All", few_appearances_speakers), "Other", speaker_grp)) %>% 
-  count(act, scene, speaker_grp, wt = word_count, name = "word_count") %>% 
-  # increment counter across act and scene
-  group_by(act, scene) %>% 
-  mutate(act_scene_id = cur_group_id()) %>% 
-  ungroup() %>% 
-  ggplot(aes(act_scene_id, word_count, fill = speaker_grp)) +
-  geom_col()
-
-
-# Word count by act and scene
-word_count_speakers %>% 
-  count(act, scene, wt = word_count, sort = TRUE)
