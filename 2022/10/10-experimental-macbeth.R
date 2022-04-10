@@ -127,7 +127,7 @@ p <-word_count_speakers %>%
     aes(xintercept = act_scene_id), 
     color = "grey50", size = 0.2, lty = "dotted") +
   geom_stream(type = "mirror", bw = 0.5,  extra_span = 0.1) +
-  # annotations for key events
+  # annotations for key events (text + segment)
   geom_textbox(
     data = story_annotations,
     aes(x - 0.08, y, label = label, vjust = vjust),
@@ -142,9 +142,9 @@ p <-word_count_speakers %>%
   ) +
   # text labels for the acts
   geom_text(
-    data = . %>% group_by(act) %>% summarize(x = mean(act_scene_id)),
+    data = . %>% group_by(act) %>% summarize(x = min(act_scene_id) + n_distinct(scene) / 2),
     aes(x, y = -Inf, label = act), inherit.aes = FALSE, 
-    vjust = -2, hjust = 0.4, color = "grey60", family = "Forum") +
+    vjust = -1, hjust = 0.5, color = "grey60", family = "Forum") +
   scale_fill_manual(values = color_palette) +
   labs(
     title = plot_titles$title,
