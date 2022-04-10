@@ -84,17 +84,31 @@ color_palette <- paletteer::paletteer_d(
                            3,
                            11 )]
 
+text_df %>%
+  distinct(act, scene) %>% 
+  mutate(row_number()) %>% head(20)
+
 # Annotations
 plot_titles <- list(
   title = "Who speaks when in Shakespeare's MACBETH?",
   subtitle = "Distribution of speech share (number of words) per character in 
   each scene. Acts are separated with vertical lines.",
-  caption = "Visualization: Ansgar Wolsing"
+  caption = "Project Gutenberg. Visualization: Ansgar Wolsing"
 )
 
 story_annotations <- tibble(
-  x = c()
-  
+  x    = c(13.5, 1.2, 7, 5, 14),
+  xend = c(19,   1.2, 7, 5, 14),
+  y    = c(-5000, -4200, -4500, 5000, 5000),
+  yend = c(-5000,  -200,   400,  800, 1000),
+  vjust = c(0, 0.25, 0.2, 0.8, 0.9),
+  label = c(
+    "Macduff & Malcolm go to war against Macbeth",
+    "Three Witches<br>appear",
+    "Macbeth kills King Duncan",
+    "Lady Macbeth & Macbeth<br>plan the murder of King Duncan",
+    "Death of Banquo reported to Macbeth,<br>Ghost of Banquo appears"
+    )
 )
 
 word_count_speakers %>% 
@@ -112,14 +126,26 @@ word_count_speakers %>%
     aes(xintercept = act_scene_id), 
     color = "grey50", size = 0.2, lty = "dotted") +
   geom_stream(type = "mirror", bw = 0.5,  extra_span = 0.1) +
+  # annotations for key events
+  geom_textbox(
+    data = story_annotations,
+    aes(x - 0.08, y, label = label, vjust = vjust),
+    inherit.aes = FALSE,
+    color = "grey90", family = "Forum", hjust = 0, fill = NA,
+    box.size = 0,
+    width = unit(3.5, "cm")) +
+  geom_segment(
+    data = story_annotations,
+    aes(x = x, xend = xend, y = y, yend = yend), inherit.aes = FALSE,
+    color = "grey90", size = 0.3
+  ) + 
+  
   # text labels for the acts
   geom_text(
     data = . %>% group_by(act) %>% summarize(x = mean(act_scene_id)),
     aes(x, y = -Inf, label = act), inherit.aes = FALSE, 
     vjust = -2, hjust = 0.4, color = "grey60", family = "Forum") +
-  # paletteer::scale_fill_paletteer_d("palettetown::pidgey") +
   scale_fill_manual(values = color_palette) +
-  # guides(fill = guide_legend(override.aes = list(size = 1))) +
   labs(
     title = plot_titles$title,
     subtitle = plot_titles$subtitle,
