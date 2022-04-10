@@ -2,6 +2,7 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(ggdist)
+library(ggtext)
 
 base_path <- here("2022", "11")
 
@@ -45,7 +46,8 @@ df_k %>%
 
 font_family <- "Noto Serif"
 start_value_y <- -7
-sun_color <- "#EAC76A"
+# sun_color <- "#EAC76A"
+bg_color <- "#00C0F0"
 
 # sun_color_palette <- c("Spring" = "#E37B31", "Summer" = "#D36E2A", 
 #                        "Autumn" = "#DA9D42", "Winter" = "#CC9738")
@@ -102,6 +104,7 @@ names(sun_color_palette_seasons) <- c("Spring", "Summer", "Autumn", "Winter")
 # 
 # 
 
+
 p_base <- df_k %>% 
   mutate(season = case_when(
     as.numeric(month) %in% 3:5 ~ "Spring",
@@ -116,7 +119,7 @@ p_base <- df_k %>%
   # geom_text(aes(label = month, y = start_value_y + 2), family = font_family, size = 3)  +
   scale_x_discrete(position = "left") +
   scale_y_continuous(limits = c(start_value_y, NA)) +
-  coord_polar(theta = "x", start = -0.2) +
+  coord_polar(theta = "x", start = -0.25) +
   guides(fill = "none") +
   labs(
     title = "Daily sunshine hours in Cologne, Germany",
@@ -124,7 +127,7 @@ p_base <- df_k %>%
   ) +
   theme_void(base_family = font_family) +
   theme(
-    plot.background = element_rect(color = NA, fill = "#00C0F0"), # #00B5E2
+    plot.background = element_rect(color = NA, fill = bg_color), # #00B5E2
     plot.margin = margin(10, 10, 10, 10),
     plot.title = element_text(hjust = 0.5, color = "black"),
     plot.title.position = "plot",
@@ -167,20 +170,60 @@ p_base +
 ggsave(here(base_path, "11-circular-sushine-cgn-intervals1.png"), width = 6, height = 5)
 
 # version with stat_interval
-p_base + 
+p <- p_base + 
   stat_interval(color = "white", alpha = 0.5, size = geom_interval_size) +
   stat_interval(aes(alpha = after_stat(level)), 
-                        size = geom_interval_size, color = sun_color) +
+                        size = geom_interval_size, color = sun_color,
+                show.legend = FALSE  # suppress legend, add a custom legend below
+                ) +
   stat_summary(geom = "label", 
                fun.data = summary_func,
                vjust = 0.5, size = 2, fill = alpha("white", 0.8),
                family = font_family, label.size = 0, label.r = unit(0.4, "mm")) +
   # stat_summary(geom = "point", color = "grey20", fun = mean, size = 0.5) +
   annotate("text", 
-           x = 1:12, y = 21, label = month.abb, color = "white", alpha = 0.5, 
+           x = 1:12, y = 21, label = month.abb, color = "white", alpha = 0.65, 
            size = 2, family = font_family)
-ggsave(here(base_path, "11-circular-sushine-cgn-intervals2.png"), width = 6, height = 5)
 
+
+## custom legend
+p_legend <- data.frame(
+  length = c(2, 3, 6, 3, 2),
+  x      = c(0, 2, 5, 11, 14),
+  xend   = c(2, 5, 11, 14, 16),
+  level = factor(c("0.95", "0.80", "0.50", "0.80", "0.95"), 
+                 levels = c("0.50", "0.80", "0.95"))
+) %>% 
+  ggplot() + 
+  geom_segment(aes(x = 0, xend = max(xend), y = 1, yend = 1),
+               size = 3, col = "white") +
+  geom_segment(aes(x = x, xend = xend, y = 1, yend = 1, 
+                   alpha = level),
+               size = 3, col = sun_color, show.legend = FALSE) +
+  annotate(
+    "richtext",
+    x = c(9, 1.5, 12),
+    y = c(1.15, 0.8, 0.8),
+    label = c("50 % of days fall within this range", "95 % of days", "80 % of days"),
+    fill = NA, label.size = 0, family = font_family, size = 2
+  ) +
+  geom_curve(
+    data = data.frame(x = c(9, 13, 1), xend = c(9, 12, 1.25), y = c(1.125, 0.85, 0.85), 
+                      yend = c(1.025, 0.95, 0.95)),
+    aes(x = x, xend = xend, y = y, yend = yend),
+    stat = "unique", curvature = 0.2, size = 0.2, color = "grey12",
+    arrow = arrow(angle = 20, length = unit(1, "mm"))
+  ) +
+  scale_alpha_manual(values = c("0.95" = 0.2, "0.80" = 0.5, "0.50" = 1)) +
+  coord_cartesian(expand = TRUE) +
+  theme_void() +
+  theme(plot.background = element_rect(color = NA, fill = NA),
+        plot.margin = margin(l = 4, r = 4, t = 4))
+
+
+library(patchwork)
+p + inset_element(p_legend, l = 0.6, r = 1,  t = 0.11, b = 0, clip = FALSE)
+ggsave(here(base_path, "11-circular-sushine-cgn-intervals2.png"), width = 5.5, height = 5.5)
 
 
 # https://de.weatherspark.com/y/54495/Durchschnittswetter-in-K%C3%B6ln-Deutschland-das-ganze-Jahr-%C3%BCber
