@@ -97,21 +97,22 @@ plot_titles <- list(
 )
 
 story_annotations <- tibble(
-  x    = c(13.5, 1.2, 7, 5, 14),
-  xend = c(19,   1.2, 7, 5, 14),
-  y    = c(-5000, -4200, -4500, 5000, 5000),
-  yend = c(-5000,  -200,   400,  800, 1000),
-  vjust = c(0, 0.25, 0.2, 0.8, 0.9),
+  x    = c(13.5, 1.2, 7, 5, 14, 22),
+  xend = c(19,   1.2, 7, 5, 14, 22),
+  y    = c(-5000, -4200, -4500, 5000, 5000, 3000),
+  yend = c(-5000,  -200,   400,  800, 1000,  500),
+  vjust = c(   0,  0.25,   0.3,  0.85,  0.9,  0.8),
   label = c(
-    "Macduff & Malcolm go to war against Macbeth",
+    "Macduff & Malcolm decide to go to war against Macbeth",
     "Three Witches<br>appear",
     "Macbeth kills King Duncan",
     "Lady Macbeth & Macbeth<br>plan the murder of King Duncan",
-    "Death of Banquo reported to Macbeth,<br>Ghost of Banquo appears"
+    "Murder of Banquo reported to Macbeth,<br>Ghost of Banquo appears",
+    "Macduff<br>kills<br>Macbeth"
     )
 )
 
-word_count_speakers %>% 
+p <-word_count_speakers %>% 
   mutate(speaker_grp = ifelse(speaker_grp %in% c("All", few_appearances_speakers), "Other", speaker_grp),
          speaker_grp = factor(speaker_grp, levels = speaker_grp_levels)) %>% 
   count(act, scene, speaker_grp, wt = word_count, name = "word_count") %>% 
@@ -138,8 +139,7 @@ word_count_speakers %>%
     data = story_annotations,
     aes(x = x, xend = xend, y = y, yend = yend), inherit.aes = FALSE,
     color = "grey90", size = 0.3
-  ) + 
-  
+  ) +
   # text labels for the acts
   geom_text(
     data = . %>% group_by(act) %>% summarize(x = mean(act_scene_id)),
