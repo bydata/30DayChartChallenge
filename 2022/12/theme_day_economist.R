@@ -34,8 +34,8 @@ df_2020 <- gdp_2020 %>%
   mutate(continent = countrycode::countrycode(code, origin = "iso3c", 
                                               destination = "continent"),
          country = fct_reorder(country, -pop),
-         continent = factor(continent, 
-                            levels = rev(c("Africa", "Americas", "Asia", "Europe", "Oceania")))) %>% 
+         continent = factor(continent, levels = rev(c("Africa", "Americas", 
+                                                      "Asia", "Europe", "Oceania")))) %>% 
   filter(!is.na(continent))
 
 p <- df_2020 %>% 
@@ -44,8 +44,14 @@ p <- df_2020 %>%
                             cex = 3.1, alpha = 0.6,
                             shape = 21, stroke = 0.2, col = "white",
                             show.legend = FALSE) +
+  # y axis labels above the grid lines
+  geom_text(aes(x = continent, y = min(gdpPercap) - 300, label = continent),
+            stat = "unique", nudge_x = 0.1, family = "Fira Sans Condensed",
+            hjust = 0, size = 3.5) + 
+  # no expansion on the left-hand side so that the geom_text appears as y-axis labels
   scale_y_log10(labels = scales::number_format(), 
-                breaks = c(1000, 3000, 10000, 30000, 100000)) +
+                breaks = c(1000, 3000, 10000, 30000, 100000),
+                expand = expansion(mult = c(0, 0.05))) +
   # scale_size_area(max_size = 20) +
   scale_size_continuous(range = c(1, 20)) +
   scale_fill_manual(values = c(
@@ -70,7 +76,8 @@ p <- df_2020 %>%
     axis.ticks.x = element_line(color = "black", size = 0.3), 
     axis.ticks.length.x = unit(2, "mm"), 
     axis.title = element_text(family = "Fira Sans Condensed Medium"),
-    axis.text.y = element_text(),
+    # axis.text.y = element_text(),
+    axis.text.y = element_blank(),
     legend.position = "top",
     legend.justification = "left",
     legend.text = element_markdown(),
@@ -86,7 +93,7 @@ p
 
 
 # Add theme elements using {grid} ---------------
-ragg::agg_png(here(base_path, "economist_gdpercap.png"), res = 300, width = 6, height = 6, units = "in")
+ragg::agg_png(here(base_path, "12-economist_gdpercap.png"), res = 300, width = 6.5, height = 6, units = "in")
 p
 grid.lines(
   x = c(0, 1),
@@ -107,4 +114,3 @@ invisible(dev.off())
 #' Bar chart: https://www.economist.com/the-economist-explains/2022/02/10/how-does-america-calculate-inflation
 #' Line chart: https://www.economist.com/graphic-detail/2022/03/17/russian-soldiers-appear-to-be-dying-in-ukraine-at-a-remarkably-high-rate
 #' https://design-system.economist.com/foundations/typography/line-height#multipliers
-#' 
