@@ -131,7 +131,8 @@ p_base <- df_k %>%
     plot.margin = margin(10, 10, 10, 10),
     plot.title = element_text(hjust = 0.5, color = "black"),
     plot.title.position = "plot",
-    plot.caption = element_markdown(margin = margin(t = 40, b = 4), color = "grey40"),
+    plot.caption = element_markdown(margin = margin(t = 40, b = 4), color = "grey40",
+                                    size = 6, hjust = 0.5),
     legend.position = "bottom"
   )
 
@@ -171,22 +172,30 @@ p_base +
 ggsave(here(base_path, "11-circular-sushine-cgn-intervals1.png"), width = 6, height = 5)
 
 # version with stat_interval
+overall_mean <- mean(df_k$sdk) %>% 
+  scales::number(accuracy = 0.1)
+
+
 p <- p_base + 
   stat_interval(color = "white", alpha = 0.5, size = geom_interval_size) +
   stat_interval(aes(alpha = after_stat(level)), 
                         size = geom_interval_size, color = sun_color,
                 show.legend = FALSE  # suppress legend, add a custom legend below
                 ) +
+  annotate("richtext", 
+           x = 6.5, y = start_value_y, 
+           label = glue::glue("Daily avg.<br>**{overall_mean} hours**"),
+           vjust = 0.5, size = 3, fill = alpha("white", 0.8),
+           family = font_family, label.size = 0, label.r = unit(0.4, "mm")) + 
   stat_summary(geom = "label", 
                fun.data = summary_func,
-               vjust = 0.5, size = 2, fill = alpha("white", 0.8),
+               vjust = 0.5, size = 2.5, fill = alpha("white", 0.8),
                family = font_family, label.size = 0, label.r = unit(0.4, "mm")) +
-  # stat_summary(geom = "point", color = "grey20", fun = mean, size = 0.5) +
   annotate("text", 
            x = 1:12, y = 21, label = month.abb, color = "white", alpha = 0.65, 
            size = 2, family = font_family)  +
   labs(
-    caption = "Source: Deutscher Wetterdienst CDC. Visualization: Ansgar Wolsing"
+    caption = "Source: Deutscher Wetterdienst CDC (1957-2022).<br>Visualization: Ansgar Wolsing"
   )
 
 
@@ -206,21 +215,30 @@ p_legend <- data.frame(
                size = 3, col = sun_color, show.legend = FALSE) +
   annotate(
     "richtext",
-    x = c(9, 1.5, 12),
-    y = c(1.15, 0.8, 0.8),
-    label = c("50 % of days fall within this range", "95 % of days", "80 % of days"),
+    x = c(9, 1.5, 12, -4),
+    y = c(1.15, 0.8, 0.8, 0.8),
+    label = c("50 % of days fall within this range", "95 % of days", "80 % of days",
+              "Mean"),
     fill = NA, label.size = 0, family = font_family, size = 2
   ) +
   geom_curve(
-    data = data.frame(x = c(9, 13, 1), xend = c(9, 12, 1.25), y = c(1.125, 0.85, 0.85), 
-                      yend = c(1.025, 0.95, 0.95)),
+    data = data.frame(x = c(9, 13, 1, -4), 
+                      xend = c(9, 12, 1.25, -4), 
+                      y = c(1.125, 0.85, 0.85, 0.85), 
+                      yend = c(1.025, 0.95, 0.95, 0.95)),
     aes(x = x, xend = xend, y = y, yend = yend),
     stat = "unique", curvature = 0.2, size = 0.2, color = "grey12",
     arrow = arrow(angle = 20, length = unit(1, "mm"))
   ) +
+  annotate("label",
+           x = -4, y = 1, label = "4.2 h",
+           vjust = 0.5, size = 2.5, fill = alpha("white", 0.8),
+           family = font_family, label.size = 0, label.r = unit(0.4, "mm")
+           ) +
   scale_alpha_manual(values = c("0.95" = 0.2, "0.80" = 0.5, "0.50" = 1)) +
-  coord_cartesian(expand = TRUE) +
-  theme_void() +
+  coord_cartesian(expand = TRUE, clip = "off") +
+  # labs(title = "Legend") + 
+  theme_void(base_family = font_family, base_size = 6) +
   theme(plot.background = element_rect(color = NA, fill = NA),
         plot.margin = margin(l = 4, r = 4, t = 4))
 
