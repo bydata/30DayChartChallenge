@@ -60,8 +60,8 @@ p <- df_2020 %>%
   coord_flip(clip = "off")  +
   labs(
     title = "GDP per capita varies between and within continents",
-    subtitle = "Logarithmic scale",
-    caption = "Source: Gapminder. Theme: The Economist.", 
+    subtitle = "Data from 2020. Logarithmic scale",
+    caption = "Source: Our World in Data, Worldbank. Theme: The Economist.", 
     x = NULL,
     y = "GDP per capita (log scale)",
     col = NULL
@@ -69,7 +69,7 @@ p <- df_2020 %>%
   theme_minimal(base_family = "Fira Sans Condensed") +
   theme(
     panel.grid = element_blank(),
-    panel.grid.major.y = element_line(size = 0.2, color = "#DAD9D9"),
+    panel.grid.major.y = element_line(size = 0.3, color = "#DAD9D9"),
     plot.background = element_rect(color = NA, fill = "white"),
     text = element_text(),
     axis.line.x = element_line(color = "black", size = 0.3),
@@ -84,6 +84,7 @@ p <- df_2020 %>%
     plot.title = element_markdown(
       face = "bold", margin = margin(t = 16, b = 4)),
     plot.title.position = "plot",
+    plot.subtitle = element_text(margin = margin(b = 8)),
     plot.caption = element_text(hjust = 0, size = 7, 
                                 family = "Fira Sans Condensed Light"),
     plot.caption.position = "plot"
