@@ -131,6 +131,7 @@ p_base <- df_k %>%
     plot.margin = margin(10, 10, 10, 10),
     plot.title = element_text(hjust = 0.5, color = "black"),
     plot.title.position = "plot",
+    plot.caption = element_markdown(margin = margin(t = 40, b = 4), color = "grey40"),
     legend.position = "bottom"
   )
 
@@ -183,7 +184,10 @@ p <- p_base +
   # stat_summary(geom = "point", color = "grey20", fun = mean, size = 0.5) +
   annotate("text", 
            x = 1:12, y = 21, label = month.abb, color = "white", alpha = 0.65, 
-           size = 2, family = font_family)
+           size = 2, family = font_family)  +
+  labs(
+    caption = "Source: Deutscher Wetterdienst CDC. Visualization: Ansgar Wolsing"
+  )
 
 
 ## custom legend
@@ -222,8 +226,8 @@ p_legend <- data.frame(
 
 
 library(patchwork)
-p + inset_element(p_legend, l = 0.6, r = 1,  t = 0.11, b = 0, clip = FALSE)
-ggsave(here(base_path, "11-circular-sushine-cgn-intervals2.png"), width = 5.5, height = 5.5)
+p + inset_element(p_legend, l = 0.6, r = 1,  t = 0.11, b = -0.05, clip = FALSE)
+ggsave(here(base_path, "11-circular-sushine-cgn-intervals2.png"), width = 5.5, height = 6)
 
 
 # https://de.weatherspark.com/y/54495/Durchschnittswetter-in-K%C3%B6ln-Deutschland-das-ganze-Jahr-%C3%BCber
