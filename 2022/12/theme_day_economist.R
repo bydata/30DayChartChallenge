@@ -2,39 +2,56 @@ library(tidyverse)
 library(grid)
 library(ggtext)
 library(here)
-library(gapminder)
-library(ggdist)
-
 
 base_path <- here("2022", "12")
 
-data(gapminder)
-glimpse(gapminder)
+#' Manually download data source from OWID:
+#' GDP per capita: https://ourworldindata.org/grapher/gdp-per-capita-worldbank
+#' Population: https://ourworldindata.org/grapher/population-past-future
 
-gap_2007 <- gapminder %>% 
-  filter(year == 2007)
+# Prepare GDP data
+gdp <- read_csv(here(base_path, "gdp-per-capita-worldbank.csv"))
+gdp <- gdp %>% 
+    rename(gdpPercap = 4) %>%
+    filter(!is.na(Code))
+glimpse(gdp)
+gdp_2020 <- gdp %>% 
+  filter(Year == 2020)
 
-p <- gap_2007 %>% 
-  mutate(country = fct_reorder(country, -pop),
-         continent = factor(continent, levels = rev(levels(continent)))) %>% 
+# Prepare population data
+pop <- read_csv(here(base_path, "population-past-future.csv"))
+pop <- pop %>% 
+  rename(pop = 4) %>%
+  filter(!is.na(Code))
+glimpse(pop)
+pop_2020 <- pop %>% 
+  filter(Year == 2020)
+
+# merge dataframes and add continent
+df_2020 <- gdp_2020 %>% 
+  inner_join(pop_2020, by = c("Year", "Entity", "Code")) %>% 
+  rename(country = Entity, code = Code, year = Year)  %>% 
+  mutate(continent = countrycode::countrycode(code, origin = "iso3c", 
+                                              destination = "continent"),
+         country = fct_reorder(country, -pop),
+         continent = factor(continent, 
+                            levels = rev(c("Africa", "Americas", "Asia", "Europe", "Oceania")))) %>% 
+  filter(!is.na(continent))
+
+p <- df_2020 %>% 
   ggplot(aes(continent, gdpPercap, fill = continent)) +
   ggbeeswarm::geom_beeswarm(aes(size = pop), 
-                            cex = 3.1,
-                            shape = 21, stroke = 0.5,
-                            col = "white",
+                            cex = 3.1, alpha = 0.6,
+                            shape = 21, stroke = 0.2, col = "white",
                             show.legend = FALSE) +
-  scale_y_log10() +
-  scale_size_area(max_size = 18) +
-  #' Colors:
-  # Hong Kong 55 	#36E2BD
-  # Chicago 30  #1F2E7A
-  # Chicago 20  	#141F52
-  # London 5   	#F97A1F
-  # Tokyo 55 	#E2365B
+  scale_y_log10(labels = scales::number_format(), 
+                breaks = c(1000, 3000, 10000, 30000, 100000)) +
+  # scale_size_area(max_size = 20) +
+  scale_size_continuous(range = c(1, 20)) +
   scale_fill_manual(values = c(
     "Europe" = "#36E2BD", "Oceania" = "#141F52", "Asia" = "#E2365B", 
     "Africa" = "#1F2E7A", "Americas" = "#F97A1F")) + 
-  coord_flip()  +
+  coord_flip(clip = "off")  +
   labs(
     title = "GDP per capita varies between and within continents",
     subtitle = "Logarithmic scale",
@@ -56,17 +73,19 @@ p <- gap_2007 %>%
     axis.text.y = element_text(),
     legend.position = "top",
     legend.justification = "left",
-    legend.text = ggtext::element_markdown(),
-    plot.title = ggtext::element_markdown(face = "bold", 
-                                          margin = margin(t = 16, b = 4)),
-    plot.title.position = "plot"
+    legend.text = element_markdown(),
+    plot.title = element_markdown(
+      face = "bold", margin = margin(t = 16, b = 4)),
+    plot.title.position = "plot",
+    plot.caption = element_text(hjust = 0, size = 7, 
+                                family = "Fira Sans Condensed Light"),
+    plot.caption.position = "plot"
+    
   )
 p
 
-unique(gap_2007$country[gap_2007$continent == "Europe"])
 
 # Add theme elements using {grid} ---------------
-
 ragg::agg_png(here(base_path, "economist_gdpercap.png"), res = 300, width = 6, height = 6, units = "in")
 p
 grid.lines(
@@ -88,3 +107,4 @@ invisible(dev.off())
 #' Bar chart: https://www.economist.com/the-economist-explains/2022/02/10/how-does-america-calculate-inflation
 #' Line chart: https://www.economist.com/graphic-detail/2022/03/17/russian-soldiers-appear-to-be-dying-in-ukraine-at-a-remarkably-high-rate
 #' https://design-system.economist.com/foundations/typography/line-height#multipliers
+#' 
