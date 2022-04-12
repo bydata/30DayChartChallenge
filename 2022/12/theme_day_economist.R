@@ -31,11 +31,12 @@ pop_2020 <- pop %>%
 df_2020 <- gdp_2020 %>% 
   inner_join(pop_2020, by = c("Year", "Entity", "Code")) %>% 
   rename(country = Entity, code = Code, year = Year)  %>% 
-  mutate(continent = countrycode::countrycode(code, origin = "iso3c", 
-                                              destination = "continent"),
-         country = fct_reorder(country, -pop),
-         continent = factor(continent, levels = rev(c("Africa", "Americas", 
-                                                      "Asia", "Europe", "Oceania")))) %>% 
+  mutate(
+    continent = countrycode::countrycode(
+      code, origin = "iso3c", destination = "continent"),
+    ountry = fct_reorder(country, -pop),
+    continent = factor(continent, 
+                       levels = rev(c("Africa", "Americas", "Asia", "Europe", "Oceania")))) %>% 
   filter(!is.na(continent))
 
 p <- df_2020 %>% 
@@ -60,7 +61,8 @@ p <- df_2020 %>%
   coord_flip(clip = "off")  +
   labs(
     title = "GDP per capita varies between and within continents",
-    subtitle = "Data from 2020. Logarithmic scale",
+    subtitle = "Measured in constant international US-$ (logarithmic scale).<br>
+    The size of the bubbles indicates population. Data from 2020",
     caption = "Source: Our World in Data, Worldbank. Theme: The Economist.", 
     x = NULL,
     y = "GDP per capita (log scale)",
@@ -84,7 +86,7 @@ p <- df_2020 %>%
     plot.title = element_markdown(
       face = "bold", margin = margin(t = 16, b = 4)),
     plot.title.position = "plot",
-    plot.subtitle = element_text(margin = margin(b = 8)),
+    plot.subtitle = element_markdown(margin = margin(b = 8), lineheight = 1),
     plot.caption = element_text(hjust = 0, size = 7, 
                                 family = "Fira Sans Condensed Light"),
     plot.caption.position = "plot"
