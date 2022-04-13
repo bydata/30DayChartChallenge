@@ -51,8 +51,8 @@ df %>%
   scale_x_log10() +
   scale_size_continuous(range = c(1, 18)) +
   scale_fill_manual(values = c(
-    "Europe" = "#36E2BD", "Oceania" = "#2E45B8", "Asia" = "#E2365B", 
-    "Africa" = "#F9C31F", "Americas" = "#F97A1F")) + 
+    "Africa" = "#F9C31F", "Americas" = "#F97A1F", "Asia" = "#E2365B",
+    "Europe" = "#36E2BD", "Oceania" = "#2E45B8")) + 
   guides(
     size = "none",
     fill = guide_legend(override.aes = list(size = 4))
