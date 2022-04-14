@@ -43,16 +43,14 @@ highlight_countries <- c(
   "Cambodia", "Singapore", "India", "China", "Japan", "Turkey", "Sri Lanka")
 
 
-ragg::agg_png(here(base_path, "14-3dimensional.png"), res = 300, width = 8, height = 6, units = "in")
+ragg::agg_png(here(base_path, "14-3dimensional-fixed-x.png"), res = 300, width = 8, height = 6, units = "in")
 df %>% 
   filter(continent %in% relevant_continents) %>% 
   # add correlation coefficients per continent
   inner_join(continent_correlations, by = "continent") %>% 
   ggplot(aes(gdp_per_cap, working_hours)) +
-  # geom_smooth(method = lm, col = "#141F52", fill = "grey72", size = 1.5,
-  #             fullrange = TRUE) +
   geom_smooth(aes(size = abs(corr)), method = lm, col = "#141F52", fill = "grey72",
-              fullrange = TRUE, show.legend = FALSE) +
+              fullrange = FALSE, show.legend = FALSE) +
   geom_point(aes(fill = continent),
              shape = 21, size = 3, color = "white", alpha = 0.7) +
   ggrepel::geom_text_repel(
@@ -70,14 +68,13 @@ df %>%
   scale_size_area(max_size = 1.5) +
   scale_fill_manual(values = c(
     "Asia" = "#E2365B", "Americas" = "#2E45B8", "Europe" = "#36E2BD")) + 
-  facet_wrap(vars(factor(continent, levels = c("Asia", "Americas", "Europe"))), scales = "free_x") +
+  facet_wrap(vars(factor(continent, levels = c("Asia", "Americas", "Europe")))) +
   guides(fill = "none") +
   labs(
     title = "Workers in poorer countries tend to work more",
     subtitle = "But the relationship between GDP per capita and annual average working 
     hours is stronger in Europe than in Asia and very weak in the Americas.<br>
-    Trend lines indicate the direction, the thickness indicates the strength of the relationship.<br>
-    *Note: Different GDP scales (x-axis) between continents*",
+    Trend lines indicate the direction, the thickness indicates the strength of the relationship.",
     caption = "Source: Our World in Data, Feenstra et al. (2015). Theme: The Economist.
     Visualization: Ansgar Wolsing",
     x = "GDP per capita (adjusted US-$, log scale)",
