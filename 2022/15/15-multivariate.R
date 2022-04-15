@@ -24,20 +24,6 @@ colnames(df) <- c("country", "code", "year", "access_clean_fuels", "gdp_per_cap"
                   "population", "deaths_household_air_pollution", "X1", "continent")
 df$X1 <- NULL
 
-# http://dwoll.de/rexrepos/posts/diagMultivariate.html
-library(ellipse)
-df_no_na <- select_if(df, is.numeric) %>% na.omit()
-corr_mat <- cor(df_no_na)
-# Relabel the correlation matrix
-variable_names <- c("Year", "Access to clean fuels", "GDP per capita", 
-                    "Population", "Deaths by household air pollution")
-rownames(corr_mat) <- variable_names
-colnames(corr_mat) <- variable_names
-png(here(base_path, "15-multivariate-ellipse.png"), res = 300, width = 6, height = 6, units = "in")
-plotcorr(corr_mat, type = "lower", diag = FALSE, main = "Bivariate correlations",
-         col = "steelblue")
-invisible(dev.off())
-
 
 ## PARALLEL COORDINATES --------------------------------------------
 
