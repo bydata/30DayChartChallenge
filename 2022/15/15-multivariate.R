@@ -41,9 +41,9 @@ invisible(dev.off())
 
 ## PARALLEL COORDINATES --------------------------------------------
 
-variable_names <- c("gdp_per_cap" = "GDP per capita<br>(log)", 
+variable_names <- c("gdp_per_cap" = "GDP per capita<br>(US-$, log)", 
                     "access_clean_fuels" = "Access to<br>clean fuels", 
-                    "deaths_household_air_pollution" = "Share of deaths due to<br>household air pollution")
+                    "deaths_household_air_pollution" = "Share of deaths due to<br>indoor air pollution")
 
 df_filtered <- df %>% 
   filter(continent != "Oceania") %>% 
@@ -53,17 +53,22 @@ df_filtered <- df %>%
   filter(year == max(year)) %>% 
   ungroup() 
 
-# quantiles_list <- map(select(df_filtered, access_clean_fuels, gdp_per_cap, deaths_household_air_pollution),
-#            quantile)
-# quantiles_df <- bind_rows(quantiles_list, .id = "variable") %>% 
-#   pivot_longer(-variable, names_to = "quantile")  %>% 
-#   bind_cols(quantile_num = rep(seq(0, 1, 0.25), 3))
+# Correlation between the 3 variables
+cor(df_filtered[c(
+  "access_clean_fuels",
+  "gdp_per_cap",
+  "deaths_household_air_pollution"
+)])
 
+unique(df_filtered$continent)
 
 df_filtered %>% 
-  summarize(across(-c(country, code, year, continent), list(min = min, max = max)))
+  select(continent, access_clean_fuels, gdp_per_cap, deaths_household_air_pollution) %>% 
+  group_split(continent, .keep = FALSE) %>% 
+  map(cor) %>% 
+  set_names(unique(df_filtered$continent))
 
-
+# Calculate the values based on share of the min-max range
 get_min_max_breaks <- function(x, breaks = seq(0, 1, 0.25), accuracy = c(1, 0.1, 0.01)) {
   min_val <- min(x)
   max_val <- max(x)
@@ -73,10 +78,7 @@ get_min_max_breaks <- function(x, breaks = seq(0, 1, 0.25), accuracy = c(1, 0.1,
   break_vals
 }
 
-get_min_max_breaks(df_filtered$access_clean_fuels)
-
-
-
+# Create the break labels 
 breaks_df <-
   map_dfr(
     c(
@@ -90,40 +92,89 @@ breaks_df <-
       step = seq(0, 1, 0.25),
       value = get_min_max_breaks(df_filtered[.x])
     )
-  ) %>% 
-  mutate(variable = variable_names[variable],
-         variable = factor(variable, levels = variable_names)) 
+  ) %>%
+  mutate(
+    variable = variable_names[variable],
+    variable = factor(variable, levels = variable_names),
+    value = case_when(
+      variable %in% variable_names[c("access_clean_fuels", "deaths_household_air_pollution")] ~
+        paste0(value, "%"),
+      TRUE ~ scales::number(value, accuracy = 1, big.mark = ",")
+    )
+  )
+
+# Annotations
+plot_titles <- list(
+  title = "Indoor air pollution - \"the world's largest single environmental health risk\"*",
+  subtitle = "
+  Household air pollution is caused by burning solid fuel sources 
+  (e.g. firewood, crop waste, dung) for cooking and heating.
+  The burning of such fuels, results in air pollution that leads to respiratory 
+  diseases which can result in premature death. **Income** is a strong driver for the 
+  **access to cleaner methods** (natural gas, ethanol, electric).<br><br>
+  <i style='color:grey40'>How to read this chart: In the plot, each line represents a country. 
+  If most lines between two parallel axes are running parallel, they indicate a positive relationship.
+  If the lines cross, they indicate a negative correlation. 
+  Randomly directed lines indicate the absence of a (linear) relationship.</i>
+  ",
+  caption = "\\* WHO 2014. Data from 2016. Source: Our World in Data, #TidyTuesday | Visualization: Ansgar Wolsing"
+)
 
 
 df_filtered %>% 
   mutate(
     gdp_per_cap = log(gdp_per_cap),
-    # center + scale
-    # across(-c(country, code, year, continent), function(x) (x - mean(x)) / sd(x))
-    # min - max scaling
     across(-c(country, code, year, continent), function(x) (x - min(x)) / (max(x) - min(x)))
   )  %>% 
   pivot_longer(cols = -c(country, code, year, continent), names_to = "variable") %>% 
   mutate(variable = variable_names[variable],
          variable = factor(variable, levels = variable_names)) %>% 
   ggplot(aes(variable, value, group = country)) +
-  geom_vline(aes(xintercept = variable), color = "grey80", size = 1) +
+  # create separate "pseudo" y-axes
+  geom_vline(aes(xintercept = variable), color = "grey40", size = 0.8) +
   geom_text(
     data = breaks_df,
     aes(variable, step, label = value),
-    inherit.aes = FALSE
+    inherit.aes = FALSE, color = "grey30",
+    size = 2.5, family = "Roboto Slab", hjust = 1, vjust = 0, nudge_x = -0.05
   ) +
-  geom_line(size = 0.2, col = "#3295a8") +
+  geom_text(
+    data = breaks_df,
+    aes(variable, step, label = "-"),
+    inherit.aes = FALSE,
+    size = 4, family = "Roboto Slab", hjust = 1, color = "grey40"
+  ) +
+  # country lines
+  geom_line(size = 0.2, alpha = 0.9, col = "#3295a8") +
   geom_point(size = 0.2, col = "#3295a8") +
-  scale_x_discrete(position = "top") +
+  scale_x_discrete(position = "bottom") +
+  scale_y_continuous(expand = expansion(mult = c(0.1, 0.1))) +
   facet_wrap(vars(continent), scales = "free_x") +
-  ggthemes::theme_fivethirtyeight(base_family = "Familjen Grotesk") +
+  labs(
+    title = plot_titles$title,
+    subtitle = plot_titles$subtitle,
+    caption = plot_titles$caption,
+  ) +
+  # ggthemes::theme_fivethirtyeight(base_family = "Fira Sans Condensed") +
   theme(
     plot.background = element_rect(color = NA, fill = "white"),
     axis.text = element_text(),
-    axis.text.y = element_markdown(family = "Roboto Slab"),
-    axis.text.x.top = element_markdown(hjust = 0.5, halign = 0.5),
-    strip.text = element_text(size = 12)
+    # axis.text.y = element_markdown(family = "Roboto Slab"),
+    axis.text.x.bottom = element_markdown(
+      hjust = 0.5, halign = 0.5, size = 8, family = "Fira Sans Condensed SemiBold"),
+    strip.text = element_text(size = 10, family = "Fira Sans Condensed SemiBold"),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text.y = element_blank(),
+    panel.grid = element_blank(),
+    panel.spacing.y = unit(8, "mm"),
+    text = element_text(color = "grey19", family = "Fira Sans Condensed"),
+    plot.title = element_text(color = "black", face = "bold"),
+    plot.subtitle = element_textbox_simple(
+      width = 0.9, size = 9, hjust = 0, margin = margin(t = 4, b = 8)
+    ),
+    plot.caption = element_markdown(size = 7, hjust = 0, color = "grey25",
+    margin = margin(t = 16))
   )
-ggsave(here(base_path, "15-parallel-coordinates.png"), width = 10, height = 6)  
+ggsave(here(base_path, "15-parallel-coordinates.png"), width = 9, height = 6)  
 
