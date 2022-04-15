@@ -51,7 +51,8 @@ df_filtered <- df %>%
   na.omit() %>% 
   group_by(country) %>% 
   filter(year == max(year)) %>% 
-  ungroup() 
+  ungroup() %>% 
+  mutate(gdp_per_cap = log(gdp_per_cap))
 
 # Correlation between the 3 variables
 cor(df_filtered[c(
@@ -107,14 +108,15 @@ breaks_df <-
 plot_titles <- list(
   title = "Indoor air pollution - \"the world's largest single environmental health risk\"*",
   subtitle = "
-  Household air pollution is caused by burning solid fuel sources 
+  Indoor air pollution is caused by burning solid fuel sources 
   (e.g. firewood, crop waste, dung) for cooking and heating.
   The burning of such fuels, results in air pollution that leads to respiratory 
   diseases which can result in premature death. **Income** is a strong driver for the 
   **access to cleaner methods** (natural gas, ethanol, electric).<br><br>
-  <i style='color:grey40'>How to read this chart: In the plot, each line represents a country. 
-  If most lines between two parallel axes are running parallel, they indicate a positive relationship.
-  If the lines cross, they indicate a negative correlation. 
+  <i style='color:grey40'>The purpose of the chart is to detect patterns and similarities: 
+  Each line connecting the parallel axis represents a country.
+  Many parallel lines indicate a positive relationship, lots of crossing lines 
+  indicate a negative correlation.
   Randomly directed lines indicate the absence of a (linear) relationship.</i>
   ",
   caption = "\\* WHO 2014. Data from 2016. Source: Our World in Data, #TidyTuesday | Visualization: Ansgar Wolsing"
@@ -123,7 +125,6 @@ plot_titles <- list(
 
 df_filtered %>% 
   mutate(
-    gdp_per_cap = log(gdp_per_cap),
     across(-c(country, code, year, continent), function(x) (x - min(x)) / (max(x) - min(x)))
   )  %>% 
   pivot_longer(cols = -c(country, code, year, continent), names_to = "variable") %>% 
@@ -177,4 +178,19 @@ df_filtered %>%
     margin = margin(t = 16))
   )
 ggsave(here(base_path, "15-parallel-coordinates.png"), width = 9, height = 6)  
+
+
+
+df_filtered %>% 
+  ggplot(aes(gdp_per_cap, access_clean_fuels)) +
+  geom_point() +
+  geom_smooth(method = lm) + 
+  facet_wrap(vars(continent))
+
+
+df_filtered %>% 
+  ggplot(aes(access_clean_fuels, deaths_household_air_pollution)) +
+  geom_point() +
+  geom_smooth(method = lm) + 
+  facet_wrap(vars(continent))
 
