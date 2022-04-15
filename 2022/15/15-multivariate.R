@@ -167,16 +167,16 @@ ggsave(here(base_path, "15-parallel-coordinates.png"), width = 9, height = 6)
 
 
 
+# Scatterplots --------
+
 df_filtered %>% 
   ggplot(aes(gdp_per_cap, access_clean_fuels)) +
   geom_point() +
   geom_smooth(method = lm) + 
   facet_wrap(vars(continent))
 
-
 df_filtered %>% 
   ggplot(aes(access_clean_fuels, deaths_household_air_pollution)) +
   geom_point() +
   geom_smooth(method = lm) + 
   facet_wrap(vars(continent))
-
