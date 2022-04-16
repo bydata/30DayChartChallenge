@@ -25,7 +25,7 @@ highlight_countries <- c("China", "Iceland", "Morocco", "Peru", "United States",
                          "Seychelles", "Philippines", "Norway", "Egypt", "India",
                          "Indonesia", "Vietnam", "Bangladesh")
 
-df %>% 
+p1 <- df %>% 
   group_by(Entity) %>% 
   filter(Year == max(Year)) %>% 
   ungroup() %>% 
@@ -47,28 +47,26 @@ df %>%
            y = c(10^7, 1),
            hjust = c(0.5, 1.1),
            vjust = c(0.5, -0.2),
-           label = c("More capture fishery", "More aquaculture production"),
+           label = c("More wild catch", "More fish farming"),
            family = "Noto Serif", fontface = "bold", color = "grey38"
            ) +
-  geom_point(aes(fill = continent, size = log(aquaculture_production + capture_fishery)),
+  geom_point(aes(fill = ifelse(aquaculture_production > capture_fishery, "steelblue", "darkblue"), 
+                 size = log(aquaculture_production + capture_fishery)),
              shape = 21, color = "white", alpha = 0.6) +
   ggrepel::geom_text_repel(
     data = . %>% filter(Entity %in% highlight_countries),
     aes(label = Entity), size = 2, segment.size = 0.2, family = "Noto Serif",
-    color = "grey20") +
+    color = "grey20", max.overlaps = 20) +
   scale_x_log10(labels = scales::number_format(accuracy = 1)) +
   scale_y_log10(labels = scales::number_format(accuracy = 1) ) +
-  scale_fill_manual(values = MetBrewer::met.brewer("Wissing")) +
+  scale_fill_identity() +
   scale_size_continuous(range = c(1, 5)) +
   coord_fixed(xlim = c(0.1, 10^8), ylim = c(0.1, 10^8), expand = FALSE, clip = "off") +
   guides(
     size = "none"
   ) +
   labs(
-    title = "Here is the Title",
-    subtitle = "",
-    caption = "Source: World Development Indicators, Our World in Data.
-    Visualization: Ansgar Wolsing",
+    subtitle = "<b style='font-size:12pt;color:grey30'>Wild catch vs. fish farming</b>",
     x = "Aquaculture production (tons, log)",
     y = "Capture fisheries production (tons, log)",
     fill = NULL
@@ -83,11 +81,10 @@ df %>%
     plot.caption = element_markdown(hjust = 0.5),
     plot.caption.position = "plot"
   )
-ggsave(here(base_path, "16-environmental.png"), width = 7, height = 7)
 
 
 ## Top 10 producing countries 
-df %>% 
+p2 <- df %>% 
   group_by(Entity) %>% 
   filter(Year == max(Year)) %>% 
   ungroup() %>% 
@@ -98,30 +95,76 @@ df %>%
   ggplot(aes(Entity)) +
   geom_col(aes(y = aquaculture_production), fill = "steelblue") +
   geom_col(aes(y = -capture_fishery), fill = "darkblue") +
-  annotate("text",
-           x = c(10, 10^8),
-           y = c(10^7, 1),
-           hjust = c(0.5, 1.1),
-           vjust = c(0.5, -0.2),
-           label = c("More capture fishery", "More aquaculture production"),
-           family = "Noto Serif", fontface = "bold", color = "grey38"
+  annotate("richtext",
+           x = c(2, 2),
+           y = c(-1.5 * 10^7, 1.5 * 10^7),
+           label = c("Wild catch", "Fish farming"), 
+           hjust = c(1, 0),
+           family = "Noto Serif", fontface = "bold", color = "grey38",
+           label.size = 0, fill = NA
   ) +
   geom_hline(yintercept = 0) +
-  scale_y_continuous(labels = scales::number_format()) +
-  coord_flip(ylim = c(-3 * 10^7, 7 * 10^7)) +
+  scale_y_continuous(labels = function(x) scales::number(abs(x), scale = 10^-6, suffix = "M")) +
+  coord_flip(ylim = c(-5 * 10^7, 7 * 10^7)) +
   labs(
-    title = "Top 15 Fish producing countries",
-    subtitle = "",
-    caption = "",
+    subtitle = "<b style='font-size:12pt;color:grey30'>Top 15 Seafood producing countries</b>",
     x = NULL,
-    y = "Metric tons"
+    y = "Million metric tons"
   ) +
   theme_minimal(base_family = "Noto Serif") +
   theme(
-   panel.grid = element_blank(),
+    plot.background = element_rect(color = NA, fill = "grey98"),
+    panel.grid = element_blank(),
    panel.grid.major.x = element_line(size = 0.2, color = "grey81"),
    plot.title = element_markdown(face = "bold"),
    plot.title.position = "plot",
    plot.caption.position = "plot"
   )
-  
+
+library(patchwork)
+
+# total worldwide 2018
+total_worldwide <- df %>% 
+  group_by(Entity) %>% 
+  filter(Year == max(Year)) %>% 
+  ungroup() %>% 
+  mutate(total = replace_na(aquaculture_production, 0) + replace_na(capture_fishery, 0)) %>% 
+  summarize(total_worldwide = sum(total)) %>% 
+  pull(total_worldwide)
+
+total_worldwide_fmt <- scales::number(total_worldwide, scale = 10^-6, suffix = " million")
+
+df %>% 
+  group_by(Entity) %>% 
+  filter(Year == max(Year)) %>% 
+  ungroup() %>% 
+  mutate(total = replace_na(aquaculture_production, 0) + replace_na(capture_fishery, 0)) %>% 
+  slice_max(order_by = total, n = 10)
+
+# Combine the plots
+p1 + p2 + 
+  plot_annotation(
+    title = "FISH & SEAFOOD PRODUCTION",
+    subtitle = glue::glue("
+      {total_worldwide_fmt} tons of fish and seafood were produced worldwide in 2018.
+      China is the largest producing country by far, followed by 
+      Indonesia, India, Vietnam, and Peru.
+      Many countries generate the majority of their fish and seafood production 
+      from capture fishery. On the other hand, China produces the majority from 
+      aquaculture.<br><br>"),
+    caption = "Source: World Development Indicators, Our World in Data.
+    Visualization: Ansgar Wolsing") + 
+  plot_layout(
+  design = c(
+    "12"
+  )) & theme(
+  plot.background = element_rect(color = NA, fill = "grey98"),
+  text = element_text(family = "Noto Serif", color = "grey20"),
+  plot.title = element_markdown(hjust = 0.5, color = "grey2", face = "bold", size = 24),
+  plot.title.position = "plot",
+  plot.subtitle = element_textbox(hjust = 0.5, width = 0.8, lineheight = 1.3),
+  plot.caption = element_markdown(hjust = 0.5, margin = margin(t = 24)),
+  plot.caption.position = "plot",
+  plot.margin = margin(l = 20, r = 20)
+)
+ggsave(here(base_path, "16-environmental.png"), width = 12, height = 7.5, scale = 1)
