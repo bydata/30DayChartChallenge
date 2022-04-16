@@ -37,14 +37,14 @@ career_annotations <- tribble(
   "Lionel Messi",      "2008-2009",  8,    11, 23,    23,      1,  "**08-09** | 23 goals, 11 assists",
   "Lionel Messi",      "2019-2020", 21,    21, 22,    25,      1,  "**19-20** | 21 assists",
   "Lionel Messi",      "2019-2020", 13,    16, 50,    50,      1,  "**11-12** | 50 goals",
-  "Lionel Messi",      "2019-2020", 10,    10, 42,    42,      1,  "**Prime at Barcelona**",
+  "Lionel Messi",      "2009-2010", 10,    10, 42,    42,      1,  "**Prime at Barcelona**",
   "Lionel Messi",      "2020-2021",  6,     9, 30,    30,      1,  "**21-22** | Last season<br>in Barcelona",
   "Lionel Messi",      "2021-2022", 16,    13,  3,     3,      0,  "**21-22** | Transfer to PSG*",
   
   "Cristiano Ronaldo", "2002-2003",  6,     3,  3,     3,      0, "**02-03** | Professional debut (Sporting CP)",
   "Cristiano Ronaldo", "2003-2004",  8,     4,  4,     4,      0, "**03-04** | Breakout at Manchester Utd.",
   "Cristiano Ronaldo", "2014-2015", 16,    16, 52,    48,      0, "**14-15** | Peak season in<br>terms of goals and assists",
-  "Cristiano Ronaldo", "2012-2013", 14,    14, 40,    40,      0, "**Prime at Real Madrid**",
+  "Cristiano Ronaldo", "2012-2013", 15,    15, 40,    40,      0, "**Prime at Real Madrid**",
   "Cristiano Ronaldo", "2018-2019", 12,     8, 21,    21,      0, "**18-19** | 1st season for Juventus",
   "Cristiano Ronaldo", "2021-2022", 10,     3, 12,    12,      0, "**21-22** | Return to Manchester*"
 )
@@ -102,7 +102,7 @@ p <- bind_rows(messi, ronaldo) %>%
   ) +
   # Messi prime
   geom_rect(
-    data = data.frame(player_name = "Lionel Messi", season_id = 10L),
+    data = data.frame(player_name = "Lionel Messi", season_id = 8L),
     aes(xmin = 8, xmax = 20, ymin = 29, ymax = 52, group = season_id),
     inherit.aes = FALSE,
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
@@ -134,11 +134,12 @@ ggsave(here(base_path, "17-connected-messi-ronaldo.png"), width = 10, height = 7
 
 
 
-
+## ANIMATION -------------------------------------------------------------------
 
 library(gganimate)
 p_anim <- p +
   transition_reveal(season_id)
 
-animate(p_anim, res = 200, width = 10, height = 7, units = "in", duration = 30)
+animate(p_anim, res = 200, width = 10, height = 7, units = "in", duration = 25,
+        end_pause = 40)
 anim_save(here(base_path, "17.gif"))
