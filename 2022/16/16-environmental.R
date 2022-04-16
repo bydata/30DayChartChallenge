@@ -2,6 +2,8 @@ library(tidyverse)
 library(ggtext)
 library(here)
 library(grid)
+library(patchwork)
+library(magick)
 
 base_path <- here("2022", "16")
 
@@ -121,8 +123,6 @@ p2 <- df %>%
    plot.caption.position = "plot"
   )
 
-library(patchwork)
-
 # total worldwide 2018
 total_worldwide <- df %>% 
   group_by(Entity) %>% 
@@ -141,8 +141,26 @@ df %>%
   mutate(total = replace_na(aquaculture_production, 0) + replace_na(capture_fishery, 0)) %>% 
   slice_max(order_by = total, n = 10)
 
+
+# Fish image
+#' Image credit:
+#' Vägverket (Swedish Road Administration)
+fish_img_url <- "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Fish_icon.svg/1000px-Fish_icon.svg.png"
+fish_img_path <- here(base_path, "fish.png")
+download.file(fish_img_url, destfile = fish_img_path)
+
+fish_img <- image_read(fish_img_path)
+fish_img_edited <- image_fill(fish_img, "steelblue", point = "+600+800", fuzz = 100) %>% 
+  image_scale("+500")
+fish_img_grob <- rasterGrob(fish_img_edited, interpolate = TRUE)
+
+
+
 # Combine the plots
-p1 + p2 + 
+p1 +
+  # annotation_custom(fish_img_grob, xmin =  10, xmax = 15, ymin = 0.7, ymax = Inf) + 
+  annotation_custom(fish_img_grob, xmin =  5, xmax = 7.8, ymin = 1, ymax = 4) + 
+  p2 + 
   plot_annotation(
     title = "FISH & SEAFOOD PRODUCTION",
     subtitle = glue::glue("
@@ -153,6 +171,7 @@ p1 + p2 +
       from capture fishery. On the other hand, China produces the majority from 
       aquaculture.<br><br>"),
     caption = "Source: World Development Indicators, Our World in Data.
+    Image credit: Vägverket (Swedish Road Administration).
     Visualization: Ansgar Wolsing") + 
   plot_layout(
   design = c(
@@ -165,6 +184,6 @@ p1 + p2 +
   plot.subtitle = element_textbox(hjust = 0.5, width = 0.8, lineheight = 1.3),
   plot.caption = element_markdown(hjust = 0.5, margin = margin(t = 24)),
   plot.caption.position = "plot",
-  plot.margin = margin(l = 20, r = 20)
-)
+  plot.margin = margin(l = 20, r = 20))
 ggsave(here(base_path, "16-environmental.png"), width = 12, height = 7.5, scale = 1)
+
