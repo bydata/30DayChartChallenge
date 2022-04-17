@@ -38,7 +38,7 @@ career_annotations <- tribble(
   "Lionel Messi",      "2006-2007",  3,     3, 18,    14,      0,  "**06-07** | 14 goals at 19 yrs",
   "Lionel Messi",      "2008-2009",  8,    11, 23,    23,      1,  "**08-09** | 23 goals, 11 assists",
   "Lionel Messi",      "2019-2020", 21,    21, 22,    25,      1,  "**19-20** | 21 assists",
-  "Lionel Messi",      "2019-2020", 13,    16, 50,    50,      1,  "**11-12** | 50 goals",
+  "Lionel Messi",      "2011-2012", 13,    16, 50,    50,      1,  "**11-12** | 50 goals",
   "Lionel Messi",      "2009-2010", 10,    10, 42,    42,      1,  "**Prime at Barcelona**",
   "Lionel Messi",      "2020-2021",  6,     9, 30,    30,      1,  "**20-21** | Last season<br>in Barcelona",
   "Lionel Messi",      "2021-2022", 16,    13,  3,     3,      0,  "**21-22** | Transfer to PSG*",
