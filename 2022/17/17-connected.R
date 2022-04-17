@@ -44,6 +44,7 @@ career_annotations <- tribble(
   
   "Cristiano Ronaldo", "2002-2003",  6,     3,  3,     3,      0, "**02-03** | Professional debut (Sporting CP)",
   "Cristiano Ronaldo", "2003-2004",  8,     4,  4,     4,      0, "**03-04** | Breakout at Manchester Utd.",
+  "Cristiano Ronaldo", "2009-2010",  9,     7, 26,    26,      0, "**09-10** | Transfer to Real Madrid<br>(record fee at the time)",
   "Cristiano Ronaldo", "2014-2015", 16,    16, 52,    48,      0, "**14-15** | Peak season in<br>terms of goals and assists",
   "Cristiano Ronaldo", "2012-2013", 15,    15, 40,    40,      0, "**Prime at Real Madrid**",
   "Cristiano Ronaldo", "2018-2019", 12,     8, 21,    21,      0, "**18-19** | 1st season for Juventus",
@@ -64,9 +65,12 @@ df_plot <- bind_rows(messi, ronaldo) %>%
   ungroup() %>% 
   # generate a variable with the leading season for geom_segment
   group_by(player_name) %>% 
-  mutate(across(c(Gls, Ast), ~lead(.x, 1), .names = "{.col}_lead")) %>% 
+  mutate(across(c(Gls, Ast), ~lead(.x, 1), .names = "{.col}_lead"),
+         across(c(Gls, Ast), ~lag(.x, 1), .names = "{.col}_lag"),
+         ) %>% 
   ungroup %>% 
   mutate(season_short = str_remove_all(Season, "20(?!(-|$))")) %>% 
+  # add career annotations
   left_join(career_annotations, by = c("player_name", "Season")) %>% 
   mutate(player_name_label = 
            sprintf("<span style='color: %s'>%s</span>",
@@ -78,19 +82,13 @@ p <- df_plot %>%
   ggplot(aes(Ast, Gls, col = player_name, group = season_id)) +
   # geom_segment(
   geom_curve(
-    aes(xend = Ast_lead, yend = Gls_lead),
+    aes(
+      # xend = Ast_lead, yend = Gls_lead
+      x = Ast_lag, xend = Ast, y = Gls_lag, yend = Gls),
     curvature = 0.3,
                size = 0.8 #, arrow = arrow(length = unit(3, "mm"), type = "open", angle = 20)
                ) +
   geom_point(aes(size = Min_Time), shape = 21, fill = "grey18") +
-  ## ggrepel::geom_label_repel(
-  # geom_label(
-  #   aes(label = season_short),
-  #   size = 2, fill = alpha("grey2", 0.6),
-  #   family = "Fira Sans Condensed",
-  #   # set seed so that the position is constant throughout the transition frames
-  #   # seed = 1
-  # ) +
   geom_richtext(
     aes(x = x, y = y, label = label, hjust = hjust, group = season_id),
     inherit.aes = FALSE,
@@ -106,7 +104,7 @@ p <- df_plot %>%
     data = data.frame(
       player_name_label = unique(df_plot$player_name_label[df_plot$player_name == "Cristiano Ronaldo"]),
       season_id = 10L),
-    aes(xmin = 5, xmax = 17, ymin = 29, ymax = 49, group = season_id),
+    aes(xmin = 7, xmax = 17, ymin = 29, ymax = 50, group = season_id),
     inherit.aes = FALSE, 
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
   ) +
@@ -115,7 +113,7 @@ p <- df_plot %>%
     data = data.frame(
       player_name_label = unique(df_plot$player_name_label[df_plot$player_name == "Lionel Messi"]), 
       season_id = 8L),
-    aes(xmin = 8, xmax = 20, ymin = 29, ymax = 52, group = season_id),
+    aes(xmin = 8, xmax = 22, ymin = 29, ymax = 52, group = season_id),
     inherit.aes = FALSE,
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
   ) +
@@ -168,5 +166,5 @@ p_anim <- p +
   transition_reveal(season_id)
 
 animate(p_anim, res = 200, width = 10, height = 7.5, units = "in", duration = 25,
-        fps = 18, end_pause = 40)
-anim_save(here(base_path, "17.gif"))
+        fps = 15, end_pause = 60)
+anim_save(here(base_path, "17-connected.gif"))
