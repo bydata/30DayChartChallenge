@@ -147,8 +147,8 @@ p <- df_plot %>%
     text = element_text(color = "grey90"),
     axis.title = element_text(family = "Fira Sans Condensed SemiBold"),
     axis.text = element_text(color = "grey80"),
-    plot.title = element_text(hjust = 0.5, color = "grey99", family = "Bangers",
-                              size = 24),
+    plot.title = element_text(
+      hjust = 0.5, color = "grey99", family = "Bangers", size = 24),
     plot.title.position = "plot",
     plot.subtitle = element_textbox(
       width = 0.8, hjust = 0.5, margin = margin(t = 8, b = 8), lineheight = 1.2),
