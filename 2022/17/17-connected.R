@@ -29,6 +29,7 @@ ronaldo <- fb_player_season_stats("https://fbref.com/en/players/dea698d9/Cristia
 leagues <- c("1. La Liga", "1. Premier League", "1. Ligue 1", "1. Serie A", "1. Primeira Liga")
 
 shiny_colors <- c("#e8fc35", "#34e9fa", "#347afa", "#c73bff", "#fa34e6")
+bg_color <- "grey4"
 
 ## Career annotations
 career_annotations <- tribble(
@@ -43,7 +44,7 @@ career_annotations <- tribble(
   "Lionel Messi",      "2021-2022", 16,    13,  3,     3,      0,  "**21-22** | Transfer to PSG*",
   
   "Cristiano Ronaldo", "2002-2003",  6,     3,  3,     3,      0, "**02-03** | Professional debut (Sporting CP)",
-  "Cristiano Ronaldo", "2003-2004",  8,     4,  4,     4,      0, "**03-04** | Breakout at Manchester Utd.",
+  "Cristiano Ronaldo", "2003-2004",  9,     4,  4.5,   4.5,    0, "**03-04** | Breakout at Manchester Utd.",
   "Cristiano Ronaldo", "2009-2010",  9,     7, 26,    26,      0, "**09-10** | Transfer to Real Madrid<br>(record fee at the time)",
   "Cristiano Ronaldo", "2014-2015", 16,    16, 52,    48,      0, "**14-15** | Peak season in<br>terms of goals and assists",
   "Cristiano Ronaldo", "2012-2013", 15,    15, 40,    40,      0, "**Prime at Real Madrid**",
@@ -89,17 +90,7 @@ p <- df_plot %>%
                size = 0.8 #, arrow = arrow(length = unit(3, "mm"), type = "open", angle = 20)
                ) +
   geom_point(aes(size = Min_Time), shape = 21, fill = "grey18") +
-  geom_richtext(
-    aes(x = x, y = y, label = label, hjust = hjust, group = season_id),
-    inherit.aes = FALSE,
-    label.size = 0, fill = NA, col = "grey90", 
-    family = "Fira Sans Condensed", size = 3
-  ) +
-  geom_segment(
-    aes(x = x, xend = xend, y = y, yend = yend, group = season_id),
-    inherit.aes = FALSE, col = "grey90", size = 0.2
-  ) +
-  # Ronaldo prime
+  # rectangle Ronaldo prime
   geom_rect(
     data = data.frame(
       player_name_label = unique(df_plot$player_name_label[df_plot$player_name == "Cristiano Ronaldo"]),
@@ -108,7 +99,7 @@ p <- df_plot %>%
     inherit.aes = FALSE, 
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
   ) +
-  # Messi prime
+  # rectangle Messi prime
   geom_rect(
     data = data.frame(
       player_name_label = unique(df_plot$player_name_label[df_plot$player_name == "Lionel Messi"]), 
@@ -117,6 +108,18 @@ p <- df_plot %>%
     inherit.aes = FALSE,
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
   ) +
+  # Career annotations
+  geom_richtext(
+    aes(x = x, y = y, label = label, hjust = hjust, group = season_id),
+    inherit.aes = FALSE,
+    label.size = 0, fill = alpha("grey4", 0.6), col = "grey90", 
+    family = "Fira Sans Condensed", size = 3, label.padding = unit("0", "mm")
+  ) +
+  geom_segment(
+    aes(x = x, xend = xend, y = y, yend = yend, group = season_id),
+    inherit.aes = FALSE, col = "grey90", size = 0.2
+  ) +
+  
   scale_y_continuous() +
   scale_color_manual(values = shiny_colors) +
   coord_cartesian(clip = "off") +
@@ -126,20 +129,20 @@ p <- df_plot %>%
   facet_wrap(vars(player_name_label)) +
   labs(
     title = "Lionel Messi & Cristiano Ronaldo - Head to head",
-    subtitle = "Lionel Messi and Cristiano Ronaldo are considered two of the best
-    football players of all time. 
+    subtitle = "Lionel Messi and Cristiano Ronaldo are considered two of the most
+    exceptional football players of all time. 
     This chart shows their goals and assists scored in their *domestic leagues* in 
     each season of their professional career. Both players achieved 40+ goals each 
-    in 3 league seasons. 
-    ",
-    caption = "**Data:** FBRef, worldfootballR R package. **Visualization:** Ansgar Wolsing",
+    in 3 league seasons.",
+    caption = "<i>\\* 21-22 incomplete (stats as of Apr 17, 2022)</i><br><br>
+    **Data:** FBRef, worldfootballR R package. **Visualization:** Ansgar Wolsing",
     x = "Assists",
     y = "Goals",
     size = "Minutes played"
   ) +
   theme_minimal(base_family = "Fira Sans Condensed") +
   theme(
-    plot.background = element_rect(color = NA, fill = "grey4"),
+    plot.background = element_rect(color = NA, fill = bg_color),
     legend.position = "bottom",
     text = element_text(color = "grey90"),
     axis.text = element_text(color = "grey80"),
