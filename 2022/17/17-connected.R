@@ -28,6 +28,7 @@ ronaldo <- fb_player_season_stats("https://fbref.com/en/players/dea698d9/Cristia
 # List of leagues to filter league appearances
 leagues <- c("1. La Liga", "1. Premier League", "1. Ligue 1", "1. Serie A", "1. Primeira Liga")
 
+shiny_colors <- c("#e8fc35", "#34e9fa", "#347afa", "#c73bff", "#fa34e6")
 
 ## Career annotations
 career_annotations <- tribble(
@@ -38,7 +39,7 @@ career_annotations <- tribble(
   "Lionel Messi",      "2019-2020", 21,    21, 22,    25,      1,  "**19-20** | 21 assists",
   "Lionel Messi",      "2019-2020", 13,    16, 50,    50,      1,  "**11-12** | 50 goals",
   "Lionel Messi",      "2009-2010", 10,    10, 42,    42,      1,  "**Prime at Barcelona**",
-  "Lionel Messi",      "2020-2021",  6,     9, 30,    30,      1,  "**21-22** | Last season<br>in Barcelona",
+  "Lionel Messi",      "2020-2021",  6,     9, 30,    30,      1,  "**20-21** | Last season<br>in Barcelona",
   "Lionel Messi",      "2021-2022", 16,    13,  3,     3,      0,  "**21-22** | Transfer to PSG*",
   
   "Cristiano Ronaldo", "2002-2003",  6,     3,  3,     3,      0, "**02-03** | Professional debut (Sporting CP)",
@@ -50,11 +51,11 @@ career_annotations <- tribble(
 )
 
 
-p <- bind_rows(messi, ronaldo) %>%
+df_plot <- bind_rows(messi, ronaldo) %>%
   tibble() %>%
   filter(Comp %in% leagues) %>% 
   group_by(Season, player_name) %>% 
-  summarize(across(c(Gls, Ast, MP_Time), sum),
+  summarize(across(c(Gls, Ast, MP_Time, Min_Time), sum),
             Squad = last(Squad),
             Comp = last(Comp)
             ) %>% 
@@ -67,6 +68,13 @@ p <- bind_rows(messi, ronaldo) %>%
   ungroup %>% 
   mutate(season_short = str_remove_all(Season, "20(?!(-|$))")) %>% 
   left_join(career_annotations, by = c("player_name", "Season")) %>% 
+  mutate(player_name_label = 
+           sprintf("<span style='color: %s'>%s</span>",
+                   ifelse(player_name == "Cristiano Ronaldo", shiny_colors[1], shiny_colors[2]),
+                   player_name
+           ))
+
+p <- df_plot %>%
   ggplot(aes(Ast, Gls, col = player_name, group = season_id)) +
   # geom_segment(
   geom_curve(
@@ -74,7 +82,7 @@ p <- bind_rows(messi, ronaldo) %>%
     curvature = 0.3,
                size = 0.8 #, arrow = arrow(length = unit(3, "mm"), type = "open", angle = 20)
                ) +
-  geom_point(aes(size = MP_Time), shape = 21, fill = "grey18") +
+  geom_point(aes(size = Min_Time), shape = 21, fill = "grey18") +
   ## ggrepel::geom_label_repel(
   # geom_label(
   #   aes(label = season_short),
@@ -95,30 +103,41 @@ p <- bind_rows(messi, ronaldo) %>%
   ) +
   # Ronaldo prime
   geom_rect(
-    data = data.frame(player_name = "Cristiano Ronaldo", season_id = 10L),
+    data = data.frame(
+      player_name_label = unique(df_plot$player_name_label[df_plot$player_name == "Cristiano Ronaldo"]),
+      season_id = 10L),
     aes(xmin = 5, xmax = 17, ymin = 29, ymax = 49, group = season_id),
     inherit.aes = FALSE, 
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
   ) +
   # Messi prime
   geom_rect(
-    data = data.frame(player_name = "Lionel Messi", season_id = 8L),
+    data = data.frame(
+      player_name_label = unique(df_plot$player_name_label[df_plot$player_name == "Lionel Messi"]), 
+      season_id = 8L),
     aes(xmin = 8, xmax = 20, ymin = 29, ymax = 52, group = season_id),
     inherit.aes = FALSE,
     stat = "unique", lty = "dashed", fill = NA, col = "grey70", size = 0.2
   ) +
-  
   scale_y_continuous() +
-  scale_color_manual(values = c("#e8fc35", "#c73bff")) +
+  scale_color_manual(values = shiny_colors) +
   coord_cartesian(clip = "off") +
   guides(
     color = "none"
   ) +
-  facet_wrap(vars(player_name)) +
+  facet_wrap(vars(player_name_label)) +
   labs(
+    title = "Lionel Messi & Cristiano Ronaldo - Head to head",
+    subtitle = "Lionel Messi and Cristiano Ronaldo are considered two of the best
+    football players of all time. 
+    This chart shows their goals and assists scored in their *domestic leagues* in 
+    each season of their professional career. Both players achieved 40+ goals each 
+    in 3 league seasons. 
+    ",
+    caption = "**Data:** FBRef, worldfootballR R package. **Visualization:** Ansgar Wolsing",
     x = "Assists",
     y = "Goals",
-    size = "Matches played"
+    size = "Minutes played"
   ) +
   theme_minimal(base_family = "Fira Sans Condensed") +
   theme(
@@ -126,12 +145,20 @@ p <- bind_rows(messi, ronaldo) %>%
     legend.position = "bottom",
     text = element_text(color = "grey90"),
     axis.text = element_text(color = "grey80"),
+    plot.title = element_text(hjust = 0.5, color = "grey99", family = "Bangers",
+                              size = 24),
+    plot.title.position = "plot",
+    plot.subtitle = element_textbox(
+      width = 0.8, hjust = 0.5, margin = margin(t = 8, b = 8), lineheight = 1.2),
+    plot.caption = element_markdown(hjust = 0.5, color = "grey74"),
     panel.grid.major = element_line(color = "grey30", size = 0.1),
     panel.grid.minor = element_blank(),
-    strip.text = element_text(color = "grey90", family = "Bangers", size = 18)
+    strip.text = element_markdown(
+      # color = "grey90", 
+      family = "Bangers", size = 16),
+    plot.margin = margin(t = 4, b = 4, l = 16, r = 16)
     )
-ggsave(here(base_path, "17-connected-messi-ronaldo.png"), width = 10, height = 7, dpi = 500)
-
+ggsave(here(base_path, "17-connected-messi-ronaldo.png"), width = 10, height = 7.5, dpi = 500)
 
 
 ## ANIMATION -------------------------------------------------------------------
@@ -140,6 +167,6 @@ library(gganimate)
 p_anim <- p +
   transition_reveal(season_id)
 
-animate(p_anim, res = 200, width = 10, height = 7, units = "in", duration = 25,
-        end_pause = 40)
+animate(p_anim, res = 200, width = 10, height = 7.5, units = "in", duration = 25,
+        fps = 18, end_pause = 40)
 anim_save(here(base_path, "17.gif"))
