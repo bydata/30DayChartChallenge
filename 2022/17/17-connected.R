@@ -49,7 +49,7 @@ career_annotations <- tribble(
   "Cristiano Ronaldo", "2014-2015", 16,    16, 52,    48,      0, "**14-15** | Peak season in<br>terms of goals and assists",
   "Cristiano Ronaldo", "2012-2013", 15,    15, 40,    40,      0, "**Prime at Real Madrid**",
   "Cristiano Ronaldo", "2018-2019", 12,     8, 21,    21,      0, "**18-19** | 1st season for Juventus",
-  "Cristiano Ronaldo", "2021-2022", 10,     3, 12,    12,      0, "**21-22** | Return to Manchester*"
+  "Cristiano Ronaldo", "2021-2022", 10,     3, 15,    15,      0, "**21-22** | Return to Manchester*"
 )
 
 
@@ -132,7 +132,7 @@ p <- df_plot %>%
     subtitle = "Lionel Messi and Cristiano Ronaldo are considered two of the most
     exceptional football players of all time. 
     This chart shows their goals and assists scored in their *domestic leagues* in 
-    each season of their professional career. Both players achieved 40+ goals each 
+    each season of their professional career. Both players have achieved 40+ goals each 
     in 3 league seasons.",
     caption = "<i>\\* 21-22 incomplete (stats as of Apr 17, 2022)</i><br><br>
     **Data:** FBRef, worldfootballR R package. **Visualization:** Ansgar Wolsing",
@@ -171,3 +171,8 @@ p_anim <- p +
 animate(p_anim, res = 200, width = 10, height = 7.5, units = "in", duration = 25,
         fps = 15, end_pause = 60)
 anim_save(here(base_path, "17-connected.gif"))
+
+
+## Accessibility:
+#' Table with goals and assists by Messi and Ronaldo: 
+#' https://en.wikipedia.org/wiki/Messi%E2%80%93Ronaldo_rivalry#Club_statistics
