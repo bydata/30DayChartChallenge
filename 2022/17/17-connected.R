@@ -166,12 +166,35 @@ ggsave(here(base_path, "17-connected-messi-ronaldo.png"), width = 10, height = 7
 ## ANIMATION -------------------------------------------------------------------
 
 library(gganimate)
+
+# Version 1: Building the whole plot -------------------------------------------
 p_anim <- p +
+  # remove the subtitle
+  labs(subtitle = "") +
   transition_reveal(season_id)
 
-animate(p_anim, res = 200, width = 10, height = 7.5, units = "in", duration = 25,
+animate(p_anim, res = 200, width = 8, height = 6, units = "in", duration = 25,
         fps = 15, end_pause = 60)
-anim_save(here(base_path, "17-connected.gif"))
+anim_save(here(base_path, "17-connected-2.gif"))
+
+
+# Version 2: Showing only the latest 3 seasons  --------------------------------
+
+# p_anim <- p +
+#   transition_states(season_id) +
+#   shadow_trail(max_frames = 3) +
+#   exit_recolor(color = "white", fill = NA)
+
+p_anim <-  p +
+  # remove the subtitle
+  labs(subtitle = "") +
+  transition_states(season_id) +
+  shadow_mark(alpha = 0.8, colour = colorspace::desaturate(colour, 0.6), 
+              size = size / 1.5, past = TRUE, future = FALSE)
+
+animate(p_anim, res = 200, width = 8, height = 6, units = "in", duration = 25,
+        fps = 10, end_pause = 60)
+anim_save(here(base_path, "17-connected_part-only.gif"))
 
 
 ## Accessibility:
