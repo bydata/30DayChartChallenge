@@ -17,60 +17,11 @@ oecd_countries <- c(
 #' Sources:
 #' https://data.oecd.org/air/air-pollution-exposure.htm#indicator-chart
 ###' Exposure to PM2.5, Micrograms per cubic metre, 1990 – 2019
-###' Air quality and health: Exposure to PM2.5 fine particles - countries and regions
-#' https://data.oecd.org/air/air-pollution-effects.htm#indicator-chart
-
 
 exposure <- read_csv(here(base_path, "oecd-pollutionexposure.csv"))
 colnames(exposure) <- tolower(colnames(exposure))
-exposure_1990 <- exposure %>%   
-  filter(time == 1990, measure == "MICGRCUBM") %>% 
-  select(location, micgrcubm = value) 
-exposure_2019 <- exposure %>%   
-  filter(time == 2019, measure == "MICGRCUBM") %>% 
-  select(location, micgrcubm = value) 
-  
-effect <- read_csv(here(base_path, "oecd-pollutioneffect.csv"))
-colnames(effect) <- tolower(colnames(effect))
-effect_2019 <- filter(effect, time == 2019) %>% 
-  select(location, pollution_mortality = value) 
 
-exposure_2019 %>% 
-  inner_join(effect_2019, by = "location") %>% 
-  ggplot(aes(micgrcubm, pollution_mortality)) +
-  geom_point() +
-  geom_text(data = . %>% filter(location == "DEU"),
-            aes(label = location)) +
-  scale_x_log10()+
-  scale_y_log10()
-
-
-exposure_1990 %>% 
-  inner_join(effect_2019, by = "location") %>% 
-  ggplot(aes(micgrcubm, pollution_mortality)) +
-  geom_point() +
-  geom_text(data = . %>% filter(location == "DEU"),
-            aes(label = location)) +
-  scale_x_log10()+
-  scale_y_log10()
-
-
-with(exposure_1990 %>% 
-  inner_join(effect_2019, by = "location"), cor(micgrcubm, pollution_mortality))
-
-with(exposure_2019 %>% 
-       inner_join(effect_2019, by = "location"), cor(micgrcubm, pollution_mortality))
-
-
-
-# change_df <- exposure_1990 %>% 
-#   inner_join(exposure_2019, by = "location", suffix = c("_1990", "_2019")) %>% 
-#   mutate(change_abs = micgrcubm_2019 - micgrcubm_1990,
-#          change_rel = change_abs / micgrcubm_1990,
-#          country = countrycode::countrycode(location, origin = "iso3c", destination = "country.name"),
-#          continent = countrycode::countrycode(location, origin = "iso3c", destination = "continent")) %>% 
-#   na.omit()
-
+# Prepare dataset for fine particles in selected years
 selected_years <- c(1990, 2000, 2019)
 change_oecd <- exposure %>% 
   filter(time %in% selected_years, measure == "MICGRCUBM") %>%
@@ -83,17 +34,6 @@ change_oecd <- exposure %>%
          continent = countrycode::countrycode(location, origin = "iso3c", destination = "continent")) %>% 
   filter(country %in% oecd_countries) %>% 
   na.omit()
-
-
-change_oecd %>% 
-  ggplot(aes(micgrcubm_1990, micgrcubm_2019)) +
-  geom_abline(slope = 1, intercept = 10, color = "red") +
-  geom_abline(slope = 1, intercept = 0, color = "grey40") +
-  geom_abline(slope = 1, intercept = -10, color = "blue") +
-  geom_point() +
-  geom_text(data = . %>% filter(location == "DEU", ),
-            aes(label = location)) +
-  coord_equal()
 
 
 colors <- c("2019" = "#8E3C82", "1990" = "#DCB73D", "2000" = "grey55")
@@ -158,10 +98,3 @@ change_oecd %>%
     plot.caption = element_markdown(hjust = 0),
     plot.caption.position = "plot")
 ggsave(here(base_path, "18-oecd-air-pollution.png"), width = 6, height = 7)  
-
-
-#' Fine particulate matter (PM2.5) is the air pollutant that poses the greatest 
-#' risk to health globally, affecting more people than any other pollutant. 
-#' Chronic exposure to PM2.5 considerably increases the risk of respiratory and 
-#' cardiovascular diseases in particular. Data refer to population exposure to
-#' more than 10 micrograms/m3 and are expressed as annual averages.
