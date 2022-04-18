@@ -73,7 +73,7 @@ change_oecd %>%
                        <span style='color:{colors['1990']}'>1990</span>,
                        <span style='color:{colors['2000']}'>2000</span>,
                        <span style='color:{colors['2019']}'>2019</span>"),
-    subtitle = " Fine particulate matter (PM2.5) is the air pollutant that poses the greatest 
+    subtitle = "Fine particulate matter (PM2.5) is the air pollutant that poses the greatest 
       risk to health globally, affecting more people than any other pollutant.
       Chronic exposure to PM2.5 considerably increases the risk of respiratory and
       cardiovascular diseases in particular. OECD member countries.",
