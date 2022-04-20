@@ -13,8 +13,9 @@ library(grid)
 #'  that brings vital global data to life. 
 #'  (Recorded February 2006 in Monterey, CA.)
 
-
 base_path <- here("2022", "19")
+
+## Data preparation ------------------------------------------------------------
 
 child_mortality <- read_csv(here(base_path, "child_mortality_0_5_year_olds_dying_per_1000_born.csv"))
 life_expectancy <- read_csv(here(base_path, "life_expectancy_years.csv"))
@@ -22,7 +23,6 @@ population <- read_csv(here(base_path, "population_total.csv"))
 children_per_woman <- read_csv(here(base_path, "children_per_woman_total_fertility.csv"))
 
 end_year <- 2021
-
 population_prep <- population %>% 
   pivot_longer(cols = -country, names_to = "year", names_transform = as.numeric,
                values_to = "population") %>% 
@@ -49,14 +49,15 @@ children_per_woman_prep <-  children_per_woman %>%
   pivot_longer(cols = -country, names_to = "year", names_transform = as.numeric,
                values_to = "children_per_woman")
 
-
-
+# Combine datasets
 df_prep <- population_prep %>% 
   inner_join(children_per_woman_prep, by = c("country", "year")) %>% 
   inner_join(life_expectancy_prep, by = c("country", "year")) %>% 
   mutate(continent = countrycode::countrycode(country, origin = "country.name", 
                                               destination = "continent"))
 
+
+## Plot & Animation ------------------------------------------------------------
 
 line_color <- "grey41"
 
