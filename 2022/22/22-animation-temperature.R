@@ -4,6 +4,8 @@ library(here)
 library(ggtext)
 library(gganimate)
 
+#' https://commons.wikimedia.org/wiki/File:20171231_Climate_spiral_(HadCRUT4.6_1850-_)_Ed_Hawkins.gif
+
 base_path <- here("2022", "22")
 
 #' Download historical weather data (DWD) 
@@ -45,7 +47,6 @@ p <- df_long %>%
             aes(label = year),
             hjust = 1, family = "Fira Sans", fontface = "bold",
             nudge_y = 2) +
-  # scale_x_discrete(expand = c(0, 0)) +
   scale_color_gradient2(low = "blue", mid = "grey95", high = "red", midpoint = baseline_temp) +
   coord_polar() +
   guides(col = guide_colorbar(title.position = "top")) +
@@ -80,9 +81,7 @@ p_anim <- p +
   transition_time(year) +
   shadow_mark(size = size / 5, alpha = 0.75 * alpha, exclude_layer = 2) # exclude geom_text
 
-animate(p_anim, res = 200, width = 1200, height = 1200,
-        # duration = (last_year - first_year) * 10, 
-        fps = 6,
-        end_pause = 20)
-anim_save(here(base_path, "22-temp.gif"))
+animate(p_anim, res = 200, width = 1000, height = 1200,
+        fps = 6, end_pause = 20, bg = "grey1")
+anim_save(here(base_path, "22-temperature-de.gif"))
 
