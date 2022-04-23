@@ -76,20 +76,15 @@ df %>%
   scale_x_continuous(position = "top", expand = c(0, add = 1),
                      breaks = seq(1880, 2030, 10)) +
   scale_y_discrete() +
-  # scale_fill_distiller(palette = "RdBu") +
   scale_fill_gradient2(high = pal[length(pal)], mid = "white",
                        low = pal[1], midpoint = 0) +
-  # scale_fill_stepsn(colours = pal, n.breaks = length(pal)) +
-  guides(
-    fill = guide_colorbar(title.position = "top", title.hjust = 0.5)
-  ) +
+  guides(fill = guide_colorbar(title.position = "top", title.hjust = 0.5)) +
   labs(
     title = glue::glue("Average monthly temperature in Germany 1881 to 2021"),
-    subtitle = "Each month since 1881 is represented in a tile. 
+    subtitle = "Each month since 1881 is represented by a tile. 
     Its color indicates by how much it deviates from the baseline temperature for this month. 
     The baseline is calculated as the average temperature of the years 1881 to 1910.",
     caption = "Baseline: 1881-1910. **Source:** DWD CDC | **Visualization:** Ansgar Wolsing",
-    y = NULL,
     fill = "Deviation from baseline<br>for the respective month (°C)"
   ) +
   theme_void(base_family = "Avenir") +
@@ -98,14 +93,13 @@ df %>%
     text = element_text(color = "grey89"),
     plot.title = element_text(size = 24, color = "white", face = "bold", hjust = 0.5),
     plot.subtitle = element_textbox(
-      hjust = 0.5, halign = 0, width = 0.7, margin = margin(t = 6, b = 12),
+      hjust = 0.5, halign = 0, width = 0.7, margin = margin(t = 4, b = 16),
       lineheight = 1.1),
     plot.caption = element_markdown(hjust = 0.5),
-    panel.background = element_rect(color = NA, fill = "grey12"),
     axis.text = element_text(size = 8, face = "bold", color = "grey79"),
     axis.text.y = element_text(hjust = 0, margin = margin(r = 2)),
-    axis.title.y = element_text(angle = 90),
-    plot.margin = margin(6, 6, 6, 6),
+    axis.title = element_blank(),
+    plot.margin = margin(t = 6, b = 6, l = 12, r = 12),
     legend.position = "bottom",
     legend.justification = "center",
     legend.title = element_markdown(hjust = 0),
