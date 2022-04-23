@@ -3,6 +3,7 @@ library(lubridate)
 library(ggtext)
 library(here)
 library(grid)
+library(glue)
 
 base_path <- here("2022", "24")
 
@@ -47,33 +48,36 @@ covid_df_long <- prep_long_data(covid_cases, metric = "cases") %>%
   # filter(date2 >= start_date & date2 <= today() - duration("1 day"))
   filter(date2 >= start_date & date2 <= as_date("2022-03-11"))
 
-color_text_cases <- "#488BC4"
-color_text_deaths <- "#BE4045"
+color_cases <- "#71C8E4"
+color_cases_text <- "#258BC3"
+color_deaths <- "#CE3240" 
 
 plot_titles <- list(
   title = "Cases are translating into deaths at much higher rates in
   Hong Kong than in New Zealand, where elderly vaccination rates are much higher  ",
-  subtitle = glue::glue("Daily
-  <span style='color:{color_text_cases}; font-family: \"Outfit SemiBold\"'>cases</span>
+  subtitle = glue("Daily
+  <span style='color:{color_cases_text}; font-family: \"Outfit SemiBold\"'>cases</span>
   per 100,000 people, and daily
-  <span style='color:{color_text_deaths}; font-family: \"Outfit SemiBold\"'>deaths</span>
+  <span style='color:{color_deaths}; font-family: \"Outfit SemiBold\"'>deaths</span>
   per 2 million"),
   caption = "Cases shifted forward (14 days) to account for lag between infection and death.<br>
   Original plot by John Burn-Murdoch (Financial Times).
   Data: Johns Hopkins University, Our World in Data")
 
-country_annotations <- data.frame(
-  region = c("Hong Kong", "New Zealand"),
-  label = c(
-    "<b style='color: black; font-size: 14pt'>Hong Kong</b><br>
+country_annotations <- data.frame(region = c("Hong Kong", "New Zealand"),
+                                  label = c(
+                                    glue(
+                                      "<b style='color: black; font-size: 14pt'>Hong Kong</b><br>
     66% of over-80s unvaccinated<br>when Omicron took off<br>
-    <span style='color: #BE4045; font-family: \"Outfit SemiBold\"'>Case fatality<br>rate: 4.7%</span>",
-    "<b style='color: black; font-size: 14pt'>New Zealand</b><br>
+    <span style='color: {color_deaths}; font-family: \"Outfit SemiBold\"'>Case fatality
+         <br>rate: 4.7%</span>"
+                                    ),
+                                    glue(
+                                      "<b style='color: black; font-size: 14pt'>New Zealand</b><br>
     2% unvaccinated<br>
-    <span style='color: #BE4045; font-family: \"Outfit SemiBold\"'>CFR: 0.1%</span>"
-    )
-)
-
+    <span style='color: {color_deaths}; font-family: \"Outfit SemiBold\"'>CFR: 0.1%</span>"
+                                    )
+                                  ))
 
 ragg::agg_png(
   here(base_path, "24-ft.png"), res = 300, width = 2800, height = 1616, units = "px"
@@ -82,10 +86,10 @@ covid_df_long %>%
   ggplot(aes(date2)) +
   geom_area(data = . %>% filter(metric == "cases"),
             aes(y = new_per_100k_7drollmean),
-            fill = "#85C6E1") +
+            fill = "#71C8E4") +
   geom_area(data = . %>% filter(metric == "deaths"),
             aes(y = -2 * new_per_million_7drollmean),
-            fill = "#BE4045") +
+            fill = "#CE3240") +
   # country annotation
   geom_richtext(data = country_annotations,
             aes(x = as_date("2022-02-01"), y = 107.5, label = label),
@@ -98,7 +102,7 @@ covid_df_long %>%
     breaks = seq(-200, 200, 20),
     labels = function(x) {
     value <- ifelse(x > 0, x, -x) 
-    color <- ifelse(x > 0, color_text_cases, color_text_deaths)
+    color <- ifelse(x > 0, color_cases_text, color_deaths)
     glue::glue("<span style='color: {color}'>{value}</span>")
     }) +
   coord_cartesian(ylim = c(NA, 100), clip = "off") +
@@ -110,7 +114,8 @@ covid_df_long %>%
   ) +
   theme_minimal(base_family = "Outfit Medium", base_size = 16) + 
   theme(
-    plot.background = element_rect(color = NA, fill = "#FEF1E7"),
+    plot.background = element_rect(color = NA, fill = "#FFF1E5"),
+    panel.background = element_rect(color = NA, fill = NA),
     panel.grid = element_blank(),
     panel.grid.major.y = element_line(color = "#E3DACE", size = 0.3),
     text = element_text(color = "#68625D", lineheight = 1.3),
