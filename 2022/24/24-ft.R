@@ -54,9 +54,9 @@ plot_titles <- list(
   title = "Cases are translating into deaths at much higher rates in
   Hong Kong than in New Zealand, where elderly vaccination rates are much higher  ",
   subtitle = glue::glue("Daily
-  <b style='color:{color_text_cases}; font-family: \"Outfit Bold\"'>cases</b>
+  <span style='color:{color_text_cases}; font-family: \"Outfit SemiBold\"'>cases</span>
   per 100,000 people, and daily
-  <b style='color:{color_text_deaths}; font-family: \"Outfit Bold\"'>deaths</b>
+  <span style='color:{color_text_deaths}; font-family: \"Outfit SemiBold\"'>deaths</span>
   per 2 million"),
   caption = "Cases shifted forward (14 days) to account for lag between infection and death.<br>
   Original plot by John Burn-Murdoch (Financial Times).
@@ -67,10 +67,10 @@ country_annotations <- data.frame(
   label = c(
     "<b style='color: black; font-size: 14pt'>Hong Kong</b><br>
     66% of over-80s unvaccinated<br>when Omicron took off<br>
-    <b style='color: #BE4045'>Case fatality<br>rate: 4.7%</b>",
+    <span style='color: #BE4045; font-family: \"Outfit SemiBold\"'>Case fatality<br>rate: 4.7%</span>",
     "<b style='color: black; font-size: 14pt'>New Zealand</b><br>
     2% unvaccinated<br>
-    <b style='color: #BE4045'>CFR: 0.1%</b>"
+    <span style='color: #BE4045; font-family: \"Outfit SemiBold\"'>CFR: 0.1%</span>"
     )
 )
 
@@ -118,11 +118,11 @@ covid_df_long %>%
                                  face = "plain", size = 18, width = 1),
     plot.title.position = "plot",
     plot.subtitle = element_markdown(family = "Outfit"),
-    plot.caption = element_markdown( family = "Outfit",
+    plot.caption = element_markdown( family = "Outfit Medium",
       hjust = 0, size = 10, color = "#5E5751"),
     axis.title = element_blank(),
     axis.text.x = element_text(hjust = 0, color = "#68625D"),
-    axis.text.y.left = element_markdown(family = "Outfit SemiBold"),
+    axis.text.y.left = element_markdown(family = "Outfit Medium"),
     axis.ticks.x = element_line(size = 0.3),
     axis.ticks.length.x = unit(1.8, "mm"),                     # set length of axis ticks
     plot.margin = margin(t = 12, b = 2, l = 1, r = 1),
@@ -135,3 +135,4 @@ grid.rect(
   gp = gpar(fill = "black")
 )
 invisible(dev.off())
+
