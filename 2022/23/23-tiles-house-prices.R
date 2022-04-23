@@ -38,20 +38,10 @@ df <- df_raw %>%
   filter(year(year_quarter_date) >= 2010) %>% 
   filter(!is.na(country))
 
-
-
+# Edit the geofacet grid
 europe_grid <- europe_countries_grid1 %>% 
   filter(name %in% unique(df$country), !name %in% c("Turkey", "Switzerland"))
 
-
-
-
-df %>% 
-  filter(purchase == "DW_NEW", unit == "I10_Q") %>% 
-  ggplot(aes(year_quarter_date, y = 1)) +
-  geom_tile(aes(fill = value), col = NA, size = 0) +
-  scale_fill_continuous() +
-  facet_wrap(vars(country))
 
 p <- df %>% 
   filter(purchase == "TOTAL", unit == "I10_Q") %>% 
@@ -68,7 +58,7 @@ p <- df %>%
     fill = guide_colorbar(title.position = "top")
   ) +
   labs(
-    title = "Housing Prices rising in many European countries",
+    title = "Housing Prices Rising in many European Countries",
     subtitle = "The House Price Index (HPI) measures inflation in the residential 
     property market. 
     The HPI captures price changes of all kinds of residential property purchased 
