@@ -20,8 +20,7 @@ covid_cases <- read_csv(owid_new_cases_per_million_url)
 
 # reporting period in plot
 start_date <- as_date("2022-02-01")
-# end_date <- as_date("2022-03-15")
-end_date <- today()
+end_date <- as_date("2022-03-15")
 lag_cases_deaths <- duration("14 days")
 
 # prepare dataframes
@@ -133,9 +132,11 @@ covid_df_long %>%
     breaks = seq(-200, 200, 20),
     labels = function(x) {
     value <- ifelse(x > 0, x, -x) 
-    color <- ifelse(x > 0, color_cases_text, color_deaths)
+    color <- case_when(x > 0 ~ color_cases_text, x < 0 ~ color_deaths, x == 0 ~ text_color)
     glue::glue("<span style='color: {color}'>{value}</span>")
-    }) +
+    },
+    # add the right axis
+    sec.axis = dup_axis()) +
   coord_cartesian(ylim = c(-60, 100), clip = "off") +
   facet_wrap(vars(region)) +
   labs(
@@ -146,7 +147,7 @@ covid_df_long %>%
   theme_ft()
   
 
- # Add black thin rectangle in the top left corner
+# Add black thin rectangle in the top left corner
 grid.rect(
   x = 0, y = 1, width = 0.165, height = 0.018,
   gp = gpar(fill = "black")
