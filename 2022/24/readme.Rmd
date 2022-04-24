@@ -2,7 +2,7 @@
 title: "#30DayChartChallenge - Theme Day: Financial Times"
 author: "Ansgar Wolsing"
 date: "April 24, 2022"
-output: github_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -145,7 +145,7 @@ theme_ft <- function(...) {
 
 ### A basic plot
 
-We create our first plot apply the `theme_ft` function.
+We create our first plot and apply our `theme_ft` function.
 
 ```{r}
 covid_df_long %>% 
