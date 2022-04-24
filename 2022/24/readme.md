@@ -173,7 +173,7 @@ covid_df_long %>%
   theme_ft()
 ```
 
-<img src="24-ft-theme_files/figure-gfm/unnamed-chunk-2-1.png" width="896" />
+<img src="readme_files/figure-gfm/unnamed-chunk-2-1.png" width="896" />
 
 ### Adding the custom-labelled y-axis
 
@@ -215,7 +215,7 @@ p <- covid_df_long %>%
 p
 ```
 
-<img src="24-ft-theme_files/figure-gfm/unnamed-chunk-3-1.png" width="896" />
+<img src="readme_files/figure-gfm/unnamed-chunk-3-1.png" width="896" />
 
 ### Adding annotations
 
@@ -277,7 +277,7 @@ p2 <- p +
 p2
 ```
 
-<img src="24-ft-theme_files/figure-gfm/unnamed-chunk-5-1.png" width="896" />
+<img src="readme_files/figure-gfm/unnamed-chunk-5-1.png" width="896" />
 
 ### Adding the black line in the top left corner
 
@@ -291,7 +291,7 @@ grid.rect(
 )
 ```
 
-<img src="24-ft-theme_files/figure-gfm/unnamed-chunk-6-1.png" width="896" />
+<img src="readme_files/figure-gfm/unnamed-chunk-6-1.png" width="896" />
 
 To save the plot to a png file, wrap `png()` or `ragg::agg_png()` around
 the printed plot object and the `grid.rect()` call:
