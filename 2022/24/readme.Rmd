@@ -100,12 +100,9 @@ Here, we start with `theme_minimal` and add typical theme elements which the FT 
 * No minor grid lines
 * The font (original: Metric, here: Outfit)
 
-We choose a pretty larger font size since the plot will saved in a larger format. We also set `strip.text` to blank to remove the default facet titles in this particular plot. 
-
-Furthermore, we define colors for the red and blue areas as well as a separate text color.
+We choose a pretty larger font size since the plot will saved in a larger format. We also set `strip.text` to blank to remove the default facet titles in this particular plot. Furthermore, we define colors for the red and blue areas as well as a separate text color.
 
 ```{r}
-
 # Colors
 text_color <- "#68625D"
 color_cases <- "#71C8E4"
@@ -140,7 +137,6 @@ theme_ft <- function(...) {
 }
 
 ```
-
 
 
 ### A basic plot
@@ -198,7 +194,7 @@ p
 
 John Burn-Murdoch is a proponent of using text annotions to guide the audience and enable further exploration (see his talk at [rstudio::global 2021 conference](https://www.rstudio.com/resources/rstudioglobal-2021/reporting-on-and-visualising-the-pandemic/)). Thus, the original plot contains a descriptive title and annotations comparing the situation in both countries.
 
-We define the titles and the annotations in separate objects and add them to the plot in a second step. (This approach might also come in handy if you have to create titles in more than one language. It can be more convenient to set the titles in the graph with list variables and change the values of the variables for each language.)
+We define the titles and the annotations in separate objects and add them to the plot in a second step. (This approach might also come in handy if you have to create titles in more than one language. It can be more convenient to set the titles in the graph with list variables and change the values of the variables for each language.) We use HTML tags and CSS to format the annotation texts, which will be added to the plot using `geom_richtext()` from the {ggtext} package.
 
 ```{r}
 plot_titles <- list(

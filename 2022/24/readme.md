@@ -115,10 +115,8 @@ the FT charts are known for:
 
 We choose a pretty larger font size since the plot will saved in a
 larger format. We also set `strip.text` to blank to remove the default
-facet titles in this particular plot.
-
-Furthermore, we define colors for the red and blue areas as well as a
-separate text color.
+facet titles in this particular plot. Furthermore, we define colors for
+the red and blue areas as well as a separate text color.
 
 ``` r
 # Colors
@@ -157,7 +155,7 @@ theme_ft <- function(...) {
 
 ### A basic plot
 
-We create our first plot apply the `theme_ft` function.
+We create our first plot and apply our `theme_ft` function.
 
 ``` r
 covid_df_long %>% 
@@ -230,7 +228,9 @@ We define the titles and the annotations in separate objects and add
 them to the plot in a second step. (This approach might also come in
 handy if you have to create titles in more than one language. It can be
 more convenient to set the titles in the graph with list variables and
-change the values of the variables for each language.)
+change the values of the variables for each language.) We use HTML tags
+and CSS to format the annotation texts, which will be added to the plot
+using `geom_richtext()` from the {ggtext} package.
 
 ``` r
 plot_titles <- list(
