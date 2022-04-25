@@ -20,7 +20,7 @@ theme_set(
     theme(legend.position = "bottom", 
           legend.justification = "left", 
           legend.key.height = unit(2.5, "mm"),
-          plot.background = element_rect(color = NA, fill = "grey98"),
+          plot.background = element_rect(fill = "grey98"),
           panel.grid = element_blank(),
           panel.grid.major.y = element_line(size = 0.3, color = "grey85"),
           panel.grid.minor.y = element_line(size = 0.15, color = "grey85"),
@@ -33,7 +33,8 @@ theme_set(
           axis.title = element_text(color = "grey45"),
           axis.title.y = element_text(hjust = 1),
           axis.title.y.right = element_blank(),
-          axis.text = element_text(color = "grey45"))
+          axis.text = element_text(color = "grey45"),
+          plot.margin = margin(8, 8, 8, 8))
 )
 
 
