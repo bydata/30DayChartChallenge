@@ -63,8 +63,7 @@ party_colors <- c(
 election_date <- as_date("2021-09-26")
 
 
-
-
+## CDU/CSU vs. SPD
 polls %>% 
   filter(party %in% c("CDU/CSU", "SPD")) %>% 
   # filter(year(date) >= 2020 & date < election_date) %>% 
@@ -78,6 +77,8 @@ polls %>%
   coord_cartesian(ylim = c(0, NA)) 
 ggsave(here(base_path, "25-union-spd.png"), width = 6, height = 5)  
 
+
+## All parties
 polls %>% 
   filter(date >= election_date - period("2 years") & date < election_date) %>% 
   ggplot(aes(date, share)) +
@@ -121,7 +122,7 @@ polls %>%
   labs(
     title = "Polling Trends in the Run-up to the German Federal Election 2021",
     subtitle = "Many polls from different institutes were published in the run-up to the election.
-    Instead of looking at each individual polling result, it is more valuable to
+    Instead of looking at each individual published polling result, it is more valuable to
     observe general trends. The trend lines are fitted using LOWESS 
     (**Lo**cally **We**ighted **S**catterplot **S**moother): for every single 
     data point a local regression is calculated, taking into account only a certain
