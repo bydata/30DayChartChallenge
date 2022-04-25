@@ -16,8 +16,13 @@ base_path <- here("2022", "25")
 polls <- read_rds(here(base_path, "wahlrecht_umfragen.rds"))
 colnames(polls) <- c("id", "institute", "date", "respondents", "party", "share")
 polls <- polls %>% 
-  mutate(party = if_else(party == "CDUCSU", "CDU/CSU", party),
-         party = fct_inorder(party))
+  mutate(
+    party = case_when(
+      party == "CDUCSU" ~ "CDU/CSU",
+      party == "GRÜNE" ~ "GREENS",
+      party == "LINKE" ~ "LEFTIST",
+      TRUE ~party),
+    party = fct_inorder(party))
 
 
 # Custom theme
@@ -35,7 +40,7 @@ theme_set(
             color = "grey2", face = "bold"),
           plot.title.position = "plot",
           plot.subtitle = element_textbox_simple(
-            size = 8, hjust = 0, margin = margin(t = 6, b = 8), width = 0.9),
+            size = 8, hjust = 0, margin = margin(t = 2, b = 8), width = 0.95),
           plot.caption = element_markdown(size = 7, hjust = 1),
           axis.title = element_text(color = "grey45"),
           axis.title.y = element_text(hjust = 1),
@@ -45,12 +50,13 @@ theme_set(
 
 # Party colors
 unique(polls$party)
-party_colors <- c("CDU/CSU" = "grey9",
-                  "SPD" = "#ca0002",
-                  "GRÜNE" = rgb(100, 161, 45, maxColorValue = 255),
-                  "FDP" = colorspace::darken("#ffed00", 0.1),
-                  "LINKE" = "purple",
-                  "AfD" = rgb(0, 158, 224, maxColorValue = 255))
+party_colors <- c(
+  "CDU/CSU" = "grey9",
+  "SPD" = "#ca0002",
+  "GREENS" = rgb(100, 161, 45, maxColorValue = 255),
+  "FDP" = colorspace::darken("#ffed00", 0.1),
+  "LEFTIST" = "purple",
+  "AfD" = rgb(0, 158, 224, maxColorValue = 255))
 
 
 # Election date
@@ -106,7 +112,9 @@ polls %>%
            ) +
   scale_x_date(expand = expansion(add = c(10, 45)), breaks = "3 months",
                date_labels = "%b %Y") +
-  scale_y_continuous(breaks = seq(0, 50, 10), sec.axis = dup_axis()) +
+  scale_y_continuous(breaks = seq(0, 50, 10), 
+                     labels = function(x) ifelse(x == 40, "40%", x),
+                     sec.axis = dup_axis()) +
   scale_color_manual(values = party_colors) +
   coord_cartesian(ylim = c(0, NA), clip = "off") +
   guides(color = "none", fill = "none") +
@@ -122,9 +130,9 @@ polls %>%
     The ribbons around the lines indicate the 95% confidence intervals of the 
     point estimates. Individual poll results are shown as points.
     ",
-    caption = "Source: Wahlrecht.de. Visualization: Ansgar Wolsing",
+    caption = "LOWESS bandwidth = 0.2. Source: Wahlrecht.de. Visualization: Ansgar Wolsing",
     x = NULL,
-    y = "Projected vote share (%)"
+    y = "Projected vote share"
   )
 ggsave(here(base_path, "25-all-parties.png"), width = 6, height = 5)  
 
