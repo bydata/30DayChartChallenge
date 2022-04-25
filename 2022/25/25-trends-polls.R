@@ -75,7 +75,6 @@ polls %>%
   scale_y_continuous(breaks = seq(0, 50, 10)) +
   scale_color_manual(values = party_colors[c("CDU/CSU", "SPD")]) +
   coord_cartesian(ylim = c(0, NA)) 
-ggsave(here(base_path, "25-union-spd.png"), width = 6, height = 5)  
 
 
 ## All parties
