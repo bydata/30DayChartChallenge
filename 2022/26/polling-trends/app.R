@@ -1,4 +1,5 @@
 library(shiny)
+library(shinythemes)
 library(tidyverse)
 library(lubridate)
 library(ggtext)
@@ -12,13 +13,33 @@ source("setup.R")
 
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("cosmo"),
 
     # Application title
-    titlePanel("LOWESS"),
+    titlePanel("Aggregated Polls for the German Federal Election"),
+    
+    p("Many polls from different institutes are published, especially in the run-up 
+        to an federal election.
+        Instead of looking at each individual published polling result, it is more valuable to
+        observe general trends. The trend lines are fitted using LOWESS 
+        (Locally Weighted Scatterplot Smoother): for every single 
+        data point a local regression is calculated, taking into account only a certain
+        range of neighboring data points. A weighting function ensures that the 
+        importance of these points decreases with increasing distance.
+        The ribbons around the lines indicate the 95% confidence intervals of the 
+        point estimates. Individual poll results are shown as points.
+        "),
+    br(),
+    p("The bandwidth (α) controls the degree of smoothing.
+      A smaller value (close to 0) means a small degree of smoothing. 
+      A larger value (close to 1) means a large degree of smoothing.
+      
+      ",
+      br(),
+        strong("Play around with the parameter to see how the smoothed lines change.")),
+    br(),
+    fluidRow(
 
-    # Sidebar with a slider input for number of bins 
-    # verticalLayout(
         sidebarPanel(
             sliderInput("bandwidth",
                         "Choose a bandwidth for smoothing",
@@ -31,21 +52,20 @@ ui <- fluidPage(
                         multiple = TRUE
             ),
             # Date range selection
-            dateInput("start_date", "Start date:",
+            dateInput("start_date", "Select the start date:",
                       value = election_date,
                       min = min(polls$date), max = max(polls$date),
                       weekstart = 1),
-            dateInput("end_date", "End date:",
+            dateInput("end_date", "Select the end date:",
                       value = max(polls$date),
                       min = min(polls$date), max = max(polls$date),
                       weekstart = 1)
         ),
         
-        # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("pollsPlot", width = "100%")
+           plotOutput("pollsPlot", width = "90%")
         )
-   # )
+   )
 )
 
 # Define server logic required to draw a histogram
@@ -85,7 +105,7 @@ server <- function(input, output, session) {
             coord_cartesian(ylim = c(0, NA), clip = "off") +
             guides(color = "none", fill = "none") +
             labs(
-                title = "Aggregated Polls for the German Federal Election",
+                title = "",
                 subtitle = "",
                 caption = "Source: Wahlrecht.de.",
                 x = NULL,
