@@ -10,7 +10,7 @@ election_date <- as_date("2021-09-26")
 
 # Prepare data, set up custom ggplot2 theme
 source("setup.R")
-
+latest_date_available <- format(max(polls$date), "%B %d, %Y")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("cosmo"),
@@ -29,13 +29,11 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
         The ribbons around the lines indicate the 95% confidence intervals of the 
         point estimates. Individual poll results are shown as points.
         "),
-    br(),
     p("The bandwidth (α) controls the degree of smoothing.
-      A smaller value (close to 0) means a small degree of smoothing. 
-      A larger value (close to 1) means a large degree of smoothing.
-      
-      ",
-      br(),
+      A smaller value (close to 0) means a small degree of smoothing and comes with 
+      a risk of overfitting the individual polls.
+      A larger value (close to 1) means a large degree of smoothing.",
+      # br(),
         strong("Play around with the parameter to see how the smoothed lines change.")),
     br(),
     fluidRow(
@@ -65,7 +63,22 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
         mainPanel(
            plotOutput("pollsPlot", width = "90%")
         )
-   )
+   ),
+   h2("How to"),
+   p(strong("1. Choose a bandwidth for smoothing with the slider"), br(), 
+     "A longer period might require a larger bandwidth."),
+   p(strong("2. Select parties"), br(),
+     "When you click in the input field, a list of unselected parties will be shown. 
+     You can also type party names. To unselect a party, click on it and press Delete. 
+     The 6 major parties in Germany can be selected."),
+   p(strong("3. Set the start and end date"), br(),
+     "Select a period to show in the plot. Data is available from 2021 to", 
+     latest_date_available
+     ),
+   br(),
+   p("Source:", a("wahlrecht.de/", href = "https://www.wahlrecht.de/umfragen/"),
+     ". Date: ", latest_date_available
+     )
 )
 
 # Define server logic required to draw a histogram
