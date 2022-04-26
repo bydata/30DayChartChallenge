@@ -46,16 +46,21 @@ trends_monthly_results <- transpose(trends_monthly) %>%
   set_names(as.character(highest_interest$date))
 
 
+
+# Background color for plot
+bg_color <- "#140e54"
+
 # Custom text annotation function
-annotate_text <- function(x, y, label, hjust = 1, nudge_y = 5, ...) {
+annotate_text <- function(x, y, label, hjust = 0.5, nudge_y = 2, ...) {
   annotate("richtext", x = x, y = y + nudge_y,
-           label = label,  hjust = hjust, size = 3, fill = NA, label.size = 0, 
+           label = label,  hjust = hjust, vjust = 0, 
+           size = 2.5, fill = NA, label.size = 0, 
            col = "grey90", family = "Noto Sans", ...)
 }
 
 # Custom annotation function, adds a circle to the data point
-annotate_point <- function(x, y) {
-  annotate("point", x = x, y = y, shape = 21, fill = "black", 
+annotate_point <- function(x, y, fill = bg_color) {
+  annotate("point", x = x, y = y, shape = 21, fill = fill, 
              color = "white", size = 2, stroke = 1)
 }
 
@@ -63,15 +68,17 @@ annotate_point <- function(x, y) {
 # Events to highlight in the plot
 highlight_events <- list(
   x = c(as_datetime("2008-09-01"), as_datetime("2011-05-01"), as_datetime("2012-12-01"), 
-        as_datetime("2016-11-01"), as_datetime("2020-03-01"), as_datetime("2020-11-01")),
-  y = c(33, 57, 81, 91, 97, 100),
+        as_datetime("2016-11-01"), as_datetime("2020-03-01"), as_datetime("2020-11-01"), 
+        as_datetime("2022-02-01")),
+  y = c(33, 57, 81, 91, 97, 100, 77),
   label = c(
     "**Mortgage loan?**", 
     "**Judgement Day**<br>on 5/21/11?",
     "**Maya Calendar 12/21/12**<br>End of the World?",
     "**Donald Trump**<br>elected president",
     "",
-    "**Trump**<br>doesn't concede"
+    "**Trump**<br>doesn't concede",
+    "Russia<br>invades<br>**Ukraine**"
   )
 )
 
@@ -100,7 +107,7 @@ df %>%
   
   scale_x_datetime(expand = c(0, 0)) +
   scale_y_continuous(position = "right") +
-  
+  coord_cartesian(clip = "off") +
   labs(
     title = "Google Search Queries for **\"What will happen\"** in the United States",
     caption = "The plot shows normalized Google Search hits for \"What will happen\"
@@ -112,16 +119,17 @@ df %>%
   
   theme_minimal(base_family = "Noto Sans") +
   theme(
-    plot.background = element_rect(color = NA, fill = "#140e54"),
+    plot.background = element_rect(color = NA, fill = bg_color),
     text = element_text(color = "grey83"),
     axis.text = element_text(color = "grey75"),
     panel.grid = element_blank(),
     axis.title.x = element_blank(),
     axis.ticks = element_line(color = "grey75", size = 0.2),
     plot.title = element_markdown(
-      color = "white", margin = margin(t = 4, b = 12)),
+      color = "white", margin = margin(t = 4, b = 16)),
     plot.title.position = "plot",
-    plot.caption = element_textbox_simple(size = 7, hjust = 0, margin = margin(t = 8))
+    plot.caption = element_textbox_simple(
+      size = 7, hjust = 0, margin = margin(t = 8))
   )
 ggsave(here(base_path, "27-what-will-happen.png"), width = 7, height = 5)
 
