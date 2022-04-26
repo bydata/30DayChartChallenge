@@ -63,14 +63,15 @@ annotate_point <- function(x, y) {
 # Events to highlight in the plot
 highlight_events <- list(
   x = c(as_datetime("2008-09-01"), as_datetime("2011-05-01"), as_datetime("2012-12-01"), 
-        as_datetime("2016-11-01"), as_datetime("2020-03-01")),
-  y = c(33, 57, 81, 91, 97),
+        as_datetime("2016-11-01"), as_datetime("2020-03-01"), as_datetime("2020-11-01")),
+  y = c(33, 57, 81, 91, 97, 100),
   label = c(
     "**Mortgage loan?**", 
     "**Judgement Day**<br>on 5/21/11?",
     "**Maya Calendar 12/21/12**<br>End of the World?",
     "**Donald Trump**<br>elected president",
-    ""
+    "",
+    "**Trump**<br>doesn't concede"
   )
 )
 
@@ -111,13 +112,14 @@ df %>%
   
   theme_minimal(base_family = "Fira Sans") +
   theme(
-    plot.background = element_rect(color = NA, fill = "black"),
+    plot.background = element_rect(color = NA, fill = "#201970"),
     text = element_text(color = "grey83"),
     axis.text = element_text(color = "grey75"),
     panel.grid = element_blank(),
     axis.title.x = element_blank(),
     axis.ticks = element_line(color = "grey75", size = 0.2),
-    plot.title = element_markdown(color = "white"),
+    plot.title = element_markdown(
+      color = "white", margin = margin(t = 4, b = 12)),
     plot.title.position = "plot",
     plot.caption = element_textbox_simple(size = 7, hjust = 0, margin = margin(t = 8))
   )
