@@ -112,7 +112,7 @@ df %>%
   
   theme_minimal(base_family = "Fira Sans") +
   theme(
-    plot.background = element_rect(color = NA, fill = "#201970"),
+    plot.background = element_rect(color = NA, fill = "#140e54"),
     text = element_text(color = "grey83"),
     axis.text = element_text(color = "grey75"),
     panel.grid = element_blank(),
