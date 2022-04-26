@@ -50,7 +50,7 @@ trends_monthly_results <- transpose(trends_monthly) %>%
 annotate_text <- function(x, y, label, hjust = 1, nudge_y = 5, ...) {
   annotate("richtext", x = x, y = y + nudge_y,
            label = label,  hjust = hjust, size = 3, fill = NA, label.size = 0, 
-           col = "grey90", family = "Fira Sans", ...)
+           col = "grey90", family = "Noto Sans", ...)
 }
 
 # Custom annotation function, adds a circle to the data point
@@ -95,7 +95,7 @@ df %>%
   annotate("richtext", x = as_datetime("2020-03-15"), y = 10,
            label = "**Coronavirus<br>pandemic**", angle = 90, size = 5,
            hjust = 0, vjust = 1, fill = NA, label.size = 0, col = "grey90", 
-           family = "Fira Sans"
+           family = "Noto Sans"
   ) +
   
   scale_x_datetime(expand = c(0, 0)) +
@@ -110,7 +110,7 @@ df %>%
     y = "Normalized search interest"
   ) +
   
-  theme_minimal(base_family = "Fira Sans") +
+  theme_minimal(base_family = "Noto Sans") +
   theme(
     plot.background = element_rect(color = NA, fill = "#140e54"),
     text = element_text(color = "grey83"),
