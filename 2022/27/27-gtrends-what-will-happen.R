@@ -48,7 +48,7 @@ trends_monthly_results <- transpose(trends_monthly) %>%
 
 
 # Background color for plot
-bg_color <- "#140e54"
+bg_color <- "#090626"
 
 # Custom text annotation function
 annotate_text <- function(x, y, label, hjust = 0.5, nudge_y = 2, ...) {
@@ -72,7 +72,7 @@ highlight_events <- list(
         as_datetime("2022-02-01")),
   y = c(33, 57, 81, 91, 97, 100, 77),
   label = c(
-    "**Mortgage loan?**", 
+    "**Mortgage loans**", 
     "**Judgement Day**<br>on 5/21/11?",
     "**Maya Calendar 12/21/12**<br>End of the World?",
     "**Donald Trump**<br>elected president",
