@@ -10,6 +10,7 @@ base_path <- here("2022", "27")
 # Get US trends for search term "what will happen"
 trends <- gtrends("\"what will happen\"", geo = "US", gprop = "web", time = "all")
 
+# Replace values "<1" with 0.5
 df <- trends$interest_over_time %>% 
   mutate(hits = ifelse(hits == "<1", 0.5, as.numeric(hits))) 
 
@@ -122,4 +123,3 @@ df %>%
   )
 ggsave(here(base_path, "27-what-will-happen.png"), width = 7, height = 5)
 
-# 2013-10 Debt ceiling crisis
