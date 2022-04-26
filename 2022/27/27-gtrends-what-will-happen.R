@@ -109,9 +109,10 @@ df %>%
   scale_y_continuous(position = "right") +
   coord_cartesian(clip = "off") +
   labs(
-    title = "Google Search Queries for **\"What will happen\"** in the United States",
+    title = "Google Search Queries for **\"What will happen\"** in the U.S.",
     caption = "The plot shows normalized Google Search hits for \"What will happen\"
-           in web searches from the United States 2004-2022. A value of 100 denotes 
+           in web searches from the United States 2004-2022.<br>
+           A value of 100 denotes 
            maximum search interest.<br><br>
            **Source:** Google Trends | **Visualization:** Ansgar Wolsing",
     y = "Normalized search interest"
