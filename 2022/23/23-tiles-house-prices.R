@@ -54,9 +54,7 @@ p <- df %>%
     label.size = 0, label.r = unit(1, "mm")) +
   scale_fill_viridis_c() +
   facet_geo(vars(country), grid = europe_grid, label = "name") +
-  guides(
-    fill = guide_colorbar(title.position = "top")
-  ) +
+  guides(fill = guide_colorbar(title.position = "top")) +
   labs(
     title = "Housing Prices Rising in many European Countries",
     subtitle = "The House Price Index (HPI) measures inflation in the residential 
@@ -68,8 +66,7 @@ p <- df %>%
     The land component of the residential property is included.
     ",
     caption = "**Source:** Eurostat. **Visualization:** Ansgar Wolsing",
-    fill = "Annual average index<br>*(2010=100)*"
-  ) +
+    fill = "Annual average index<br>*(2010=100)*") +
   theme_void(base_family = "Fira Sans Condensed") +
   theme(
     plot.background = element_rect(color = NA, fill = "grey87"),
@@ -82,8 +79,6 @@ p <- df %>%
       width = 0.8, hjust = 0, halign = 0, lineheight = 1.2, 
       margin = margin(b = 24)),
     plot.caption = element_markdown(margin = margin(t = 18)),
-    # strip.text = element_text(family = "Fira Sans Condensed SemiBold",
-    #                           color = "grey16", size = 7)
     strip.text = element_blank(),
     plot.margin = margin(12, 12, 12, 12),
     legend.direction = "horizontal",
