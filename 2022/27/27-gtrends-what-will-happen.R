@@ -4,6 +4,7 @@ library(here)
 library(gtrendsR)
 library(glue)
 library(lubridate)
+library(grid)
 
 base_path <- here("2022", "27")
 
@@ -34,7 +35,6 @@ highest_interest <- highest_interest %>%
 
 # retrieve the Google Trends data for the months with the highest search interest
 # to find related topics and related queries
-
 highest_interest$end_date <- highest_interest$date + period("1 months") - period("1 day")
 
 gtrends_safely <- safely(gtrends, otherwise = NULL, quiet = FALSE) 
@@ -44,7 +44,6 @@ trends_monthly <- map2(as.character(highest_interest$date), as.character(highest
 trends_monthly_results <- transpose(trends_monthly) %>% 
   pluck("result") %>% 
   set_names(as.character(highest_interest$date))
-
 
 
 # Background color for plot
@@ -82,7 +81,9 @@ highlight_events <- list(
   )
 )
 
-
+# Create the plot with a line added via grid -----------------------------------
+ragg::agg_png(here(base_path, "27-what-will-happen.png"), res = 400, 
+              width = 7, height = 5.25, units = "in")
 df %>% 
   ggplot(aes(date, hits)) +
   
@@ -111,26 +112,34 @@ df %>%
   labs(
     title = "Google Search Queries for **\"What will happen\"** in the U.S.",
     caption = "The plot shows normalized Google Search hits for \"What will happen\"
-           in web searches from the United States 2004-2022.<br>
-           A value of 100 denotes 
-           maximum search interest.<br><br>
+           in web searches from the United States 2004-2022.
+           A value of 100 denotes maximum search interest.
+           The topics highlighted in the plot are based on the related topics and 
+           related queries returned by the Google Trends API.
+           <br><br>
            **Source:** Google Trends | **Visualization:** Ansgar Wolsing",
     y = "Normalized search interest"
   ) +
-  
   theme_minimal(base_family = "Noto Sans") +
   theme(
     plot.background = element_rect(color = NA, fill = bg_color),
+    plot.margin = margin(8, 8, 8, 8),
     text = element_text(color = "grey83"),
     axis.text = element_text(color = "grey75"),
     panel.grid = element_blank(),
     axis.title.x = element_blank(),
     axis.ticks = element_line(color = "grey75", size = 0.2),
     plot.title = element_markdown(
-      color = "white", margin = margin(t = 4, b = 16)),
+      color = "white", margin = margin(t = 4, b = 4)),
     plot.title.position = "plot",
     plot.caption = element_textbox_simple(
       size = 7, hjust = 0, margin = margin(t = 8))
   )
-ggsave(here(base_path, "27-what-will-happen.png"), width = 7, height = 5)
 
+# Add line below the title
+grid.lines(
+  x = c(0.0125, 0.725),
+  y = 0.925,
+  gp = gpar(col = "white", lwd = 1)
+)
+invisible(dev.off())
