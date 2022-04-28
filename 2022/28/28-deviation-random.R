@@ -23,17 +23,24 @@ p <- df %>%
   ggplot(aes(value, fill = name, color = name)) +
   stat_density(geom = "area", alpha = 0.1, col = NA, bw = 2, n = 2^12, size = 0.8) +
   stat_density(geom = "line", alpha = 1, bw = 2, n = 2^12, size = 0.8) +
+  paletteer::scale_color_paletteer_d("jcolors::pal3") +
+  paletteer::scale_fill_paletteer_d("jcolors::pal3") +
   guides(fill = "none") +
-  labs(title = "STANDARD DEVIATIONS",
+  labs(
+    title = "STANDARD DEVIATIONS",
+    subtitle = "5 distributions with different means and standard deviations",
+    caption = "**Visualization:** Ansgar Wolsing",
     col = NULL) +
-  theme_void() +
+  theme_void(base_family = "Noto Sans Math") +
   theme(
     plot.background = element_rect(color = NA, fill = "#210d33"),
     plot.margin = margin(t = 8, b = 8, l = 16, r = 16),
     text = element_text(color = "grey99"),
     plot.title = element_text(
       family = "Oswald", color = "white", size = 24, hjust = 0.5,
-      margin = margin(b = 12)),
+      margin = margin(b = 4)),
+    plot.subtitle = element_markdown(hjust = 0.5, margin = margin(b = 12)),
+    plot.caption = element_markdown(family = "Noto Sans", size = 6),
     legend.position = c(0.9, 0.8),
     legend.text = element_markdown(family = "Noto Sans Math", size = 6),
     legend.key.height = unit(6, "mm"))
