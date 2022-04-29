@@ -75,26 +75,44 @@ get_sample_means <- function(n, repetitions) {
   means
 }
 
+
+
 means <- get_sample_means(n = 10, repetitions = 100)
 means[order(means)]
 mean(means)
 sd(means)
 
 
-data.frame(
-  mean = means
-) %>% 
-  ggplot(aes(mean, y = 0)) + 
-  geom_jitter(shape = "|", size = 6, alpha = 0.5, height = 0) +
-  coord_cartesian(xlim = c(75, 81)) +
-  theme_minimal()
+img_width <- 1200 * 2/3
+img_height <- 1000 * 2/3
+res <- 200
+highlight_color <- "#f403fc"
 
-data.frame(
-  mean = means
+states_simultaneously <- 10
+p_anim <- data.frame(
+  mean = means,
+  state_id = ceiling(seq_along(means) / states_simultaneously)
 ) %>% 
   ggplot(aes(mean, y = 0)) + 
-  stat_interval() +
-  theme_minimal()
+  # geom_jitter(shape = "|", size = 6, alpha = 0.7, height = 0, color = "deeppink") +
+  geom_segment(aes(xend = mean, yend = 1), 
+               position = position_jitter(height = 0, width = 0.1),
+               color = highlight_color) +
+  coord_cartesian(xlim = c(75, 81), ylim = c(-0.5, 2)) +
+  labs(
+    subtitle = "These 100 samples give us<br>
+    <b style='color:{highlight_color}'>100 sample means</b><br>
+    of NBA player heights",
+    x = "height (in inches)"
+  ) +
+  transition_reveal(state_id) +
+  shadow_wake(wake_length = 1, colour = "white", alpha = 0.5)
+
+animate(p_anim, res = res, width = img_width, height = img_height, fps = 10,
+        duration = 2, bg = "grey12")
+anim_save(here(base_path, "29-stripes-10.gif"))
+
+
 
 means <- get_sample_means(n = 100, repetitions = 100)
 mean(means)
@@ -110,7 +128,7 @@ data.frame(
 
 
 
-means <- get_sample_means(n = 1000, repetitions = 100)
+means <- get_sample_means(n = 500, repetitions = 100)
 mean(means)
 sd(means)
 
@@ -183,13 +201,13 @@ plot_circular_points <- function(df_circular_points) {
       alpha = 0.6, shape = 21, size = 1, color = "white", stroke = 0.1) +
     geom_point(data = ~filter(., selected),
                aes(fill = selected), 
-               alpha = 1, size = 1, stroke = 0.2, shape = 21, color = "white") +
-    scale_fill_manual(values = c("FALSE" = "grey80", "TRUE" = "#f403fc")) + ##f0fc03
+               alpha = 1, size = 2, stroke = 0.2, shape = 21, color = "white") +
+    scale_fill_manual(values = c("FALSE" = "grey80", "TRUE" = highlight_color)) + ##f0fc03
     coord_fixed() +
     guides(fill = "none") +
     labs(subtitle = glue("From {n_players} basketball players in NBA history<br>
        we randomly draw <br>
-       <b style='font-size:12pt'>{n_selected}</b> <br>
+       <b style='font-size:12pt;color:{highlight_color}'>{n_selected}</b> <br>
        players
        <br><br>
        ... 100 times.")) +
@@ -204,32 +222,40 @@ plot_circular_points <- function(df_circular_points) {
 animate_circular_points <- function(p = last_plot()) {
   p_anim <- p +
     transition_layers(from_blank = FALSE, layer_length = 1.5)
-  animate(p_anim, res = 300, width = 1200, height = 1000, 
+  animate(p_anim, res = res, width = img_width, height = img_height, fps = 20,
           duration = 2, bg = "grey12")
 }
 
 
 df_circular_points_10 <- make_circular_points(n_players, 10)
 df_circular_points_100 <- make_circular_points(n_players, 100)
+df_circular_points_500 <- make_circular_points(n_players, 500)
 df_circular_points_1000 <- make_circular_points(n_players, 1000)
 
 p_10   <- plot_circular_points(df_circular_points_10)
 p_100  <- plot_circular_points(df_circular_points_100)
+p_500  <- plot_circular_points(df_circular_points_500)
 p_1000 <- plot_circular_points(df_circular_points_1000)
 
 animate_circular_points(p_10)
 anim_save(here(base_path, "29-anim-circles-10.gif"))
 animate_circular_points(p_100)
 anim_save(here(base_path, "29-anim-circles-100.gif"))
-animate_circular_points(p_1000)
-anim_save(here(base_path, "29-anim-circles-1000.gif"))
+animate_circular_points(p_500)
+anim_save(here(base_path, "29-anim-circles-500.gif"))
 
 
 gif1_10   <- image_read(here(base_path, "29-anim-circles-10.gif"))
 gif1_100  <- image_read(here(base_path, "29-anim-circles-100.gif"))
-gif1_1000 <- image_read(here(base_path, "29-anim-circles-1000.gif"))
-image_animate(c(gif1_10, gif1_100, gif1_1000), fps = 4)
+gif1_500 <- image_read(here(base_path, "29-anim-circles-500.gif"))
 
+gif2_10   <- image_read(here(base_path, "29-stripes-10.gif"))
+
+# gif_combined <- image_animate(c(gif1_10, gif2_10, gif1_100, gif1_500), fps = 10)
+gifs <- c(c(rep(gif1_10[1], 10), rep(gif1_10[2], 20)), gif2_10)
+gif_combined <- image_animate(rep(gifs, 3), fps = 10)
+image_write(gif_combined, here(base_path, "29-anim-circles-combined.gif"),
+            compression = "RunlengthEncoded", density = 100)
 
 # Display all player heights
 players %>% 
