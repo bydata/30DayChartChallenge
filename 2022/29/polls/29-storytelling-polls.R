@@ -70,8 +70,9 @@ annotations <- data.frame(
   label = c("**1** | CDU/CSU surged<br>at the start of the<br>pandemic",
             "**2** | Beginning of 2021, CDU/CSU lost support,<br>
             while Greens and FDP gained in the polls"),
-  x = c(as_date("2019-11-01"), as_date("2020-11-01")),
-  y = c(38, 32),
+  x = c(as_date("2020-10-01"), as_date("2020-04-01")),
+  # y = c(38, 32),
+  y = 50,
   hjust = 0)
 
 annotations$date_id <- seq_along(annotations$label)
@@ -97,16 +98,15 @@ p <- polls %>%
     aes(x, y, label = label, hjust = hjust),
     inherit.aes = FALSE,
     family = "Lato", size = 2.5, color = "grey99", fill = alpha("grey2", 0.6), 
-    label.r = unit(1, "mm"), label.size = 0.1, label.colour = "grey60"
-  ) +
+    label.r = unit(1, "mm"), label.size = 0.1, label.colour = "grey60", vjust = 1) +
   # geom_segment() +
   scale_x_date(expand = expansion(add = c(10, 45)), breaks = "3 months",
                date_labels = "%b %Y") +
-  scale_y_continuous(breaks = seq(0, 50, 10), 
+  scale_y_continuous(breaks = seq(0, 40, 10), 
                      labels = function(x) ifelse(x == 40, "40%", x),
                      sec.axis = dup_axis()) +
   scale_color_manual(values = party_colors) +
-  coord_cartesian(ylim = c(0, NA), clip = "off") +
+  coord_cartesian(ylim = c(0, 50), clip = "off") +
   guides(color = "none", fill = "none") +
   labs(
     title = "Polling Trends in the Run-up to the German Federal Election 2021",
@@ -126,9 +126,13 @@ p <- polls %>%
     x = NULL,
     y = "Projected vote share"
   )
-
-p + 
-  transition_reveal(date_id) 
-
 ggsave(here(base_path, "29-all-parties.png"), width = 6, height = 5)  
 
+
+p + 
+  transition_filter(
+    transition_length = 1, filter_length = 0,
+    date_id) 
+
+p + 
+  transition_states(date_id, transition_length = 0, state_length = 1)
