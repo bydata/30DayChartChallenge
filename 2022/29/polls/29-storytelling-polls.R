@@ -41,7 +41,7 @@ theme_set(
             color = "grey2", face = "bold"),
           plot.title.position = "plot",
           plot.subtitle = element_textbox_simple(
-            size = 8, hjust = 0, margin = margin(t = 2, b = 8), width = 0.95),
+            size = 8, hjust = 0, margin = margin(t = 2, b = 12), width = 0.95),
           plot.caption = element_textbox_simple(
             width = 1, size = 6, hjust = 0, 
             margin = margin(t = 10, b = 4)),
@@ -67,13 +67,17 @@ election_date <- as_date("2021-09-26")
 
 # Annotations
 annotations <- data.frame(
-  label = c("**1** | CDU/CSU surged<br>at the start of the<br>pandemic",
-            "**2** | Beginning of 2021, CDU/CSU lost support,<br>
-            while Greens and FDP gained in the polls"),
-  x = c(as_date("2020-10-01"), as_date("2020-04-01")),
-  # y = c(38, 32),
-  y = 50,
-  hjust = 0)
+  label = c("**1** | CDU/CSU surged at the start of the pandemic",
+            "**2** | SPD numbers were flat going into the campaign",
+            "**3** | Beginning of 2021, CDU/CSU lost support,
+            while Greens and FDP gained in the polls",
+            "**4** | As quickly as the Greens' share increase, 
+            it dropped to previous level",
+            "**5** | SPD eventually passed the CDU/CSU to become the strongest party
+            in the federal election"),
+  x = c(as_date("2020-03-01"), as_date("2020-09-01"), as_date("2021-03-01"), 
+        as_date("2021-06-01"), as_date("2021-09-10")),
+  y = c(38, 15, 28, 22, 33))
 
 annotations$date_id <- seq_along(annotations$label)
 
@@ -81,9 +85,6 @@ annotations$date_id <- seq_along(annotations$label)
 p <- polls %>%
   filter(party %in% c("CDU/CSU", "SPD", "GREENS", "FDP")) %>% 
   filter(date >= election_date - period("2 years") & date < election_date) %>% 
-  # group_by(date) %>% 
-  # mutate(date_id = cur_group_id()) %>% 
-  # ungroup() %>% 
   ggplot(aes(date, share)) +
   geom_point(aes(color = party), alpha = 0.2, size = 0.5, shape = 21) +
   geom_smooth(aes(color = party, fill = stage(party, after_scale = alpha(color, 0.2))), 
@@ -93,13 +94,22 @@ p <- polls %>%
             stat = "summary", fun = mean, nudge_x = 1, hjust = 0, vjust = 0.5, family = "Lato", 
             fontface = "bold", size = 2.5
             ) +
+  
+  # Text on top of the chart area
+  geom_textbox(
+    data = annotations,
+    aes(x = as_date("2020-11-01"), y = 51, label = label),
+    inherit.aes = FALSE, hjust = 0.5, halign = 0, width = 1.1,
+    family = "Lato", size = 3, color = "grey2", fill = "grey98", 
+    box.padding = unit(5, "mm"),
+    box.r = unit(0, "mm"), box.size = 0, box.colour = "grey60", vjust = 1) +
+  # Notes inside the chart
   geom_richtext(
     data = annotations,
-    aes(x, y, label = label, hjust = hjust),
-    inherit.aes = FALSE,
-    family = "Lato", size = 2.5, color = "grey99", fill = alpha("grey2", 0.6), 
-    label.r = unit(1, "mm"), label.size = 0.1, label.colour = "grey60", vjust = 1) +
-  # geom_segment() +
+    aes(x, y, label = date_id),
+    inherit.aes = FALSE, hjust = 0.5, fontface = "bold",
+    family = "Lato", size = 5, color = "grey99", fill = alpha("grey2", 0.6), 
+    label.r = unit(1.5, "mm"), label.size = 0.1, label.colour = "grey60", vjust = 1) +
   scale_x_date(expand = expansion(add = c(10, 45)), breaks = "3 months",
                date_labels = "%b %Y") +
   scale_y_continuous(breaks = seq(0, 40, 10), 
@@ -128,11 +138,8 @@ p <- polls %>%
   )
 ggsave(here(base_path, "29-all-parties.png"), width = 6, height = 5)  
 
-
-p + 
-  transition_filter(
-    transition_length = 1, filter_length = 0,
-    date_id) 
-
-p + 
+p_anim <- p + 
   transition_states(date_id, transition_length = 0, state_length = 1)
+animate(p_anim, res = 300, width = 1800, height = 1500, duration = 15,
+        start_pause = 10, end_pause = 20, bg = "grey98")
+anim_save(here(base_path, "29-polls-storytelling.gif"))
