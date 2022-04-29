@@ -8,7 +8,7 @@ library(gganimate)
 library(glue)
 library(magick)
 
-base_path <- here("2022", "29")
+base_path <- here("2022", "29", "nba-heights")
 
 library(DBI)
 library(dbplyr)
