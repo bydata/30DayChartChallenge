@@ -54,26 +54,6 @@ df_long <- df %>%
                values_to = "births_per_1k", names_pattern = "age_(.+)")
   
 
-df %>% 
-  filter(region == "WORLD") %>% 
-  ggplot(aes(reference_date, `age_15-19`, col = ci_level, group = ci_level)) +
-  geom_line()
-
-
-
-df_long %>% 
-  select(region, reference_date, ci_level, age_group, births_per_1k) %>% 
-  pivot_wider(id_cols = c(region, reference_date, age_group),
-              names_from = "ci_level", values_from = "births_per_1k") %>% 
-  filter(region == "WORLD") %>% 
-  ggplot(aes(reference_date, group = age_group)) +
-  geom_ribbon(aes(ymin = `Lower 95`, ymax = `Upper 95`), fill = "grey70") + 
-  geom_ribbon(aes(ymin = `Lower 80`, ymax = `Upper 80`), fill = "grey50") + 
-  geom_line(aes(y = Median), size = 1.5) +
-  facet_wrap(vars(age_group))
-
-
-
 df_long %>% 
   select(region, type, reference_date, ci_level, age_group, births_per_1k) %>% 
   pivot_wider(id_cols = c(region, type, reference_date, age_group),
@@ -136,4 +116,3 @@ df_long %>%
   )
 ggsave(here(base_path, "30-un-pop-fertility-age-groups.png"), 
        dpi = 300, width = 8, height = 7)
-
