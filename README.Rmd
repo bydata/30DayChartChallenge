@@ -36,3 +36,18 @@ Code: [2022/02/02-pictogram.R](2022/02/02-pictogram.R)
 Code: [2022/03/03-historical.R](2022/03/03-historical.R)
 
 ![](2022/03/03-historical-wframe.png)
+
+
+#### Day 04 | Flora
+
+Code: [2022/04/04-trees-cgn-combined.R](2022/04/04-trees-cgn-combined.R)
+
+![](2022/04/04-trees-combined.png)
+
+
+#### Day 05 | Slope
+
+Code: [2022/05/05-slope-wordle.R](2022/05/05-slope-wordle.R)
+
+![](2022/05/05-slope-wordle.png)
+
