@@ -15,19 +15,19 @@ Contributions to the \#30DayChartChallenge
 
 Code: [2022/01/waffle\_renewable.R](2022/01/waffle_renewable.R)
 
-![](2022/01/01-waffle-renewable.png)
+## ![](2022/01/01-waffle-renewable.png)
 
 #### Day 02 \| Pictogram
 
 Code: [2022/02/02-pictogram.R](2022/02/02-pictogram.R)
 
-![](2022/02/saarland-pictogram-edited-en.png)
+## ![](2022/02/saarland-pictogram-edited-en.png)
 
 #### Day 03 \| Historical
 
 Code: [2022/03/03-historical.R](2022/03/03-historical.R)
 
-![](2022/03/03-historical-wframe.png)
+## ![](2022/03/03-historical-wframe.png)
 
 #### Day 04 \| Flora
 
@@ -35,8 +35,37 @@ Code: [2022/04/04-trees-cgn-combined.R](2022/04/04-trees-cgn-combined.R)
 
 ![](2022/04/04-trees-combined.png)
 
+------------------------------------------------------------------------
+
 #### Day 05 \| Slope
 
 Code: [2022/05/05-slope-wordle.R](2022/05/05-slope-wordle.R)
 
 ![](2022/05/05-slope-wordle.png)
+
+------------------------------------------------------------------------
+
+#### Day 06 \| Data Day: Our World in Data
+
+Code: [2022/06/06-owid-working-hours.R](2022/06/06-owid-working-hours.R)
+
+![](2022/06/06-owid-slope.png)
+
+------------------------------------------------------------------------
+
+#### Day 07 \| Physical
+
+Code: [07-physical-nba.R](07-physical-nba.R)
+
+![](2022/07/07-physical-nba-height-weight.png)
+
+------------------------------------------------------------------------
+
+#### Day 10 \| Experimental
+
+Code:
+[2022/10/10-experimental-macbeth.R](2022/10/10-experimental-macbeth.R)
+
+![](2022/10/10-experimental-macbeth.png)
+
+------------------------------------------------------------------------
