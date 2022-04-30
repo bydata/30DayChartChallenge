@@ -98,4 +98,31 @@ elevations %>%
     plot.caption = element_text(hjust = 0)
   )
 ggsave(here(base_path, "08-mountains-de.png"), width = 5, height = 4)  
-  
+
+
+
+# Log scale
+elevations %>% 
+  ggplot(aes(elevation)) +
+  geom_histogram(bins = 50, fill = "grey30", col = "white") +
+  scale_x_continuous(trans = "log", labels = scales::number_format(accuracy = 1)) +
+  scale_y_continuous() +
+  labs(
+    title = "Elevation of Mountains and Hills in Germany",
+    subtitle = "Number of mountains/hills (elevations in logarithmic scale)",
+    caption = "Source: OpenStreetMap contributors. Visualization: Ansgar Wolsing",
+    x = "elevation", y = NULL
+  ) +
+  theme_minimal(base_family = font_family, base_size = 8) +
+  theme(
+    plot.background = element_rect(color = NA, fill = "grey98"),
+    panel.grid = element_blank(),
+    axis.line.x = element_line(),
+    axis.ticks.x = element_line(),
+    text = element_text(color = "grey17"),
+    plot.title = element_text(size = 16),
+    plot.title.position = "plot",
+    plot.caption = element_text(hjust = 0)
+  )
+ggsave(here(base_path, "08-mountains-de-log-scale.png"), width = 5, height = 4)  
+
