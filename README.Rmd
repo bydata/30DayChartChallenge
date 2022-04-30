@@ -1,6 +1,9 @@
 ---
 title: "#30DayChartChallenge"
-output: github_document
+output: 
+  github_document:
+    toc: true
+    toc_depth: 4
 ---
 
 ```{r setup, include=FALSE}
@@ -20,21 +23,18 @@ Contributions to the #30DayChartChallenge
 #### Day 01 | Part-to-Whole
 
 Code: [2022/01/waffle_renewable.R](2022/01/waffle_renewable.R)
-
 ![](2022/01/01-waffle-renewable.png)
 ---
 
 #### Day 02 | Pictogram
 
 Code: [2022/02/02-pictogram.R](2022/02/02-pictogram.R)
-
 ![](2022/02/saarland-pictogram-edited-en.png)
 ---
 
 #### Day 03 | Historical
 
 Code: [2022/03/03-historical.R](2022/03/03-historical.R)
-
 ![](2022/03/03-historical-wframe.png)
 ---
 

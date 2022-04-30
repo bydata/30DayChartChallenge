@@ -1,6 +1,19 @@
 \#30DayChartChallenge
 ================
 
+-   [2022](#2022)
+    -   [Prompts](#prompts)
+    -   [My Contributions](#my-contributions)
+        -   [Day 01 \| Part-to-Whole](#day-01--part-to-whole)
+        -   [Day 02 \| Pictogram](#day-02--pictogram)
+        -   [Day 03 \| Historical](#day-03--historical)
+        -   [Day 04 \| Flora](#day-04--flora)
+        -   [Day 05 \| Slope](#day-05--slope)
+        -   [Day 06 \| Data Day: Our World in
+            Data](#day-06--data-day-our-world-in-data)
+        -   [Day 07 \| Physical](#day-07--physical)
+        -   [Day 10 \| Experimental](#day-10--experimental)
+
 Contributions to the \#30DayChartChallenge
 
 ## 2022
@@ -14,20 +27,17 @@ Contributions to the \#30DayChartChallenge
 #### Day 01 \| Part-to-Whole
 
 Code: [2022/01/waffle\_renewable.R](2022/01/waffle_renewable.R)
-
-## ![](2022/01/01-waffle-renewable.png)
+![](2022/01/01-waffle-renewable.png) —
 
 #### Day 02 \| Pictogram
 
 Code: [2022/02/02-pictogram.R](2022/02/02-pictogram.R)
-
-## ![](2022/02/saarland-pictogram-edited-en.png)
+![](2022/02/saarland-pictogram-edited-en.png) —
 
 #### Day 03 \| Historical
 
 Code: [2022/03/03-historical.R](2022/03/03-historical.R)
-
-## ![](2022/03/03-historical-wframe.png)
+![](2022/03/03-historical-wframe.png) —
 
 #### Day 04 \| Flora
 
