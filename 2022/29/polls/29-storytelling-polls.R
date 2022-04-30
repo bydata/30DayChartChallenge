@@ -41,12 +41,12 @@ theme_set(
             color = "grey2", face = "bold"),
           plot.title.position = "plot",
           plot.subtitle = element_textbox_simple(
-            size = 8, hjust = 0, margin = margin(t = 2, b = 12), width = 0.95),
+            size = 8, hjust = 0, margin = margin(t = 2, b = 9), width = 0.95),
           plot.caption = element_textbox_simple(
             width = 1, size = 6, hjust = 0, 
             margin = margin(t = 10, b = 4)),
           axis.title = element_text(color = "grey45"),
-          axis.title.y = element_text(hjust = 1),
+          axis.title.y = element_text(hjust = 0.5),
           axis.title.y.right = element_blank(),
           axis.text = element_text(color = "grey45"))
 )
@@ -67,19 +67,25 @@ election_date <- as_date("2021-09-26")
 
 # Annotations
 annotations <- data.frame(
-  label = c("**1** | CDU/CSU surged at the start of the pandemic",
-            "**2** | SPD numbers were flat going into the campaign",
-            "**3** | Beginning of 2021, CDU/CSU lost support,
-            while Greens and FDP gained in the polls",
-            "**4** | As quickly as the Greens' share increase, 
-            it dropped to previous level",
-            "**5** | SPD eventually passed the CDU/CSU to become the strongest party
-            in the federal election"),
+  label = c(glue("<b style='color:{party_colors[\"CDU/CSU\"]}'>CDU/CSU</b>
+                 surged at the start of the pandemic"),
+                 glue("<b style='color:{party_colors[\"SPD\"]}'>SPD</b> numbers were
+            flat going into the campaign"),
+                 glue("Beginning of 2021, 
+            <b style='color:{party_colors[\"CDU/CSU\"]}'>CDU/CSU</b> 
+            lost support, while 
+            <b style='color:{party_colors[\"GREENS\"]}'>Greens</b> and 
+            <b style='color:{party_colors[\"FDP\"]}'>FDP</b> gained in the polls"),
+                 glue("As quickly as the <b style='color:{party_colors[\"GREENS\"]}'>Greens'</b>
+            share increase,  it dropped to previous level"),
+                 glue("<b style='color:{party_colors[\"SPD\"]}'>SPD</b> 
+            eventually passed <b style='color:{party_colors[\"CDU/CSU\"]}'>CDU/CSU</b> 
+            to become the strongest party in the federal election")),
   x = c(as_date("2020-03-01"), as_date("2020-09-01"), as_date("2021-03-01"), 
         as_date("2021-06-01"), as_date("2021-09-10")),
   y = c(38, 15, 28, 22, 33))
-
 annotations$date_id <- seq_along(annotations$label)
+annotations$label <- glue("<span style='font-size:14pt'><b>{annotations$date_id}</b> |</span> {annotations$label}")
 
 ## All parties
 p <- polls %>%
@@ -140,6 +146,6 @@ ggsave(here(base_path, "29-all-parties.png"), width = 6, height = 5)
 
 p_anim <- p + 
   transition_states(date_id, transition_length = 0, state_length = 1)
-animate(p_anim, res = 300, width = 1800, height = 1500, duration = 15,
+animate(p_anim, res = 300, width = 1800, height = 1500, duration = 20,
         start_pause = 10, end_pause = 20, bg = "grey98")
 anim_save(here(base_path, "29-polls-storytelling.gif"))
