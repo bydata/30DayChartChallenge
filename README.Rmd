@@ -24,18 +24,21 @@ Contributions to the #30DayChartChallenge
 
 Code: [2022/01/waffle_renewable.R](2022/01/waffle_renewable.R)
 ![](2022/01/01-waffle-renewable.png)
+
 ---
 
 #### Day 02 | Pictogram
 
 Code: [2022/02/02-pictogram.R](2022/02/02-pictogram.R)
 ![](2022/02/saarland-pictogram-edited-en.png)
+
 ---
 
 #### Day 03 | Historical
 
 Code: [2022/03/03-historical.R](2022/03/03-historical.R)
 ![](2022/03/03-historical-wframe.png)
+
 ---
 
 #### Day 04 | Flora
@@ -68,6 +71,28 @@ Code: [2022/06/06-owid-working-hours.R](2022/06/06-owid-working-hours.R)
 Code: [07-physical-nba.R](07-physical-nba.R)
 
 ![](2022/07/07-physical-nba-height-weight.png)
+
+---
+
+#### Day 08 | Mountains
+
+Code: [2022/08/08-mount-everest.R](2022/08/08-mount-everest.R)
+
+![](2022/08/08-mount-everest.png)
+
+Code: [2022/08/08-mountains-de.R](2022/08/08-mountains-de.R)
+
+![](2022/08/08-mountains-de.png)
+
+---
+
+#### Day 09 | Statistics
+
+Code: [2022/09/09-all-too-well.R](2022/09/09-all-too-well.R)
+
+![](2022/09/09-all-too-well.png)
+
+![](2022/09/09-all-too-well-dist.png)
 
 
 ---
