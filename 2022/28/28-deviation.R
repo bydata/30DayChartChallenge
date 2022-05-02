@@ -44,4 +44,4 @@ p <- df %>%
     legend.position = c(0.9, 0.8),
     legend.text = element_markdown(family = "Noto Sans Math", size = 6),
     legend.key.height = unit(6, "mm"))
-ggsave(here(base_path, "28-random.png"), dpi = 400, width = 5, height = 4)
+ggsave(here(base_path, "28-deviation.png"), dpi = 400, width = 5, height = 4)
