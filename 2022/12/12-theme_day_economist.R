@@ -90,7 +90,6 @@ p <- df_2020 %>%
     plot.caption = element_text(hjust = 0, size = 7, 
                                 family = "Fira Sans Condensed Light"),
     plot.caption.position = "plot"
-    
   )
 p
 
