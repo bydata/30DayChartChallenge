@@ -15,6 +15,11 @@
         -   [Day 08 \| Mountains](#day-08--mountains)
         -   [Day 09 \| Statistics](#day-09--statistics)
         -   [Day 10 \| Experimental](#day-10--experimental)
+        -   [Day 11 \| Circular](#day-11--circular)
+        -   [Day 12 \| Theme Day: The
+            Economist](#day-12--theme-day-the-economist)
+        -   [Day 13 \| Correlation](#day-13--correlation)
+        -   [Day 14 \| 3-Dimensional](#day-14--3-dimensional)
 
 Contributions to the \#30DayChartChallenge
 
@@ -109,3 +114,34 @@ Code:
 ![](2022/10/10-experimental-macbeth.png)
 
 ------------------------------------------------------------------------
+
+#### Day 11 \| Circular
+
+Code: [2022/11/11-circular-sunshine.R](2022/11/11-circular-sunshine.R)
+
+![](2022/11/11-circular-sushine-cgn-intervals2.png)
+
+------------------------------------------------------------------------
+
+#### Day 12 \| Theme Day: The Economist
+
+Code:
+[2022/12/12-theme\_day\_economist.R](2022/12/12-theme_day_economist.R)
+
+![](2022/12/12-economist_gdpercap.png)
+
+------------------------------------------------------------------------
+
+#### Day 13 \| Correlation
+
+Code: [2022/13/13-correlation.R](2022/13/13-correlation.R)
+
+![](2022/13/13-correlation.png)
+
+------------------------------------------------------------------------
+
+#### Day 14 \| 3-Dimensional
+
+Code: [2022/14/14-3dimensional.R](2022/14/14-3dimensional.R)
+
+![](2022/14/14-3dimensional-fixed-x.png)

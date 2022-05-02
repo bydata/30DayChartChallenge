@@ -105,6 +105,39 @@ Code: [2022/10/10-experimental-macbeth.R](2022/10/10-experimental-macbeth.R)
 
 ---
 
+#### Day 11 | Circular
+
+Code: [2022/11/11-circular-sunshine.R](2022/11/11-circular-sunshine.R)
+
+![](2022/11/11-circular-sushine-cgn-intervals2.png)
+
+---
+
+#### Day 12 | Theme Day: The Economist
+
+Code: [2022/12/12-theme_day_economist.R](2022/12/12-theme_day_economist.R)
+
+![](2022/12/12-economist_gdpercap.png)
+
+---
+
+#### Day 13 | Correlation
+
+Code: [2022/13/13-correlation.R](2022/13/13-correlation.R)
+
+![](2022/13/13-correlation.png)
+
+---
+
+#### Day 14 | 3-Dimensional
+
+Code: [2022/14/14-3dimensional.R](2022/14/14-3dimensional.R)
+
+![](2022/14/14-3dimensional-fixed-x.png)
+
+
+
+
 
 
 
