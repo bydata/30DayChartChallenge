@@ -3,7 +3,7 @@
 
 -   [2022](#2022)
     -   [Prompts](#prompts)
-    -   [My Contributions](#my-contributions)
+    -   [Contributions](#contributions)
         -   [Day 01 \| Part-to-Whole](#day-01--part-to-whole)
         -   [Day 02 \| Pictogram](#day-02--pictogram)
         -   [Day 03 \| Historical](#day-03--historical)
@@ -20,6 +20,18 @@
             Economist](#day-12--theme-day-the-economist)
         -   [Day 13 \| Correlation](#day-13--correlation)
         -   [Day 14 \| 3-Dimensional](#day-14--3-dimensional)
+        -   [Day 15 \| Multivariate](#day-15--multivariate)
+        -   [Day 16 \| Environment](#day-16--environment)
+        -   [Day 17 \| Connections](#day-17--connections)
+        -   [Day 18 \| Data Day: OECD](#day-18--data-day-oecd)
+        -   [Day 19 \| Global Change](#day-19--global-change)
+        -   [Day 20 \| New Tool](#day-20--new-tool)
+        -   [Day 21 \| Down/upwards](#day-21--downupwards)
+        -   [Day 22 \| Animation](#day-22--animation)
+        -   [Day 23 \| Tiles](#day-23--tiles)
+        -   [Day 24 \| Theme Day: Financial
+            Times](#day-24--theme-day-financial-times)
+        -   [Day 25 \| Trend](#day-25--trend)
 
 Contributions to the \#30DayChartChallenge
 
@@ -29,7 +41,7 @@ Contributions to the \#30DayChartChallenge
 
 ![Prompts 2022](https://pbs.twimg.com/media/FOEPn_hXsAgct7P?format=jpg)
 
-### My Contributions
+### Contributions
 
 #### Day 01 \| Part-to-Whole
 
@@ -145,3 +157,104 @@ Code: [2022/13/13-correlation.R](2022/13/13-correlation.R)
 Code: [2022/14/14-3dimensional.R](2022/14/14-3dimensional.R)
 
 ![](2022/14/14-3dimensional-fixed-x.png)
+
+------------------------------------------------------------------------
+
+#### Day 15 \| Multivariate
+
+Code: [2022/15/15-multivariate.R](2022/15/15-multivariate.R.R)
+
+![](2022/15/15-parallel-coordinates.png)
+
+------------------------------------------------------------------------
+
+#### Day 16 \| Environment
+
+Code: [2022/16/16-environmental.R](2022/16/16-environmental.R)
+
+![](2022/16/16-environmental.png)
+
+------------------------------------------------------------------------
+
+#### Day 17 \| Connections
+
+Code: [2022/17/17-connected.R](2022/17/17-connected.R)
+
+![](2022/17/17-connected-messi-ronaldo.png)
+
+Animated version:
+
+![](2022/17/17-connected-2.gif)
+
+------------------------------------------------------------------------
+
+#### Day 18 \| Data Day: OECD
+
+Code: [2022/18/18-oecd.R](2022/18/18-oecd.R)
+
+![](2022/18/18-oecd-air-pollution.png)
+
+------------------------------------------------------------------------
+
+#### Day 19 \| Global Change
+
+Code: [2022/19/19-global-change.R](2022/19/19-global-change.R)
+
+![](2022/19/19-global-change.gif)
+
+------------------------------------------------------------------------
+
+#### Day 20 \| New Tool
+
+<https://www.datawrapper.de/_/iWW9z/>
+
+![](2022/20/number-of-contributions-to-30daychartchallenge-on-twitter.png)
+
+------------------------------------------------------------------------
+
+#### Day 21 \| Down/upwards
+
+Code: [2022/21/21-price-of-gasoline.R](2022/21/21-price-of-gasoline.R)
+
+![](2022/21/21-price-of-gasoline.png)
+
+------------------------------------------------------------------------
+
+#### Day 22 \| Animation
+
+Code:
+[2022/22/22-animation-temperature.R](2022/22/22-animation-temperature.R)
+
+![](2022/22/22-temperature-de.gif)
+
+Code: [2022/22/22-global-change.R](2022/22/22-global-change.R)
+
+![](2022/22/22-global-change.gif)
+
+------------------------------------------------------------------------
+
+#### Day 23 \| Tiles
+
+Code: [2022/23/23-tiles-house-prices.R](2022/23/23-tiles-house-prices.R)
+
+![](2022/23/23-titles-europe-housing-prices.png)
+
+Code: [2022/23/23-tiles-temp-de.R](2022/23/23-tiles-temp-de.R)
+
+![](2022/23/23-tiles-temp-de.png)
+
+------------------------------------------------------------------------
+
+#### Day 24 \| Theme Day: Financial Times
+
+Code: [2022/24/24-ft.R](2022/24/24-ft.R)
+
+![](2022/24/24-ft.png)
+
+------------------------------------------------------------------------
+
+#### Day 25 \| Trend
+
+Code: [2022/25/25-trends-polls.R](2022/25/25-trends-polls.R)
+
+![](2022/25/25-all-parties.png)
