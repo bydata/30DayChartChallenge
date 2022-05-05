@@ -1,7 +1,7 @@
 ---
 title: "#30DayChartChallenge"
 output: 
-  github_document:
+  html_document:
     toc: true
     toc_depth: 4
 ---
@@ -274,7 +274,7 @@ Code: [2022/29/polls/29-storytelling-polls.R](2022/29/polls/29-storytelling-poll
 
 ---
 
-#### Day 30 | xyz
+#### Day 30 | Data Day: UN Population
 
 Code: [2022/30/30-un-population.R](2022/30/30-un-population.R)
 
