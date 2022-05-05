@@ -33,6 +33,10 @@
             Times](#day-24--theme-day-financial-times)
         -   [Day 25 \| Trend](#day-25--trend)
         -   [Day 26 \| Interactive](#day-26--interactive)
+        -   [Day 27 \| Future](#day-27--future)
+        -   [Day 28 \| Deviation](#day-28--deviation)
+        -   [Day 29 \| Storytelling](#day-29--storytelling)
+        -   [Day 30 \| xyz](#day-30--xyz)
 
 Contributions to the \#30DayChartChallenge
 
@@ -266,11 +270,42 @@ Code: [2022/25/25-trends-polls.R](2022/25/25-trends-polls.R)
 
 Code: [2022/26/polling-trends](2022/2/2.R)
 
-https://user-images.githubusercontent.com/42520206/167015728-2fd183bb-c582-45ec-97d8-f515c78c3232.mp4
-
-
-
 App: <https://awol.shinyapps.io/polling-trends/>
 
 **Video of the app in use:**
+<https://user-images.githubusercontent.com/42520206/165275612-45329bde-710d-471e-818e-ea850a8bdd3c.mp4>
 
+------------------------------------------------------------------------
+
+#### Day 27 \| Future
+
+Code:
+[2022/27/27-gtrends-what-will-happen.R](2022/27/27-gtrends-what-will-happen.R)
+
+![](2022/27/27-what-will-happen.png)
+
+------------------------------------------------------------------------
+
+#### Day 28 \| Deviation
+
+Code: [2022/28/28-deviation.R](2022/28/28-deviation.R)
+
+![](2022/28/28-deviation.png)
+
+------------------------------------------------------------------------
+
+#### Day 29 \| Storytelling
+
+Code:
+[2022/29/polls/29-storytelling-polls.R](2022/29/polls/29-storytelling-polls.R)
+
+![](2022/29/polls/29-all-parties.png)
+![](2022/29/polls/29-polls-storytelling.gif)
+
+------------------------------------------------------------------------
+
+#### Day 30 \| xyz
+
+Code: [2022/30/30-un-population.R](2022/30/30-un-population.R)
+
+![](2022/30/30-un-pop-fertility-age-groups.png)

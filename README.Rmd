@@ -247,8 +247,38 @@ App: https://awol.shinyapps.io/polling-trends/
 https://user-images.githubusercontent.com/42520206/165275612-45329bde-710d-471e-818e-ea850a8bdd3c.mp4
 
 
+---
 
+#### Day 27 | Future
 
+Code: [2022/27/27-gtrends-what-will-happen.R](2022/27/27-gtrends-what-will-happen.R)
+
+![](2022/27/27-what-will-happen.png)
+
+---
+
+#### Day 28 | Deviation
+
+Code: [2022/28/28-deviation.R](2022/28/28-deviation.R)
+
+![](2022/28/28-deviation.png)
+
+---
+
+#### Day 29 | Storytelling
+
+Code: [2022/29/polls/29-storytelling-polls.R](2022/29/polls/29-storytelling-polls.R)
+
+![](2022/29/polls/29-all-parties.png)
+![](2022/29/polls/29-polls-storytelling.gif)
+
+---
+
+#### Day 30 | xyz
+
+Code: [2022/30/30-un-population.R](2022/30/30-un-population.R)
+
+![](2022/30/30-un-pop-fertility-age-groups.png)
 
 
 
