@@ -235,6 +235,19 @@ Code: [2022/25/25-trends-polls.R](2022/25/25-trends-polls.R)
 
 ![](2022/25/25-all-parties.png)
 
+---
+
+#### Day 26 | Interactive
+
+Code: [2022/26/polling-trends](2022/2/2.R)
+
+App: https://awol.shinyapps.io/polling-trends/
+
+**Video of the app in use:**
+https://user-images.githubusercontent.com/42520206/165275612-45329bde-710d-471e-818e-ea850a8bdd3c.mp4
+
+
+
 
 
 

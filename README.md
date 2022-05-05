@@ -32,6 +32,7 @@
         -   [Day 24 \| Theme Day: Financial
             Times](#day-24--theme-day-financial-times)
         -   [Day 25 \| Trend](#day-25--trend)
+        -   [Day 26 \| Interactive](#day-26--interactive)
 
 Contributions to the \#30DayChartChallenge
 
@@ -258,3 +259,14 @@ Code: [2022/24/24-ft.R](2022/24/24-ft.R)
 Code: [2022/25/25-trends-polls.R](2022/25/25-trends-polls.R)
 
 ![](2022/25/25-all-parties.png)
+
+------------------------------------------------------------------------
+
+#### Day 26 \| Interactive
+
+Code: [2022/26/polling-trends](2022/2/2.R)
+
+App: <https://awol.shinyapps.io/polling-trends/>
+
+**Video of the app in use:**
+<https://user-images.githubusercontent.com/42520206/165275612-45329bde-710d-471e-818e-ea850a8bdd3c.mp4>
