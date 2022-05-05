@@ -266,7 +266,11 @@ Code: [2022/25/25-trends-polls.R](2022/25/25-trends-polls.R)
 
 Code: [2022/26/polling-trends](2022/2/2.R)
 
+https://user-images.githubusercontent.com/42520206/167015728-2fd183bb-c582-45ec-97d8-f515c78c3232.mp4
+
+
+
 App: <https://awol.shinyapps.io/polling-trends/>
 
 **Video of the app in use:**
-https://user-images.githubusercontent.com/42520206/165275612-45329bde-710d-471e-818e-ea850a8bdd3c.mp4
+
