@@ -36,7 +36,8 @@
         -   [Day 27 \| Future](#day-27--future)
         -   [Day 28 \| Deviation](#day-28--deviation)
         -   [Day 29 \| Storytelling](#day-29--storytelling)
-        -   [Day 30 \| xyz](#day-30--xyz)
+        -   [Day 30 \| Data Day: UN
+            Population](#day-30--data-day-un-population)
 
 Contributions to the \#30DayChartChallenge
 
@@ -304,7 +305,7 @@ Code:
 
 ------------------------------------------------------------------------
 
-#### Day 30 \| xyz
+#### Day 30 \| Data Day: UN Population
 
 Code: [2022/30/30-un-population.R](2022/30/30-un-population.R)
 
