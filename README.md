@@ -51,8 +51,17 @@ Contributions to the \#30DayChartChallenge
 
 #### Day 01 \| Part-to-Whole
 
-Code: [2022/01/waffle\_renewable.R](2022/01/waffle_renewable.R)
+**Renewable Energy Consumption**
+
+Code: [2022/01/01-waffle\_renewable.R](2022/01/01-waffle_renewable.R)
 ![](2022/01/01-waffle-renewable.png)
+
+![](2022/01/01-waffle-renewable_geofacets.png)
+
+**Bundesliga Champions**
+
+Code: [2022/01/01-bundesliga.R](2022/01/01-bundesliga.R)
+![](2022/01/01-bundesliga-en.gif)
 
 ------------------------------------------------------------------------
 
