@@ -185,6 +185,10 @@ plot_titles <- list(
 
 tracks_df %>% 
   ggplot(aes(x = factor(decade), y = duration_s)) +
+  geom_point(data = longest_no1_per_decade,
+             aes(fill = factor(decade), 
+                 size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2)),
+             shape = 21, stroke = 1, color = "grey80", show.legend = FALSE) +
   ggbeeswarm::geom_beeswarm(
     aes(fill = factor(decade),
         size = ifelse(str_detect(artist_song, "Taylor Swift - All Too Well"), 3.5, 2)),
