@@ -21,8 +21,7 @@ df <- aquaculture %>%
 
 summary(df)
 
-
-
+# Countries to mention in the plot
 highlight_countries <- c("China", "Iceland", "Morocco", "Peru", "United States",
                          "Seychelles", "Philippines", "Norway", "Egypt", "India",
                          "Indonesia", "Vietnam", "Bangladesh")
@@ -33,7 +32,7 @@ p1 <- df %>%
   ungroup() %>% 
   # a small number to avoid log 0
   mutate(across(c(aquaculture_production, capture_fishery), ~.x + 0.1)) %>% 
-  na.omit() %>% #View()
+  na.omit() %>% 
   ggplot(aes(aquaculture_production, capture_fishery)) +
   ggforce::geom_shape(
     data = data.frame(
@@ -41,7 +40,7 @@ p1 <- df %>%
       y = c(0.1, 0.1,  10^8)
     ),
     aes(x, y),
-    fill = "grey78", alpha = 0.6
+    fill = "grey89", alpha = 0.6
   ) +
   geom_abline(slope = 1, intercept = 0, color = "grey50", size = 0.5) +
   annotate("text",
@@ -50,7 +49,8 @@ p1 <- df %>%
            hjust = c(0.5, 1.1),
            vjust = c(0.5, -0.2),
            label = c("More wild catch", "More fish farming"),
-           family = "Noto Serif", fontface = "bold", color = "grey38"
+           color = c("darkblue", "steelblue"),
+           family = "Noto Serif", fontface = "bold"
            ) +
   geom_point(aes(fill = ifelse(aquaculture_production > capture_fishery, "steelblue", "darkblue"), 
                  size = log(aquaculture_production + capture_fishery)),
@@ -84,7 +84,6 @@ p1 <- df %>%
     plot.caption.position = "plot"
   )
 
-
 ## Top 10 producing countries 
 p2 <- df %>% 
   group_by(Entity) %>% 
@@ -102,7 +101,8 @@ p2 <- df %>%
            y = c(-1.5 * 10^7, 1.5 * 10^7),
            label = c("Wild catch", "Fish farming"), 
            hjust = c(1, 0),
-           family = "Noto Serif", fontface = "bold", color = "grey38",
+           color = c("darkblue", "steelblue"),
+           family = "Noto Serif", fontface = "bold",
            label.size = 0, fill = NA
   ) +
   geom_hline(yintercept = 0) +
@@ -142,23 +142,21 @@ df %>%
   slice_max(order_by = total, n = 10)
 
 
-# Fish image
+# Fish image -------------------------------------------------------------------
 #' Image credit:
 #' Vägverket (Swedish Road Administration)
 fish_img_url <- "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Fish_icon.svg/1000px-Fish_icon.svg.png"
 fish_img_path <- here(base_path, "fish.png")
 download.file(fish_img_url, destfile = fish_img_path)
-
 fish_img <- image_read(fish_img_path)
+# recolor the fish in steelblue and rescale it
 fish_img_edited <- image_fill(fish_img, "steelblue", point = "+600+800", fuzz = 100) %>% 
   image_scale("+500")
 fish_img_grob <- rasterGrob(fish_img_edited, interpolate = TRUE)
 
 
-
-# Combine the plots
+# Combine the plots ------------------------------------------------------------
 p1 +
-  # annotation_custom(fish_img_grob, xmin =  10, xmax = 15, ymin = 0.7, ymax = Inf) + 
   annotation_custom(fish_img_grob, xmin =  5, xmax = 7.8, ymin = 1, ymax = 4) + 
   p2 + 
   plot_annotation(
