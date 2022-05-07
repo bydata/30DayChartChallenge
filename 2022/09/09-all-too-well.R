@@ -179,7 +179,7 @@ plot_titles <- list(
   10 minutes and 13 seconds. The song replaces **Don McLean's song \"American Pie\"** 
   (8 minutes and 36 seconds), which became no. 1 on 15 January 1972, after nearly 50 years.
   <br>
-  The longest no. 1 song in each decade is highlighted.",
+  Each no. 1 song is a dot. The longest no. 1 song in each decade is highlighted.",
   caption = "Source: **Billboard Hot 100 (Kaggle), Spotify API** |
     Visualization: **Ansgar Wolsing**")
 
@@ -229,7 +229,7 @@ tracks_df %>%
     y = "Track duration"
   )
 ggsave(here(base_path, "09-all-too-well.png"),
-       dpi = 300, width = 6.5, height = 7)
+       dpi = 600, width = 6.5, height = 7)
 
 
 ## With distribution strips instead of individual points -------------------
@@ -281,4 +281,4 @@ tracks_df %>%
     y = "Track duration"
   )
 ggsave(here(base_path, "09-all-too-well-dist.png"),
-       dpi = 300, width = 6.5, height = 7)
+       dpi = 600, width = 6.5, height = 7)
