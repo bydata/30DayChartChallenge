@@ -9,7 +9,6 @@ base_path <- here("2022", "03")
 
 # William Playfair - Imports & Exports
 
-# text line package gg extension
 
 # width to height
 aspect_ratio <- 1280 / 946
