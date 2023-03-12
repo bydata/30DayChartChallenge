@@ -116,7 +116,7 @@ outer_ring <- theoffice_wordcount_season %>%
 
 
 inner_ring_xmax <- 1.5
-outer_ring_factor <- 3
+outer_ring_factor <- 2
 
 ggplot() +
   # annotate(
@@ -157,17 +157,25 @@ ggplot() +
   ) +
   annotate(
     GeomTextBox,
-    x = 2.7, y = 0.075,
+    x = 2.3, y = 0.075,
     label = "Each segment of the outer ring indicates the speech share of a character
     within a particular season",
-    family = "Helvetica Neue", color = "grey99",
+    family = "Helvetica Neue Light", color = "grey99",
     hjust = 0, vjust = 0, size = 3.25, fill = NA, box.size = 0, width = 0.3
+  ) +
+  annotate(
+    GeomTextBox,
+    x = 1.75, y = 0.26,
+    label = "Michael Scott did not appear in season 8 and only
+    had a short appearance in season 9",
+    family = "Helvetica Neue Light", color = "grey99",
+    hjust = 0, vjust = 0, size = 3.25, fill = NA, box.size = 0, width = 0.24
   ) +
   # label the season number in the segments for Michael Scott
   geom_label(
     data = subset(outer_ring, character2 == "Michael" & season <= 7),
     aes(
-      x = 2,
+      x = inner_ring_xmax + 0.33,
       y = ymin + (ymax - ymin) / 2,
       label = season
     ),
@@ -177,13 +185,23 @@ ggplot() +
   scale_alpha_continuous(range = c(0.3, 1)) +
   scale_size_identity() +
   scale_color_identity() +
-  coord_polar(theta = "y") +
+  coord_polar(theta = "y", clip = "off") +
   guides(alpha = "none", fill = "none") +
+  labs(
+    caption = "Source: {schrute} R package. Visualisation: Ansgar Wolsing"
+  ) +
   theme_void(base_family = "Helvetica Neue") +
   theme(
-    # plot.background = element_rect(color = "white", fill = "white")
-    plot.background = element_rect(color = "#435774", fill = "#435774")
+    plot.background = element_rect(color = "#435774", fill = "#435774"),
+    text = element_text(color = "grey92"),
+    plot.title = element_markdown(color = "grey98", family = "American Typewriter", 
+                                  hjust = 0.5, size = 14),
+    plot.subtitle = element_textbox(
+      lineheight = 1.1, size = 8, width = 1.33, margin = margin(t = 2, b = 10),
+      hjust = 0.5, halign = 0.5
+    ),
+    plot.caption = element_markdown(hjust = 0.5, size = 7)
   )
-ggsave(here(base_path, "01-part-to-whole-the-office-sunburst.png"), width = 5, 
+ggsave(here(base_path, "01-part-to-whole-the-office-sunburst.png"), width = 4, 
        height = 4, scale = 1.8)
 
