@@ -78,6 +78,10 @@ outer_ring <- theoffice_wordcount_season %>%
   ) 
 
 ggplot() +
+  annotate(
+    "rect",
+    xmin = 0, xmax = 2, ymin = 0, ymax = 1, fill = "white"
+  ) +
   geom_rect(
     data = outer_ring,
     aes(xmin = 0.25, xmax = 2, ymin = ymin, ymax = ymax, fill = character2,
@@ -87,7 +91,15 @@ ggplot() +
     aes(xmin = 0.5, xmax = 1.5, ymin = ymin, ymax = ymax, fill = character2),
     alpha = 1, color = "white", linewidth = 0.5) +
   geom_vline(aes(xintercept = 1.5), color = "white") +
-  # geom_col(aes(fill = character2)) +
+  geom_text(
+    data = inner_ring,
+    aes(x = ifelse(words_share > 0.05, 1.1, 2.25), 
+        y = ymin + (ymax - ymin) / 2,
+        label = character2,
+        # color = ifelse(words_share > 0.05, "grey90", "white")
+        ),
+    family = "Helvetica Neue", size = 4, hjust = 0.5, color = "grey92"
+  ) +
   annotate(
     "rect", xmin = 0, xmax = 0.75, ymin = -Inf, ymax = Inf,
     fill = "white"
@@ -99,6 +111,12 @@ ggplot() +
   ) +
   scale_fill_manual(values = rev(pal_office)) +
   coord_polar(theta = "y") +
-  theme_void()
-
+  guides(alpha = "none", fill = "none") +
+  theme_void() +
+  theme(
+    # plot.background = element_rect(color = "white", fill = "white")
+    plot.background = element_rect(color = "#435774", fill = "#435774")
+  )
+ggsave(here(base_path, "01-part-to-whole-the-office-sunburst.png"), width = 5, 
+       height = 4, scale = 1.5)
 
