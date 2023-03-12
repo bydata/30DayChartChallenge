@@ -118,7 +118,7 @@ outer_ring <- theoffice_wordcount_season %>%
 inner_ring_xmax <- 1.5
 outer_ring_factor <- 2
 
-ggplot() +
+p <- ggplot() +
   # annotate(
   #   "rect",
   #   xmin = 0, xmax = 2, ymin = 0, ymax = 1, fill = "white"
@@ -135,7 +135,7 @@ ggplot() +
   geom_rect(
     data = inner_ring,
     aes(xmin = 0.5, xmax = inner_ring_xmax, ymin = ymin, ymax = ymax, fill = character2),
-    alpha = 1, color = "white", linewidth = 0.5) +
+    alpha = 1, color = "white", linewidth = 0.42) +
   geom_vline(aes(xintercept = 1.5), color = "white") +
   geom_text(
     data = inner_ring,
@@ -143,10 +143,10 @@ ggplot() +
         y = ymin + (ymax - ymin) / 2,
         label = character2,
         color = ifelse(character2 == "Michael", "grey20", "white"),
-        size = ifelse(words_share > 0.05, 4, 3),
+        size = ifelse(words_share > 0.05, 4, 3.5),
         vjust = ifelse(words_share > 0.05, 0.5, -0.7)
         ),
-    family = "Helvetica Neue", hjust = 0.5
+    family = "Outfit", hjust = 0.5
   ) +
   annotate(
     "rect", xmin = 0, xmax = 0.75, ymin = -Inf, ymax = Inf, fill = "white") +
@@ -160,7 +160,7 @@ ggplot() +
     x = 2.3, y = 0.075,
     label = "Each segment of the outer ring indicates the speech share of a character
     within a particular season",
-    family = "Helvetica Neue Light", color = "grey99",
+    family = "Outfit", color = "grey99",
     hjust = 0, vjust = 0, size = 3.25, fill = NA, box.size = 0, width = 0.3
   ) +
   annotate(
@@ -168,8 +168,8 @@ ggplot() +
     x = 1.75, y = 0.26,
     label = "Michael Scott did not appear in season 8 and only
     had a short appearance in season 9",
-    family = "Helvetica Neue Light", color = "grey99",
-    hjust = 0, vjust = 0, size = 3.25, fill = NA, box.size = 0, width = 0.24
+    family = "Outfit", color = "grey99",
+    hjust = 0, vjust = 0, size = 3.25, fill = NA, box.size = 0, width = 0.22
   ) +
   # label the season number in the segments for Michael Scott
   geom_label(
@@ -179,7 +179,7 @@ ggplot() +
       y = ymin + (ymax - ymin) / 2,
       label = season
     ),
-    family = "Helvetica Neue", label.r = unit(2, "mm"), label.size = 0.1
+    family = "Outfit", label.r = unit(2, "mm"), label.size = 0.1
   ) +
   scale_fill_manual(values = rev(pal_office)) +
   scale_alpha_continuous(range = c(0.3, 1)) +
@@ -187,10 +187,7 @@ ggplot() +
   scale_color_identity() +
   coord_polar(theta = "y", clip = "off") +
   guides(alpha = "none", fill = "none") +
-  labs(
-    caption = "Source: {schrute} R package. Visualisation: Ansgar Wolsing"
-  ) +
-  theme_void(base_family = "Helvetica Neue") +
+  theme_void(base_family = "Outfit") +
   theme(
     plot.background = element_rect(color = "#435774", fill = "#435774"),
     text = element_text(color = "grey92"),
@@ -202,6 +199,19 @@ ggplot() +
     ),
     plot.caption = element_markdown(hjust = 0.5, size = 7)
   )
+
+library(grid)
+library(cowplot)
+grob <- grobTree(
+  textGrob("Who speaks in The Office?", x = 0.02, y = 0.96, hjust = 0,
+             gp = gpar(fontfamily = "Outfit", fontface = "bold",
+                       fontsize = 22, col="white")),
+  textGrob("The subtitle subtitle subtitle", x = 0.02, y = 0.90, hjust = 0,
+           gp = gpar(fontfamily = "Outfit", 
+                     fontsize = 14, col="white")),
+  textGrob("Source: {schrute} R package. Visualisation: Ansgar Wolsing", 
+           x = 0.5, y = 0.1, hjust = 0.5, 
+           gp = gpar(fontfamily = "Outfit", fontsize = 10, col="white")))
+ggdraw(p) + annotation_custom(grob)
 ggsave(here(base_path, "01-part-to-whole-the-office-sunburst.png"), width = 4, 
        height = 4, scale = 1.8)
-
