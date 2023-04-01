@@ -1,6 +1,5 @@
 library(tidyverse)
 library(ggtext)
-library(ggstream)
 library(tidytext)
 library(here)
 # install.packages("schrute")
@@ -59,7 +58,7 @@ theoffice_wordcount_season %>%
   group_by(season) %>% 
   slice_max(order_by = words_share, n = 5, with_ties = TRUE) %>% 
   mutate(season_rank = rank(-words_share)) %>% 
-  ungroup() %>% View()
+  ungroup() 
 
 pal_office <- 
   c("#FBA93A", "#93BFE5", "#BD4047", "#D8ACD8", "#9C6A4B", "#2AA3A6", "#F0F4EC", 
@@ -104,9 +103,9 @@ theoffice_wordcount_season %>%
   facet_wrap(vars(season)) +
   labs(
     title = "Who speaks in The Office?",
-    subtitle = "Speech share of characters in The Office by season (word count).
+    subtitle = "Speech share of characters in The Office by season (word count).<br>
     The characters with the biggest share per season are shown.",
     caption = "Data: {schrute} R package. Visualisation: Ansgar Wolsing",
     fill = NULL
   )
-ggsave(here(base_path, "the-office-characters.png"), width = 4, height = 5)
+ggsave(here(base_path, "02-waffle-the-office-characters.png"), width = 4, height = 5, scale = 1.1)
