@@ -109,7 +109,7 @@ p_base <- ggplot() +
     within a particular season",
     family = "Outfit", color = "grey99",
     hjust = 0, vjust = 0, size = 3.25, fill = NA, box.size = 0, width = 0.3
-  ) +
+  ) + 
   annotate(
     GeomTextBox,
     x = 1.65, y = 0.26,
@@ -122,7 +122,7 @@ p_base <- ggplot() +
   scale_alpha_continuous(range = c(0.3, 1)) +
   scale_size_identity() +
   scale_color_identity() +
-  coord_polar(theta = "y", clip = "off") +
+  coord_polar(theta = "y", clip = "off", start = -0.005) +
   guides(alpha = "none", fill = "none") +
   labs(title = "") +
   theme_void(base_family = "Outfit") +
@@ -137,7 +137,7 @@ grob <- grobTree(
   textGrob("Who speaks in The Office?", x = 0.02, y = 0.96, hjust = 0,
            gp = gpar(fontfamily = "Outfit", fontface = "bold",
                      fontsize = 28, col = "white")),
-  textGrob("Speech share by character (inner ring)\nand season (outer ring)", 
+  textGrob("Speech share by character (inner ring)\nand season (outer ring), measured by\nthe share of spoken words", 
            x = 0.02, y = 0.88, hjust = 0,
            gp = gpar(fontfamily = "Outfit", 
                      fontsize = 12, col = "white", lineheight = 1)),
@@ -194,6 +194,13 @@ p1 <- p_base +
       label = season
     ),
     family = "Outfit", label.r = unit(2, "mm"), label.size = 0.1
+  ) +
+  geom_text(
+    data = subset(outer_ring, character2 == "Michael" & season <= 7 | character2 == "Dwight"),
+    aes(x = inner_ring_xmax + outer_ring_factor * words_share.season,
+        y = ymin + (ymax - ymin) / 2,
+        label = scales::percent(words_share.season, accuracy = 1)),
+    family = "Outfit", size = 2, color = "grey90", hjust = 0.5, nudge_x = 0.1
   )
   
 ggdraw(p1) + annotation_custom(grob)
@@ -201,7 +208,7 @@ ggsave(here(base_path, "01-part-to-whole-the-office-sunburst-rectangles.png"),
        width = 4, height = 4, scale = 1.8)
 
 
-# Plot with segments
+# Plot with segments instead of rectangles
 p2 <- p_base +
   geom_rect(
     data = outer_ring,
@@ -223,6 +230,13 @@ p2 <- p_base +
       label = season
     ),
     family = "Outfit", label.r = unit(2, "mm"), label.size = 0.1
+  ) +
+  geom_text(
+    data = subset(outer_ring, character2 == "Michael" & season <= 7 | character2 == "Dwight"),
+    aes(x = inner_ring_xmax + outer_ring_factor * words_share.season,
+        y = ymin,
+        label = scales::percent(words_share.season, accuracy = 1)),
+    family = "Outfit", size = 2, color = "grey90", hjust = 0.5, nudge_x = 0.1
   )
 
 ggdraw(p2) + annotation_custom(grob)
