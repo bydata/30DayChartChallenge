@@ -6,11 +6,13 @@ library(rvest)
 
 base_path <- here("2023", "04")
 
+# Scrape historical record transfers
 transfermarkt_url <- "https://www.transfermarkt.com/transfers/transferrekordehistorie/statistik?land_id=0&ausrichtung=&spielerposition_id=&altersklasse=&w_s=&plus=1"
 page <- read_html(transfermarkt_url)
 table <- html_node(page, css = "table.items") %>% 
   html_table()
 
+# Prepare the data
 transfers <- table %>% 
   select(rank = 1, name = 4, position = 5, age = 6, transfer_season = 7, 
          transfer_date = 8, departure_club = 12, departure_league = 13,
