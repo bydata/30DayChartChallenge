@@ -104,7 +104,9 @@ ggraph(graph, layout = "dendrogram", circular = TRUE) +
     ) +
   labs(
     title = "Trees of New York City",
-    caption = "Data: Kaggle, NYC Parks and Recreation staff,
+    subtitle = "All tree species by genus with their Latin names.",
+    caption = "\\* Species unknown. <br>
+    Data: Kaggle, NYC Parks and Recreation staff,
     TreesCount!<br>program staff,and hundreds of volunteers, 2015. <br>
     Visualisation: Ansgar Wolsing"
   ) +
@@ -113,10 +115,12 @@ ggraph(graph, layout = "dendrogram", circular = TRUE) +
     plot.background = element_rect(color = "grey90", fill = "grey90"),
     plot.margin = margin(t = 10, b = 80, l = 80, r = 80),
     plot.title = element_text(
-      size = 32, face = "bold", hjust = 0.5, margin = margin(b = 80)),
+      size = 32, face = "bold", hjust = 0.5),
+    plot.subtitle = element_textbox(
+      width = 1, hjust = 0.5, halign = 0.5, margin = margin(b = 80)),
     plot.caption = element_markdown(
-      hjust = 1.5, halign = 0, margin = margin(t = 40, b = -24)),
-    legend.position = c(-0.18, 0),
+      hjust = 1.5, halign = 0, margin = margin(t = 60, b = -36)),
+    legend.position = c(-0.22, 0),
     # move legend text slightly to the left
     legend.text = element_text(margin = margin(l = -6))
   )
