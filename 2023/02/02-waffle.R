@@ -103,8 +103,8 @@ theoffice_wordcount_season %>%
   facet_wrap(vars(season)) +
   labs(
     title = "Who speaks in The Office?",
-    subtitle = "Speech share of characters in The Office by season (word count).<br>
-    The characters with the biggest share per season are shown.",
+    subtitle = "The proportion of words spoken by characters in The Office by 
+    season (word count). Characters with the highest proportion of words per season are shown.",
     caption = "Data: {schrute} R package. Visualisation: Ansgar Wolsing",
     fill = NULL
   )
