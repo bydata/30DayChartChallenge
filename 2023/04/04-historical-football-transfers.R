@@ -33,7 +33,8 @@ write_rds(transfers, here(base_path, "record-transfers.rds"))
 # Longest reign es record transfer?
 transfers %>% 
   select(name, transfer_date, transfer_fee_eur) %>% 
-  mutate(reign = lag(transfer_date, 1, default = Sys.Date()) - transfer_date)
+  mutate(reign = lag(transfer_date, 1, default = Sys.Date()) - transfer_date) %>% 
+  arrange(desc(reign))
 
 
 ## https://r-graph-gallery.com/307-add-space-in-circle-packing.html
