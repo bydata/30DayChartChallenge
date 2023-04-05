@@ -44,8 +44,7 @@ transfers_df_2002 <- bind_rows(transfers_2002)
 
 transfers_df <- bind_rows(transfers_df, transfers_df_2002)
 
-league_pal <- rev(paletteer::paletteer_d("ggthemes::excel_Main_Event",
-                                         direction = 1)[1:5])
+league_pal <- c("grey94", "grey70", "grey86", "grey78", "#FF6003")
 names(league_pal) <- c("Serie A", "Bundesliga", "Ligue 1", "LaLiga", "Premier League")
 
 leagues <- c("Serie A", "Bundesliga", "Ligue 1", "LaLiga", "Premier League")
@@ -55,7 +54,8 @@ plot_titles <- list(
   "title" = sprintf(
     "<span style='color: %s'>Premier League</span> has left the other 
     top 5 leagues far behind", league_pal["Premier League"]),
-  "subtitle" = "Total transfer fees in 2002 and 2022"
+  "subtitle" = "Total transfer fees in 2002-03 and 2022-23 (in EUR)",
+  "caption" = "Source: transfermarkt.de. Visualisation: Ansgar Wolsing"
   )
 
 #' NB: The league column reflects the current league of the teams at the time of
@@ -64,8 +64,9 @@ plot_titles <- list(
 transfers_df %>% 
   mutate(country = ifelse(team_name == "Chievo Verona", "Italy", country),
          league = leagues[country]) %>% 
-  filter(season %in% c(2002, 2022)) %>% 
+  filter(season %in% c("2002", "2022")) %>%
   filter(transfer_type == "Arrivals") %>% 
+  mutate(season = case_when(season == "2002" ~ "2002-03", season == "2022" ~ "2022-23")) %>% 
   group_by(league, season) %>% 
   summarize(total_fees = sum(transfer_fee, na.rm = TRUE), .groups = "drop") %>% 
   ggplot(aes(season, total_fees, color = league, group = league)) +
@@ -75,10 +76,12 @@ transfers_df %>%
                                            yend = max(total_fees) + 50e6),
     aes(x = season, xend = season,
         y = 0, yend = yend),
-    inherit.aes = FALSE, col = "grey80", linewidth = 0.8
+    inherit.aes = FALSE, col = "grey70", linewidth = 0.8
   ) +
   geom_line(
-    linewidth = 0.5, alpha = 0.8, 
+    aes(linewidth = league == "Premier League"),
+    # aes(linewidth = ifelse(league == "Premier League", 2, 0.5)),
+    alpha = 0.8, 
     arrow = arrow(type = "closed", angle = 20, length = unit(1.5, "mm"))) +
   geom_point(
     data = ~subset(., season == min(season)),
@@ -108,27 +111,32 @@ transfers_df %>%
     size = 2.5
   ) +
   annotate(
-    "text", x = 1.5, y = 2.05e9, label = "\U25B2 817%", color = league_pal[5],
+    "text", x = 1.45, y = 2.0e9, label = "\U25B2 817%", color = league_pal[5],
     family = "Avenir Next Condensed Medium", size = 4
   ) +
   scale_x_discrete(position = "top", expand = expansion(add = c(0.1, 0.33))) +
   scale_color_manual(values = league_pal) +
-  guides(color = "none") +
+  #scale_size_manual(values = c("FALSE" = 0.5, "TRUE" = 1.2)) +
+  scale_linewidth_discrete(range = c(0.5, 1)) +
+  coord_cartesian(clip = "off") +
+  guides(color = "none", size = "none", linewidth = "none") +
   labs(
     title = plot_titles$title,
     subtitle = plot_titles$subtitle,
-    caption = "Source: transfermarkt.de. Visualisation: Ansgar Wolsing"
+    caption = plot_titles$caption
   ) +
   theme_minimal(base_family = "Avenir Next Condensed") +
   theme(
-    plot.background = element_rect(color = "grey98", fill = "grey98"),
-    text = element_text(color = "grey38"),
-    axis.text.x.top = element_text(family = "Avenir Next Condensed Demi Bold", color = "grey38"),
+    plot.background = element_rect(color = "#555B6E", fill = "#555B6E"),
+    text = element_text(color = "grey95"),
+    axis.text.x.top = element_text(family = "Avenir Next Condensed Demi Bold", color = "grey90"),
     axis.text.y = element_blank(),
     axis.title = element_blank(),
     panel.grid = element_blank(),
+    plot.margin = margin(t = 4, b = 4, l = 4, r = 14),
     # panel.grid.major.x = element_line(color = "grey80", linewidth = 0.8),
-    plot.title = element_markdown(lineheight = 1, color = "grey2",
+    plot.title = element_markdown(lineheight = 1, color = "white",
                                   family = "Avenir Next Condensed Medium")
   )
-ggsave(here(base_path, "05-slope-transfers.png"), width = 5, height = 4)
+ggsave(here(base_path, "05-slope-transfers.png"), width = 4, height = 5)
+
