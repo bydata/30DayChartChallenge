@@ -7,23 +7,12 @@ base_path <- here("2023", "08")
 #' Source: OWID, NCD RisC
 #' https://ourworldindata.org/grapher/average-height-by-year-of-birth?tab=table
 #' Download the full data
-
 height <- read_csv(here(base_path, "average-height-by-year-of-birth.csv"))
-
-
 
 height %>% 
   filter(Year == 1996) %>% 
   ggplot(aes(`Mean male height (cm)`, `Mean female height (cm)`, group = Entity)) +
   geom_point()
-
-# Animated version
-# library(gganimate)
-# height %>% 
-#   pivot_longer(cols = starts_with("Mean"), values_to = "avg_height") %>% 
-#   ggplot(aes(name, avg_height, group = Entity)) +
-#   ggbeeswarm::geom_quasirandom() +
-#   transition_time(Year)
 
 
 # Are there countries in which women are taller then men 100 years ago?
