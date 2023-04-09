@@ -89,3 +89,27 @@ height_prep %>%
     strip.placement = "outside"
   )
 ggsave(here(base_path, "08-human-avg-height-1896-1996.png"), width = 5, height = 4)
+
+
+## Is the average increase among women greater than among men?
+height_prep2 <- height_prep %>% 
+  pivot_wider(id_cols = c(Entity, Code), names_from = c("gender", "Year"), 
+              values_from = "avg_height") %>% 
+  mutate(male_change = male_1996 / male_1896 - 1,
+         female_change = female_1996 / female_1896 - 1) 
+
+mean(height_prep2$male_change)
+mean(height_prep2$female_change)
+
+height_prep2 %>% 
+  filter(Entity != "Niue") %>% 
+  ggplot(aes(female_change, male_change)) +
+  geom_abline(slope = 1, color = "darkblue", size = 1) +
+  geom_point(alpha = 0.5) +
+  ggrepel::geom_text_repel(
+    data = ~subset(., abs(male_change - female_change) > 0.03),
+    aes(label = Entity), size = 3
+  ) +
+  scale_x_continuous(labels = scales::label_percent(), breaks = seq(0, 1, 0.025)) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  coord_equal()
