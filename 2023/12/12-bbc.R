@@ -5,7 +5,7 @@ library(here)
 library(bbplot)
 
 
-#' Tweet data retrieve from the Twitter Search API on March 15 and March 16, 2023
+#' Tweet data retrieved from the Twitter Search API on March 15 and March 16, 2023
 #' Mentions of BBC and (Gary) Lineker extracted from the tweet texts. 
 #' Data aggregated by day and content
 lineker_bbc_tweet_agg <- read_csv("2023/12/lineker-bbc-tweet-agg.csv")
