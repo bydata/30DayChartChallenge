@@ -50,26 +50,37 @@ df_plot %>%
   ggplot(aes(year, country_name)) +
   geom_tile(aes(fill = life_ladder_rolling),
             height = 1, col = "white") +
-  # geom_text(aes(label = scales::number(life_ladder_rolling, accuracy = 0.1)),
-  #           col = "white", size = 2) +
   scale_x_continuous(position = "top") +
   scale_y_discrete(position = "right") +
   scale_fill_viridis_c(option = "D") +
   # coord_equal() +
   coord_cartesian(expand = FALSE) +
   facet_grid(rows = vars(continent), scales = "free_y", space = "free_y", switch = "y") +
+  guides(fill = guide_colorbar(title.position = "top")) +
   labs(
-    title = "",
+    title = "WORLD HAPPINESS",
+    caption = "Source: Visualisation: Ansgar Wolsing",
     x = NULL, y = NULL,
-    fill = "Ladder"
+    fill = "Life happiness (Cantril ladder),<br>rolling average"
   ) +
-  theme_minimal(base_family = "Helvetica Neue") +
+  theme_minimal(base_family = "Roboto", base_size = 9) +
   theme(
     plot.background = element_rect(color = "white", fill = "white"),
-    legend.position = "right",
-    axis.text = element_text(size = 5),
+    legend.position = "bottom",
+    # legend.position = c(0.5, 0.1),
+    # legend.direction = "horizontal",
+    legend.key.height = unit(4, "mm"),
+    legend.box.just = "center",
+    legend.title = element_markdown(),
+    text = element_text(color = "grey30"),
+    axis.text = element_text(size = 4.5),
     axis.text.x = element_text(color = "grey30"),
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 24, color = "grey2"),
+    plot.caption = element_markdown(hjust = 0.5),
     panel.grid = element_blank(),
-    strip.text.y.left = element_text(face = "bold", color = "grey60", angle = 0, hjust = 0)
+    panel.spacing.y = unit(6, "mm"),
+    strip.text.y.left = element_text(
+      family = "Roboto Condensed",
+      size = 12, face = "bold", color = "grey60", angle = 0, hjust = 0)
   )
-ggsave(here(base_path, "23-tiles-un-world-happiness.png"), width = 4, height = 10, dpi = 600)
+ggsave(here(base_path, "23-tiles-un-world-happiness.png"), width = 5, height = 10, dpi = 600)
