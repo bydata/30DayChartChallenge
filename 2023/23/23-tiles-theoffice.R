@@ -107,7 +107,8 @@ theoffice_wordcount_episode %>%
   guides(fill = guide_legend(title.position = "left")) +
   labs(
     title = "Who speaks most in the episodes of The Office?",
-    caption = "Source: {schrute} R package. Visualisation: Ansgar Wolsing",
+    caption = "Selection of characters: top 15 characters by words for each season.<br>
+    Source: {schrute} R package. Visualisation: Ansgar Wolsing",
     x = NULL, y = NULL,
     fill = "Episode rank (by # of words)"
   ) +
@@ -126,7 +127,7 @@ theoffice_wordcount_episode %>%
     plot.title = element_text(
       hjust = 0.5, family = "American Typewriter", size = 18, 
       color = "white"),
-    plot.caption = element_markdown(hjust = 0.5),
+    plot.caption = element_markdown(hjust = 0.5, size = 7, lineheight = 1),
     panel.grid = element_blank(),
     strip.text = element_text(color = "grey92", size = 10, family = "Outfit SemiBold")
   )
