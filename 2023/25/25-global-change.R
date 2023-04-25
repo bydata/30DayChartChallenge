@@ -10,7 +10,6 @@ base_path <- here("2023", "25")
 #' https://population.un.org/wpp/Download/
 #' Download Demographic Indicators Medium zip. file
 
-# file <- here(base_path, "UN_PPP2022_Input_e0F.xlsx")
 file <- here(base_path, "UN_PPP2022_Output_PopTot.xlsx")
 # The quantiles reside in separate sheets
 sheet_names <- excel_sheets(file)
@@ -30,14 +29,6 @@ projections_long <- projections %>%
 
 table(projections$variant)
 
-projections %>% 
-  filter(type == "Region") %>% 
-  distinct(entity)
-
-
-
-
-###
 
 indicators <- read_excel(here(base_path, "WPP2022_GEN_F01_DEMOGRAPHIC_INDICATORS_REV1.xlsx"),
                         skip = 16, .name_repair = janitor::make_clean_names)
@@ -48,44 +39,6 @@ glimpse(indicators)
 indicators <- indicators %>% 
   mutate(across(total_population_as_of_1_january_thousands:net_migration_rate_per_1_000_population, as.numeric)) %>% 
   rename(entity = region_subregion_country_or_area)
-
-indicators %>% 
-  select(year, type, entity, female_life_expectancy_at_birth_years) %>% 
-  mutate(female_life_expectancy_at_birth_years = as.numeric(female_life_expectancy_at_birth_years)) %>% 
-  filter(type == "Region") 
-
-
-
-
-projections_long %>% 
-  # filter(variant %in% c("Lower 80 PI", "Median PI", "Upper 80 PI")) %>% 
-  pivot_wider(id_cols = everything(), names_from = "variant", values_from = "value") %>% 
-  filter(type == "Region") %>% 
-  # filter(entity == "AFRICA") %>% 
-  ggplot(aes(year)) +
-  geom_ribbon(
-    aes(ymin = `Lower 95 PI`, ymax = `Upper 95 PI`,
-        fill = entity),
-    alpha = 0.25
-  ) +
-  geom_ribbon(
-    aes(ymin = `Lower 80 PI`, ymax = `Upper 80 PI`,
-        fill = entity),
-    alpha = 0.5
-  ) +
-  geom_line(
-    data = 
-      indicators %>% 
-      select(year, type, entity, total_population_as_of_1_january_thousands) %>% 
-      filter(type == "Region"),
-    aes(y = total_population_as_of_1_january_thousands)
-  ) +
-  geom_line(aes(y = `Median PI`, col = entity)) +
-  facet_wrap(vars(entity)) +
-  theme_minimal() +
-  theme(
-    legend.position = "bottom"
-  )
 
 
 indicators_projection_median_combined <- indicators %>% 
