@@ -13,15 +13,16 @@ raw_table <- page %>%
   html_node("table") %>% 
   html_table()
 
+
 # Prepare dataset
+
 scenario_translation <- c(
   "Niedriger Anstieg der Lebenserwartung L1" = "Low increase",
   "Moderater Anstieg der Lebenserwartung L2" = "Moderate increase",
   "Hoher Anstieg der Lebenserwartung L3" = "High increase"
 )
 
-df <- 
-  raw_table %>% 
+df <- raw_table %>% 
   rename(year = Jahr, male = `Männer`, female = `Frauen`) %>% 
   # filter(!year %in% c("20201", "1: Nach der Sterbetafel 2019/2021.")) %>% 
   filter(year != "1: Nach der Sterbetafel 2019/2021.") %>% 
@@ -36,19 +37,9 @@ df <-
     scenario = scenario_translation[scenario]
   )
 
+# actual life exp. from 2020
 df_2020 <- df %>% 
   filter(year == 2020)
-
-df %>% 
-  add_row(
-    year = 2020, male = df_2020$male, female = df_2020$female,
-    scenario = "Moderate increase"
-  ) %>% 
-  add_row(
-    year = 2020, male = df_2020$male, female = df_2020$female,
-    scenario = "High increase"
-  ) %>% 
-  fill(scenario, .direction = "up")
 
 # exclude 2020 from dataset
 df <- df %>% filter(year != 2020)
