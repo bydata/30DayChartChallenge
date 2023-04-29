@@ -24,12 +24,10 @@ outcomes_home <- c("w", "l", "d")
 n_samples <- 100
 sample(outcomes_home, n_samples, replace = TRUE, prob = probs) %>% table()
 
-# Select BVB and FCB matches
-relevant_teams <- c("Borussia Dortmund", "Bayern Munich")
-spi_matches_buli_remaining_relevant_teams <- spi_matches_buli_remaining %>% 
+
+spi_matches_buli_remaining <- spi_matches_buli_remaining %>% 
   pivot_longer(cols = c(team1, team2), names_to = "home_away", values_to = "team") %>% 
   mutate(home_away = ifelse(home_away == "team1", "home", "away")) %>% 
-  filter(team %in% relevant_teams) %>% 
   # recode probabilities from the teams' perspective
   mutate(
     prob_win = ifelse(home_away == "home", prob1, prob2),
@@ -38,12 +36,22 @@ spi_matches_buli_remaining_relevant_teams <- spi_matches_buli_remaining %>%
   ) %>% 
   select(-c(prob1, prob2, probtie)) 
 
+# Select BVB and FCB matches
+relevant_teams <- c("Borussia Dortmund", "Bayern Munich")
+spi_matches_buli_remaining_relevant_teams <- spi_matches_buli_remaining %>% 
+  filter(team %in% relevant_teams)
 
 
 # Standings before matchweek 30
+# current_team_points <- tibble(
+#   team = relevant_teams,
+#   current_pts = c(60, 59)
+# )
+
 current_team_points <- tibble(
-  team = relevant_teams,
-  current_pts = c(60, 59)
+  team = c("Borussia Dortmund", "Bayern Munich", "1. FC Union Berlin",
+           "SC Freiburg", "RB Leipzig"),
+  current_pts = c(60, 59, 55, 53, 51)
 )
 
 
@@ -52,7 +60,7 @@ outcomes_classes <- c("w", "l", "d")
 outcomes_points <- c(3, 0, 1)
 n_samples <- 10000
 set.seed(123)
-outcomes_simulations <- spi_matches_buli_remaining_relevant_teams %>% 
+outcomes_simulations <- spi_matches_buli_remaining %>% 
   rowwise() %>% 
   mutate(outcomes = list(sample(outcomes_points, n_samples, replace = TRUE, 
                            prob = c(prob_win, prob_loss, prob_draw)))) %>%
@@ -81,10 +89,10 @@ outcomes_simulations_season_ranks %>%
   count(team, predicted_season_rank) %>% 
   filter(predicted_season_rank <= 1.5)
 
-
 # Sample 100 outcomes from the total set of outcomes
-set.seed(1)
+set.seed(111)
 sampled_season_outcomes <- outcomes_simulations_season_ranks %>% 
+  filter(team %in% relevant_teams) %>% 
   group_by(simulation_id) %>% 
   # arrange(predicted_season_rank, .by_group = TRUE) %>% 
   mutate(pts_diff = predicted_season_pts - lag(predicted_season_pts, 1)) %>% 
@@ -153,9 +161,8 @@ sampled_season_outcomes %>%
     "richtext",
     x = 0.11,
     y = c(-8, 8),
-    # label = c("Bayern wins<br>64 in 100", "Dortmund wins<br>36 in 100"),
     label = sprintf("<span style='font-size: 10pt'>%s wins<br></span>%d in 100", 
-                    c("Bayern", "Dortmund"), c(64, 36)),
+                    c("Bayern", "Dortmund"), c(62, 38)),
     col = c("#3478ba", "#052e57"),
     fill = NA, family = "Outfit Medium", label.size = 0, vjust = 0, size = 6
   ) +
@@ -184,8 +191,9 @@ sampled_season_outcomes %>%
     subtitle = "I simulated the remaining 5 Bundesliga match weeks 10,000 times 
     to see who wins most often. The sample of 100 outcomes below provides an 
     indication of the range of scenarios.",
-    caption = "**Source:** Own calculations based on FiveThirtyEight Club Soccer Ratings.
-    **Visualisation:** Ansgar Wolsing"
+    caption = "There is a chance (< 0.3 %) that neither Dortmund or Bayern win the title.
+    This is ignored in this chart.<br>**Source:** Own calculations based on 
+    FiveThirtyEight Club Soccer Ratings. **Visualisation:** Ansgar Wolsing"
   ) +
   theme_minimal(base_family = "Outfit") +
   theme(
@@ -198,7 +206,7 @@ sampled_season_outcomes %>%
     plot.subtitle = element_textbox(
       width = 0.95, hjust = 0.5, halign = 0.5, lineheight = 1.1, 
       margin = margin(b = 16)),
-    plot.caption = element_markdown(hjust = 0.5)
+    plot.caption = element_markdown(hjust = 0.5, lineheight = 1.5)
   )
 ggsave(here(base_path, "29-monochrome-bundesliga-champions-predictions.png"),
        width = 7, height = 5.5)
