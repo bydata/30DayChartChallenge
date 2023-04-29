@@ -101,7 +101,7 @@ df_scenario_wide %>%
   guides(fill = "none", color = "none") +
   labs(
     title = "Projected <span style='color:#725AC1'>female</span> and
-    <span style='color:#849483'>male</span> life expectation in Germany",
+    <span style='color:#849483'>male</span> life expectancy in Germany",
     subtitle = "Life expectancy at birth, 3 scenarios until 2070",
     caption = "Source: Destatis. Visualisation: Ansgar Wolsing",
     x = NULL, y = "Life expectancy at birth"
