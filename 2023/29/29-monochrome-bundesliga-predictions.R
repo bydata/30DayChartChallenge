@@ -16,15 +16,14 @@ spi_matches <- read_csv(url)
 # Select remaining Bundesliga games
 spi_matches_buli_remaining <- spi_matches %>% 
   filter(league == "German Bundesliga", season == "2022",
-         date >= as.Date("2023-05-04")) %>% 
+         date >= as.Date("2023-05-22")) %>% 
   select(season, date, league, team1, team2, prob1, prob2, probtie)
 spi_matches_buli_remaining
 
 # Current standings
 current_team_points <- tibble(
-  team = c("Bayern Munich", "Borussia Dortmund", "1. FC Union Berlin",
-           "SC Freiburg", "RB Leipzig"),
-  current_pts = c(62, 61, 56, 56, 54)
+  team = c("Borussia Dortmund", "Bayern Munich"),
+  current_pts = c(70, 68)
 )
 
 
