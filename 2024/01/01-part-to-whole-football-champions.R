@@ -60,11 +60,16 @@ champions_country |>
 champions_country |> 
   mutate(
     champion = fct_reorder2(champion, most_titles, n),
-    # country = fct_rev(country),
     country = fct_reorder2(country, most_titles, -n)
     ) |> 
-  ggplot(aes(x = country, y = n, group = champion, fill = most_titles)) +
-  ggchicklet::geom_chicklet(color = "white", radius = unit(3.5, "pt"), size = 1.2) +
+  ggplot(
+    aes(x = country, y = n, group = champion, 
+        fill = case_when(
+          champion == "Bayern München" ~ "2",
+          most_titles ~ "3",
+          TRUE ~ "1"))) +
+  ggchicklet::geom_chicklet(
+    color = "white", radius = unit(3.5, "pt"), size = 1.2) +
   geom_text(
     data = ~subset(., most_titles),
     aes(y = 0, label = champion),
@@ -72,12 +77,11 @@ champions_country |>
   ) +
   scale_x_discrete(position = "top") +
   scale_y_continuous(breaks = seq(0, 10, 2), expand = expansion(add = c(0.1, 0.1))) +
-  scale_fill_manual(values = c("#D5D5D5", "#1D00DB")) +
-  # coord_flip(expand = FALSE,  clip = "off") +
+  scale_fill_manual(values = c("#D5D5D5", "#db00be", "#1D00DB")) +
   coord_flip() +
   guides(fill = "none") +
   labs(
-    title = "Bundesliga is hoping for Scottish conditions",
+    title = "<span style='color:#db00be'>Bundesliga</span> hoping for Scottish conditions",
     subtitle = "Number of titles by the most successful team in each league vs. 
     the rest in the top 10 football leagues in Europe in the last the seasons
     (2013/13 to 2022/23)",
