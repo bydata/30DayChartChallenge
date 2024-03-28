@@ -41,13 +41,13 @@ theme_set(
       axis.text = element_text(family = "Source Code Pro"),
       axis.line.x = element_line(linewidth = 0.33),
       plot.title = element_textbox(
-        color = "grey8", width = 1,
-        family = "Libre Franklin Medium", hjust = 0, size = 16,
+        color = "grey8", width = 1, lineheight = 1.1,
+        family = "Libre Franklin SemiBold", hjust = 0, size = 16,
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_textbox(
         hjust = 0, color = "grey35", lineheight = 1.25, width = 1,
-        margin = margin(b = 8)),
+        margin = margin(b = 6)),
       plot.caption = element_markdown(),
       plot.margin = margin(rep(4, 4)),
       legend.position = "top",
@@ -57,8 +57,8 @@ theme_set(
       # panel.grid.minor.y = element_blank(),
       panel.grid = element_blank(),
       strip.text = element_text(
-        family = "Libre Franklin Medium", size = 10, color = "grey35",
-        margin = margin(t = 4, b = 1))
+        family = "Libre Franklin Medium", size = 8, color = "grey35", hjust = 0,
+        margin = margin(t = 3, b = 1))
     )
 )
 
@@ -72,7 +72,12 @@ transfers |>
 
 transfers |> 
   mutate(name = fct_reorder(name, -transfer_fee_eur)) |> 
-  ggplot(aes(name, transfer_fee_eur)) + 
+  ggplot(aes(x = 1, transfer_fee_eur)) +
+  # Light grey background for the bars
+  annotate(
+    "rect",
+    xmin = -Inf, xmax = Inf, ymin = 0, ymax = Inf,
+    fill = "grey93") +
   geom_col(
     aes(fill = rank == 1), 
     colour = "white", size = 0.3) +
@@ -80,9 +85,10 @@ transfers |>
     aes(
       label = scales::number(
         transfer_fee_eur, scale_cut = scales::cut_short_scale(), accuracy = 1),
-      color = transfer_fee_eur > 18e6,
-      hjust = ifelse(transfer_fee_eur > 18e6, 1.1, -0.1)),
-    family = "Libre Franklin SemiBold", size = 2
+      # color = transfer_fee_eur > 18e6,
+      # hjust = ifelse(transfer_fee_eur > 18e6, 1.1, -0.1)
+      ),
+    family = "Libre Franklin SemiBold", size = 2, hjust = 1.2, color = "white"
   ) +
   # geom_richtext(
   #   data = transfers_packing, 
@@ -109,21 +115,25 @@ transfers |>
   # ) + 
   scale_y_continuous(
     labels = scales::number_format(scale_cut = scales::cut_short_scale()),
-    breaks = seq(0, 200e6, 50e6),
-    expand = expansion(mult = c(0, 0.1))) +
+    breaks = seq(0, 200e6, 50e6)) +
   scale_fill_manual(values = c("#1d00db", "#db00be")) +
-  scale_color_manual(values = c("grey2", "white")) +
-  coord_flip() +
+  # scale_color_manual(values = c("grey2", "white")) +
+  coord_flip(expand = FALSE) +
+  facet_wrap(vars(name), ncol = 1) +
   labs(
-    title = "All record-high transfers in association football at their time
+    title = "All record-high transfers at their time
     since Maradona to Napoli",
-    caption = "Transfer fees in EUR (at historical prices).<br>
-    Source: transfermarkt.de. Visualisation: Ansgar Wolsing"
+    subtitle = "Each transfer in association football since 1984 that has set a new record.
+    Transfer fees at historical prices (in EUR).",
+    caption = "Source: transfermarkt.de. Visualisation: Ansgar Wolsing"
   ) +
-  # theme_void(base_family = "Outfit") + 
   theme(
     legend.position = "none",
-    axis.title.y = element_blank(),
-    axis.text.y = element_text(family = "Libre Franklin"))
-ggsave(here(base_path, "03-makeover-transfer-records.png"), width = 5, height = 5)
-
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.line.x = element_blank(),
+    plot.margin = margin(t = 2, b = 2, l = 6, r = 6),
+    panel.spacing.y = unit(0, "mm")
+  )
+ggsave(here(base_path, "03-makeover-transfer-records.png"), 
+       width = 2, height = 3, scale = 2.2)
