@@ -30,7 +30,7 @@ theme_set(
       axis.line.x = element_line(linewidth = 0.33),
       plot.title = element_markdown(
         color = "grey8",
-        family = "Libre Franklin Medium", hjust = 0, size = 16,
+        family = "Libre Franklin SemiBold", hjust = 0, size = 16,
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_textbox(
