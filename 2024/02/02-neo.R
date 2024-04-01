@@ -23,7 +23,7 @@ df_long <- df |>
     gross_label_pos = lag(gross, 1, default = 0) + gross / 2,
     .by = release) 
 
-bar_width <- 0.5
+bar_width <- 0.45
 matrix_green <- colorspace::lighten("#75C2A0", 0.5)
 colorspace::lighten("#365989", 0.8)
 
@@ -46,7 +46,7 @@ p <-
   geom_text(
     aes(x = worldwide_gross,
         label = scales::number(worldwide_gross, accuracy = 1, scale_cut = scales::cut_long_scale())),
-    hjust = 0, nudge_x = 5e6, family = "Source Sans Pro SemiBold", size = 3,
+    hjust = 0, nudge_x = 7e6, family = "Source Sans Pro SemiBold", size = 3,
     color = matrix_green
   ) +
   # Annotation for the regions inside the longest bar
@@ -63,7 +63,7 @@ p <-
         label = paste(region, "earnings")),
     color = "grey40", hjust = 0.5, vjust = 2.3, size = 2.5, family = "Source Sans Pro"
   ) +
-  scale_y_discrete(expand = c(0.4, 0)) +
+  scale_y_discrete(expand = c(0.33, 0)) +
   scale_fill_manual(values = c("#EFFEFC", matrix_green)) +
   coord_cartesian(clip = "off") +
   facet_wrap(vars(release), ncol = 1, scales = "free_y") +
@@ -84,9 +84,11 @@ p <-
       color = matrix_green, hjust = 0, size = 11,
       margin = margin(l = 6, b = -2)),
     panel.grid = element_blank(),
+    panel.spacing.y = unit(4, "mm"),
     plot.title = element_text(
       family = "Source Sans Pro SemiBold", size = 16, hjust = 0.5),
-    plot.subtitle = element_text(size = 11, hjust = 0.5),
+    plot.subtitle = element_text(
+      size = 11, hjust = 0.5, margin = margin(t = 2, b = 8)),
     plot.caption = element_text(hjust = 0.5)
   )
 
@@ -101,7 +103,7 @@ p_annotations <- ggplot() +
     "curve",
     x = 4.1, xend = 4.1, y = 3.05, yend = 2.7, 
     curvature = -0.2, color = matrix_green, linewidth = 0.25,
-    arrow = arrow(angle = 20, length = unit(1.3, "mm"))
+    arrow = arrow(angle = 20, length = unit(1, "mm"))
   ) +
   coord_cartesian(xlim = c(0, 4), ylim = c(0, 4)) +
   theme_void()
