@@ -90,29 +90,6 @@ transfers |>
       ),
     family = "Libre Franklin SemiBold", size = 2, hjust = 1.2, color = "white"
   ) +
-  # geom_richtext(
-  #   data = transfers_packing, 
-  #   aes(x, y, size = transfer_fee_eur, 
-  #       label = 
-  #         paste0(
-  #           ifelse(str_length(name) > 10, str_replace(name, "\\s", "<br>"), name), 
-  #           "<br>", "**",
-  #           scales::number(transfer_fee_eur, accuracy = 1, scale = 1e-6, suffix = "m"),
-  #           "**")), 
-  #   color = "white", family = "Outfit", fill = NA, label.size = 0) +
-  # annotate(
-  #   GeomTextBox,
-  #   x = 11400 + 4600, y = 9150 + 3200,
-  #   label = "Zidane held the record for the longest period (2001 to 2009)",
-  #   width = 0.25, family = "Outfit Light", size = 2, hjust = 0,
-  #   fill = NA, box.size = 0
-  # ) +
-  # annotate(
-  #   GeomCurve,
-  #   x = 11400 + 5150, xend = 11400 + 3300, y = 9150 + 3200, yend = 9150 + 2900,
-  #   curvature = 0.2, size = 0.25, color = "grey10",
-  #   arrow = arrow(length = unit(1.5, "mm"))
-  # ) + 
   scale_y_continuous(
     labels = scales::number_format(scale_cut = scales::cut_short_scale()),
     breaks = seq(0, 200e6, 50e6)) +
@@ -132,7 +109,7 @@ transfers |>
     axis.title = element_blank(),
     axis.text = element_blank(),
     axis.line.x = element_blank(),
-    plot.margin = margin(t = 2, b = 2, l = 6, r = 6),
+    plot.margin = margin(t = 2, b = 4, l = 6, r = 6),
     panel.spacing.y = unit(0, "mm")
   )
 ggsave(here(base_path, "03-makeover-transfer-records.png"), 
