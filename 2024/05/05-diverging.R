@@ -31,7 +31,6 @@ df |>
 
 colors <- c("#FBFAFC", "#FFFFFF")
 gradient_fill <- grid::linearGradient(colors, group = FALSE)
-
 theme_set(
   theme_minimal(base_family = "Libre Franklin Light") +
     theme(
@@ -41,7 +40,7 @@ theme_set(
       axis.line.x = element_line(linewidth = 0.33),
       plot.title = element_markdown(
         color = "grey8",
-        family = "Libre Franklin Medium", hjust = 0, size = 16,
+        family = "Libre Franklin SemiBold", hjust = 0, size = 16,
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_markdown(
@@ -53,8 +52,7 @@ theme_set(
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),
       panel.grid.major.y = element_line(color = "grey70", linewidth = 0.15),
-      # panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.05)
-      panel.grid.minor.y = element_blank(),
+      panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.05),
       strip.text = element_text(
         family = "Libre Franklin Medium", size = 10, color = "grey35",
         margin = margin(t = 4, b = 1))
@@ -129,8 +127,5 @@ df |>
     Visualization: Ansgar Wolsing",
     x = "Age (years)",
     y = "Share of population (%)"
-  ) +
-  theme(
-    panel.grid.minor.y = element_line()
   )
 ggsave(here(base_path, "05-diverging.png"), width = 6, height = 4, scale = 1.25)
