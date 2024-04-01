@@ -22,7 +22,7 @@ champions_country <- df |>
 colors <- c("#FBFAFC", "#FFFFFF")
 gradient_fill <- grid::linearGradient(colors, group = FALSE)
 theme_set(
-  theme_minimal(base_family = "Libre Franklin Light") +
+  theme_minimal(base_family = "Libre Franklin") +
     theme(
       plot.background = element_rect(color = NA, fill = gradient_fill),
       text = element_text(color = "#090909"),
@@ -36,13 +36,12 @@ theme_set(
       plot.subtitle = element_textbox(
         hjust = 0, color = "grey35", lineheight = 1.1, width = 1,
         margin = margin(b = 8)),
-      plot.caption = element_markdown(),
+      plot.caption = element_markdown(hjust = 0),
       plot.margin = margin(rep(4, 4)),
       legend.position = "top",
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),
       panel.grid.major.y = element_line(color = "grey70", linewidth = 0.15),
-      # panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.05)
       panel.grid.minor.y = element_blank(),
       strip.text = element_text(
         family = "Libre Franklin Medium", size = 10, color = "grey35",
@@ -84,7 +83,7 @@ champions_country |>
     title = "<span style='color:#db00be'>Bundesliga</span> hoping for Scottish conditions",
     subtitle = "Number of titles by the most successful team in each league vs. 
     the rest in the top 10 football leagues in Europe in the last the seasons
-    (2013/13 to 2022/23)",
+    (2013/14 to 2022/23)",
     caption = "Source: kicker.de. Visualization: Ansgar Wolsing.",
     y = "# of titles"
   ) + 
@@ -97,4 +96,3 @@ champions_country |>
   )
 ggsave(here(base_path, "01-part-to-whole-football-champions.png"), 
        width = 5, height = 5, scale = 1.2)
-
