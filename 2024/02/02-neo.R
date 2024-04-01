@@ -90,7 +90,7 @@ p <- df |>
   facet_wrap(vars(release), ncol = 1, scales = "free_y") +
   guides(fill = "none") +
   labs(
-    title = "Total and opening gross of the Matrix franchise",
+    title = "Box office gross earnings of The Matrix films",
     subtitle = "(in USD)",
     caption = "Source: Box Office Mojo (IMDb Pro). Visualization: Ansgar Wolsing") +
   theme_minimal(base_family = "Source Sans Pro") +
