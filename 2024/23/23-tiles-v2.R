@@ -22,25 +22,24 @@ theme_set(
       text = element_text(color = "#090909"),
       axis.text = element_text(family = "Source Code Pro"),
       axis.line.x = element_line(linewidth = 0.33),
+      axis.line.x.top = element_blank(),
       plot.title = element_markdown(
         color = "grey8",
-        family = "Libre Franklin Medium", hjust = 0, size = 16,
-        margin = margin(t = 4, b = 4)),
+        family = "Libre Franklin SemiBold", hjust = 0.5, size = 16, 
+        lineheight = 1.3, margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_textbox(
-        hjust = 0, color = "grey35", lineheight = 1.1,
-        margin = margin(b = 8)),
+        hjust = 0.5, halign = 0.5, width = 1, color = "grey35", lineheight = 1.2,
+        margin = margin(t = 4, b = 20)),
       plot.caption = element_markdown(),
       plot.margin = margin(rep(4, 4)),
-      legend.position = "top",
-      panel.grid.major.x = element_blank(),
-      panel.grid.minor.x = element_blank(),
-      panel.grid.major.y = element_line(color = "grey70", linewidth = 0.15),
-      # panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.05)
-      panel.grid.minor.y = element_blank(),
+      panel.grid = element_blank(),
       strip.text = element_text(
         family = "Libre Franklin Medium", size = 10, color = "grey35",
-        margin = margin(t = 4, b = 1))
+        margin = margin(t = 4, b = 1)),
+      legend.position = "bottom",
+      legend.key.height = unit(3, "mm")
+      
     )
 )
 
@@ -73,19 +72,12 @@ hot100 |>
     year = year(Date),
     month = month(Date),
     month_abb = month.abb[month],
-    month_abb = fct_reorder(month_abb, month)) |> 
-  View()
+    month_abb = fct_reorder(month_abb, month)) 
 
 
 df_prep |> 
   ggplot(aes(month_abb, year)) +
-  # geom_tile(aes(fill = n),
-  #           col = "white", linewidth = 2.5) +
   geom_tile(fill = NA, col = "grey30", linewidth = 0.2) +
-  # geom_point(
-  #   aes(size = n),
-  #   shape = 22, col = "grey30", stroke = 0.1, fill = "#021aee"
-  #   ) +
   geom_point(
     data = ~subset(., n > 0),
     aes(fill = n),
@@ -113,18 +105,10 @@ df_prep |>
     fill = "# of songs"
   ) +
   theme(
-    axis.line.x.top = element_blank(),
-    panel.grid.major.y = element_blank(),
     plot.margin = margin(t = 4, b = 4, l = 100, r = 100),
-    plot.title = element_markdown(hjust = 0.5, lineheight = 1.3),
-    plot.subtitle = element_textbox(
-      hjust = 0.5, halign = 0.5, width = 1, lineheight = 1.2,
-      margin = margin(t = 4, b = 20)),
-    legend.position = "bottom",
-    legend.key.height = unit(3, "mm"),
     legend.title.position = "top"
   )
-ggsave(here(base_path, "23-tiles.png"), width = 5, height = 5, scale = 1.5)
+ggsave(here(base_path, "23-tiles-monthly.png"), width = 5, height = 5, scale = 1.5)
 
 
 ## Weekly version --------------------------------------------------------------
@@ -138,7 +122,6 @@ df_prep_week <- hot100 |>
   arrange(Date, Rank) |>
   # count each song only once per month
   distinct(year, week, Song) |> 
-  # filter(year < 2024) |> 
   count(year, week) |>
   complete(year, week, fill = list(n = 0)) |> 
   mutate(n_cat = case_when(
@@ -179,15 +162,7 @@ df_prep_week |>
     fill = "# of songs"
   ) +
   theme(
-    axis.line.x.top = element_blank(),
-    panel.grid.major.y = element_blank(),
     plot.margin = margin(t = 4, b = 4, l = 10, r = 10),
-    plot.title = element_markdown(hjust = 0.5, lineheight = 1.3),
-    plot.subtitle = element_textbox(
-      hjust = 0.5, halign = 0.5, width = 1, lineheight = 1.2,
-      margin = margin(t = 4, b = 20)),
-    legend.position = "bottom",
-    legend.key.height = unit(3, "mm"),
     legend.title.position = "left"
   )
 ggsave(here(base_path, "23-tiles-weekly.png"), width = 6, height = 5, scale = 1.5)
