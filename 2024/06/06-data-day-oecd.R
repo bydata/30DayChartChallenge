@@ -64,6 +64,10 @@ color_pal <- c("#009688", "#00897B", "#00796B", "#00695C")
 df |> 
   mutate(ref_area_label = fct_reorder(ref_area_label, obs_value)) |> 
   ggplot(aes(obs_value, ref_area_label)) +
+  # Light grey background for the bars
+  geom_col(
+    aes(x = Inf),
+    fill = "grey93") +
   geom_col(
     aes(fill = continent), width = 0.75) +
   geom_text(
