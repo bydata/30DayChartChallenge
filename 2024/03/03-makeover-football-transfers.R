@@ -70,6 +70,86 @@ transfers |>
   arrange(desc(reign))
 
 
+## CIRCLEPACK VERSION (new style) ----------------------------------------------
+
+
+
+## https://r-graph-gallery.com/307-add-space-in-circle-packing.html
+# Generate the layout
+packing <- circleProgressiveLayout(transfers$transfer_fee_eur, sizetype = "area")
+packing$radius <- 0.95 * packing$radius
+transfers_packing <- bind_cols(packing, transfers)
+dat.gg <- circleLayoutVertices(transfers_packing, npoints = 50, idcol = "rank")
+
+ggplot() + 
+  geom_polygon(
+    data = dat.gg, 
+    aes(x, y, group = id, 
+        fill = case_when(id %in% c(1, 15) ~ as.character(id), TRUE ~ "other")), 
+    colour = "white", size = 0.3) +
+  geom_richtext(
+    data = transfers_packing, 
+    aes(x, y, size = transfer_fee_eur, 
+        label = 
+          paste0(
+            ifelse(str_length(name) > 8, str_replace(name, "\\s", "<br>"), name), 
+            "<br>", "<b style='font-family:\"Libre Franklin\"'>",
+            scales::number(transfer_fee_eur, accuracy = 1, scale = 1e-6, suffix = "m"),
+            "</b>")), 
+    color = "white", family = "Libre Franklin Medium", fill = NA, label.size = 0) +
+  # Annotation: Zidane
+  annotate(
+    GeomTextBox,
+    x = 16000, y = 12350,
+    label = "Zidane held the record for the longest period (2001 to 2009)",
+    width = 0.15, family = "Libre Franklin", size = 2, hjust = 0,
+    fill = NA, box.size = 0
+  ) +
+  annotate(
+    GeomCurve,
+    x = 16550, xend = 14700, y = 12350, yend = 12050,
+    curvature = 0.2, linewidth = 0.25, color = "grey10",
+    arrow = arrow(length = unit(1.5, "mm"))
+  ) + 
+  # Curve to show the temporal direction
+  annotate(
+    "text",
+    x = -20000, y = 8800, label = "time",
+    family = "Libre Franklin SemiBold", size = 3, hjust = 0, color = "#666666",
+    angle = 45
+  ) +
+  annotate(
+    GeomCurve,
+    x = -15000, xend = -21500, y = 11500, yend = 5000,
+    curvature = 0.2, linewidth = 0.5, color = "#666666",
+    arrow = arrow(length = unit(1.5, "mm"))
+  ) + 
+  scale_size_continuous(range = c(1.5, 5.5)) +
+  scale_fill_manual(values = c("#03DAC5", "#6200EE", "#78909C")) +
+  coord_equal(clip = "off") +
+  labs(
+    title = "All record-high transfers at their time
+    since Maradona to Napoli",
+    subtitle = "Each transfer in association football since 1984 that has set a new record",
+    caption = "Transfer fees in EUR (at historical prices).<br><br>
+    Source: transfermarkt.de. Visualisation: Ansgar Wolsing"
+  ) +
+  theme_void(base_family = "Libre Franklin") + 
+  theme(
+    plot.background = element_rect(color = "white", fill = "white"),
+    text = element_text(lineheight = 1.1),
+    plot.title = element_markdown(hjust = 0.5, family = "Libre Franklin SemiBold"),
+    plot.subtitle = element_markdown(hjust = 0.5),
+    plot.caption = element_markdown(hjust = 0.5, family = "Libre Franklin Light", size = 7),
+    plot.margin = margin(rep(2, 4)),
+    legend.position = "none")
+ggsave(here(base_path, "03-makeover-historical-transfer-records.png"), 
+       width = 4, height = 4, scale = 1.4)
+
+
+## BAR CHART VERSION (new) ----------------------------------------------
+
+
 transfers |> 
   mutate(name = fct_reorder(name, -transfer_fee_eur)) |> 
   ggplot(aes(x = 1, transfer_fee_eur)) +
@@ -79,21 +159,20 @@ transfers |>
     xmin = -Inf, xmax = Inf, ymin = 0, ymax = Inf,
     fill = "grey93") +
   geom_col(
-    aes(fill = rank == 1), 
+    aes(fill = as.character(ifelse(rank %in% c(1, 15), rank, 99))), 
     colour = "white", size = 0.3) +
   geom_text(
     aes(
       label = scales::number(
-        transfer_fee_eur, scale_cut = scales::cut_short_scale(), accuracy = 1),
-      # color = transfer_fee_eur > 18e6,
-      # hjust = ifelse(transfer_fee_eur > 18e6, 1.1, -0.1)
+        transfer_fee_eur, scale_cut = scales::cut_short_scale(), accuracy = 1)
       ),
     family = "Libre Franklin SemiBold", size = 2, hjust = 1.2, color = "white"
   ) +
   scale_y_continuous(
     labels = scales::number_format(scale_cut = scales::cut_short_scale()),
     breaks = seq(0, 200e6, 50e6)) +
-  scale_fill_manual(values = c("#1d00db", "#db00be")) +
+  # scale_fill_manual(values = c("#1d00db", "#db00be")) +
+  scale_fill_manual(values = c("#03DAC5", "#6200EE", "#78909C")) +
   # scale_color_manual(values = c("grey2", "white")) +
   coord_flip(expand = FALSE) +
   facet_wrap(vars(name), ncol = 1) +
