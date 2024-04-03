@@ -37,7 +37,7 @@ theme_set(
       text = element_text(color = "#090909"),
       axis.title = element_blank(),
       axis.text.x = element_blank(),
-      axis.text.y = element_text(family = "Libre Franklin", hjust = 1, size = 6),
+      axis.text.y = element_text(family = "Libre Franklin", hjust = 1, size = 5.5),
       axis.line = element_blank(),
       plot.title = element_markdown(
         color = "grey8",
@@ -50,7 +50,7 @@ theme_set(
       plot.caption = element_textbox(
         width = 1, hjust = 0, lineheight = 1, size = 7),
       plot.caption.position = "plot",
-      plot.margin = margin(rep(4, 4)),
+      plot.margin = margin(t = 2, b = 2, l = 4, r = 2),
       legend.position = "top",
       panel.grid = element_blank(),
       panel.spacing.y = unit(4, "mm"),
@@ -61,12 +61,14 @@ theme_set(
 # color_pal <- c("#C2185B", "#0097A7", "#4527A0", "#FF8F00")
 color_pal <- c("#009688", "#00897B", "#00796B", "#00695C")
 
+max_value <- max(df$obs_value)
+
 df |> 
   mutate(ref_area_label = fct_reorder(ref_area_label, obs_value)) |> 
   ggplot(aes(obs_value, ref_area_label)) +
   # Light grey background for the bars
   geom_col(
-    aes(x = Inf),
+    aes(x = 1.1 * max_value),
     fill = "grey93") +
   geom_col(
     aes(fill = continent), width = 0.75) +
