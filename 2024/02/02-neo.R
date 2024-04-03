@@ -28,7 +28,7 @@ matrix_green <- colorspace::lighten("#75C2A0", 0.5)
 colorspace::lighten("#365989", 0.8)
 
 p <- 
-  df_long |> #View()
+  df_long |>
   ggplot(aes(y = release, group = region)) +
   ggfx::with_inner_glow(
     geom_col(
@@ -49,13 +49,6 @@ p <-
     hjust = 0, nudge_x = 7e6, family = "Source Sans Pro SemiBold", size = 3,
     color = matrix_green
   ) +
-  # Annotation for the regions inside the longest bar
-  # geom_text(
-  #   data = ~subset(., worldwide_gross == max(worldwide_gross)),
-  #   aes(x = gross_label_pos,
-  #       label = paste(region, "earnings")),
-  #   color = "grey40", hjust = 0.5, vjust = 2.3, size = 2.5, family = "Source Sans Pro"
-  # ) +
   # Annotation for the regions inside the first bar
   geom_text(
     data = ~subset(., us_release_date == min(us_release_date)),
