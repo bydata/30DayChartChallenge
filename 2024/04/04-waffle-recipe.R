@@ -7,8 +7,6 @@ library(treemapify)
 #' Makes about 4 - 4 1/2 inch (10 cm) square Belgain waffles, 
 #' or 4 - 6 1/2 inch (16.5 cm) round regular waffles.
 
-# Read more: https://www.joyofbaking.com/breakfast/Waffles.html#ixzz8VQKy77Bj
-# Follow us: @joyofbaking on Twitter | joyofbaking on Facebook
 df <- data.frame(
   ingredient = c("Flour", "Baking Powder", "Salt", "Sugar", "Egg", "Milk", "Butter"),
   g = c(130, 5, 1.5, 25, 45, 240, 28) 
