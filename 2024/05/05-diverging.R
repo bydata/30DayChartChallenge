@@ -25,28 +25,27 @@ df |>
     age_mult = age * value) |> 
   group_by(country_or_area) |> 
   summarize(avg_age = sum(age_mult) / sum(value)) |> 
-  arrange(avg_age) |> 
-  View()
+  arrange(avg_age) 
 
 
 colors <- c("#FBFAFC", "#FFFFFF")
 gradient_fill <- grid::linearGradient(colors, group = FALSE)
 theme_set(
-  theme_minimal(base_family = "Libre Franklin Light") +
+  theme_minimal(base_family = "Libre Franklin") +
     theme(
       plot.background = element_rect(color = NA, fill = gradient_fill),
       text = element_text(color = "#090909"),
       axis.text = element_text(family = "Source Code Pro"),
       axis.line.x = element_line(linewidth = 0.33),
       plot.title = element_markdown(
-        color = "grey8",
+        color = "grey8", lineheight = 1.2,
         family = "Libre Franklin SemiBold", hjust = 0, size = 16,
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_markdown(
         hjust = 0, color = "grey35", # family = "Poppins",
         margin = margin(b = 8)),
-      plot.caption = element_markdown(),
+      plot.caption = element_markdown(hjust = 0, lineheight = 1.1, size = 7),
       plot.margin = margin(rep(4, 4)),
       legend.position = "top",
       panel.grid.major.x = element_blank(),
@@ -94,7 +93,7 @@ df |>
     data = data.frame(
       country_or_area = c("Japan", "Niger"),
       xmin = c(48.3, -0.7), xmax = c(101, 14.7),
-      ymin = c(-0.011, -0.024), ymax = c(0.011, 0.024)
+      ymin = c(-0.011, -0.024), ymax = c(0.011, 0.0245)
     ),
     aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
     inherit.aes = FALSE, col = "grey40", linewidth = 0.3, fill = "transparent"
@@ -102,7 +101,7 @@ df |>
   geom_label(
     data = data.frame(
       country_or_area = c("Japan", "Niger"),
-      x = c(48.5, 18), y = c(-0.019, -0.024),
+      x = c(48.5, 18), y = c(-0.021, -0.025),
       label = "50% of the\npopulation"
     ),
     aes(x, y, label = label),
@@ -113,19 +112,20 @@ df |>
     expand = expansion(add = c(0.5, 2)),
     breaks = seq(0, 100, 10), minor_breaks = seq(0, 100, 5)) +
   scale_y_continuous(labels = function(x) sprintf("%s%%", abs(x) * 100)) +
-  scale_fill_manual(values = c("#03DAC5", "#6200EE"), aesthetics = c("fill", "color")) +
+  scale_fill_manual(values = c("#6200EE", "#03DAC5"), aesthetics = c("fill", "color")) +
   coord_flip(ylim = c(-0.022, 0.022), clip = "off") +
   facet_wrap(vars(country_or_area)) +
   guides(fill = "none", color = "none") +
   labs(
-    title = "Comparing the countries with the oldest and youngest population",
+    title = "Population pyramids for the countries with the oldest and<br>the youngest population",
     subtitle = "Share of
-    <span style='color:#03DAC5;font-family:\"Poppins Medium\"'>female</span> and
-    <span style='color:#6200EE;font-family:\"Poppins Medium\"'>male</span>
+    <span style='color:#6200EE;font-family:\"Poppins Medium\"'>female</span> and
+    <span style='color:#03DAC5;font-family:\"Poppins Medium\"'>male</span>
     population by age",
-    caption = "Source: United Nations Statistics Division.
+    caption = "Note: The age group 100 includes the population 100 years and older.
+    <br>Source: United Nations Statistics Division.
     Visualization: Ansgar Wolsing",
     x = "Age (years)",
     y = "Share of population (%)"
   )
-ggsave(here(base_path, "05-diverging.png"), width = 6, height = 4, scale = 1.25)
+ggsave(here(base_path, "05-diverging.png"), width = 5, height = 5, scale = 1.3)
