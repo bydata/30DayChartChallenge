@@ -1,6 +1,5 @@
 library(tidyverse)
 library(ggtext)
-library(patchwork)
 library(xml2)
 library(here)
 
@@ -58,7 +57,6 @@ theme_set(
     )
 )
 
-# color_pal <- c("#C2185B", "#0097A7", "#4527A0", "#FF8F00")
 color_pal <- c("#009688", "#00897B", "#00796B", "#00695C")
 
 max_value <- max(df$obs_value)
@@ -90,7 +88,7 @@ df |>
   facet_grid(rows = vars(continent), scales = "free_y", space = "free") +
   guides(fill = "none") + 
   labs(
-    title = "Share of students aged 15 enrolled<br>in schools with high staff shortages",
+    title = "Students aged 15 enrolled in<br>schools with high staff shortages",
     subtitle = "Share in %",
     caption = "Note: 15-year-old students in schools with high relative values 
     on the PISA Index of Staff Shortage.
@@ -98,4 +96,4 @@ df |>
     Visualization: Ansgar Wolsing"
   )
 ggsave(here(base_path, "06-data-day-oecd.png"),
-       width = 800, height = 1200, unit = "px", scale = 1.5)
+       width = 800, height = 1200, unit = "px", scale = 1.4)
