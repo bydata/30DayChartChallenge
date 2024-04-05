@@ -114,7 +114,7 @@ df |>
   scale_y_continuous(labels = function(x) sprintf("%s%%", abs(x) * 100)) +
   scale_fill_manual(values = c("#6200EE", "#03DAC5"), aesthetics = c("fill", "color")) +
   coord_flip(ylim = c(-0.022, 0.022), clip = "off") +
-  facet_wrap(vars(country_or_area)) +
+  facet_wrap(vars(country_or_area), labeller = as_labeller(toupper)) +
   guides(fill = "none", color = "none") +
   labs(
     title = "Population pyramids for the countries with the oldest and<br>the youngest population",
