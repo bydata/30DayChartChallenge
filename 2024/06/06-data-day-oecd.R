@@ -11,7 +11,7 @@ base_path <- here("2024", "06")
 api_url <- "https://sdmx.oecd.org/public/rest/data/OECD.WISE.CWB,DSD_CWB@DF_CWB,1.0/.B2_2.B2?startPeriod=2017&dimensionAtObservation=AllDimensions"
 raw <- read_xml(api_url)
 
-# Extract the relevant nodes
+# Extract the relevant nodes from the result XML output
 obs_keys <- xml_find_all(raw, ".//generic:ObsKey")
 obs_values <- xml_find_all(raw, ".//generic:ObsValue")
 
