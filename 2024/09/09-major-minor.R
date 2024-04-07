@@ -38,23 +38,21 @@ theme_set(
       plot.background = element_rect(color = NA, fill = gradient_fill),
       text = element_text(color = "#090909"),
       plot.title = element_text(
-        color = "grey8", 
-        family = "Libre Franklin SemiBold", hjust = 0, size = 16,
+        color = "grey8", family = "AHDN", hjust = 0.5, size = 24,
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_textbox(
-        hjust = 0, color = "grey35", lineheight = 1.25, width = 1,
+        hjust = 0.5, halign = 0.5, color = "grey35", lineheight = 1.25, width = 1,
         margin = margin(b = 6)),
-      plot.caption = element_markdown(hjust = 0),
-      plot.margin = margin(rep(4, 4)),
+      plot.caption = element_markdown(hjust = 1),
+      plot.margin = margin(t = 4, b = 4, l = 9, r = 9),
       legend.position = "top",
       panel.grid = element_blank(),
       strip.text = element_text(
-        family = "Libre Franklin Medium", size = 8, color = "grey35", hjust = 0,
+        family = "Libre Franklin SemiBold", size = 9, color = "grey35", hjust = 0,
         margin = margin(t = 3, b = 1))
     )
 )
-
 
 beatles_font_mapping <- c(
   "John" = "J",
@@ -87,18 +85,10 @@ beatles |>
     <b style='color:#FFD600'>major</b> or <b style='color:#512DA8'>minor</b>
     key.",
     caption = "Source: Spotify API. Visualization: Ansgar Wolsing"
-  ) +
-  theme(
-    plot.title = element_textbox(family = "AHDN", hjust = 0.5, halign = 0.5,
-                                 size = 24),
-    plot.subtitle = element_textbox(hjust = 0.5, halign = 0.5),
-    strip.text = element_text(family = "Libre Franklin SemiBold", size = 9),
-    plot.margin = margin(t = 4, b = 4, l = 9, r = 9)
   )
 
 # Add the Beatles picture
 img_x_pos <- seq(0.32, 0.71, 0.13)
-
 walk2(
   img_x_pos, beatles_font_mapping,
   function(x, label) {
