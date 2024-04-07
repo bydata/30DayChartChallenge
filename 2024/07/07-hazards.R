@@ -46,6 +46,7 @@ theme_set(
     )
 )
 
+## Histogram -------------------------------------------------------------------
 
 p <- earthquakes |> 
   ggplot(aes(mag)) +
@@ -63,8 +64,6 @@ p <- earthquakes |>
 
 ## Inset map -------------------------------------------------------------------
 
-
-
 # Load shape of New Zealand
 nz <- giscoR::gisco_get_countries(epsg = "4326", country = "New Zealand", resolution = "20")
 nz <- st_shift_longitude(nz) |> 
@@ -76,7 +75,6 @@ earthquake_max_magnitude <- earthquakes |>
   select(time, latitude, longitude, mag, place)
 
 earthquake_max_magnitude[rep(1, 3), ]
-
 
 p_map <- ggplot(nz) +
   geom_sf() +
@@ -92,6 +90,9 @@ p_map <- ggplot(nz) +
     plot.margin = margin(0)
   )
   
+
+## Combine plots ---------------------------------------------------------------
+
 p + 
   annotate(
     "segment",
