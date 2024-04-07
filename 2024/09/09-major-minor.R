@@ -88,14 +88,14 @@ beatles |>
   )
 
 # Add the Beatles picture
-img_x_pos <- seq(0.32, 0.71, 0.13)
+img_x_pos <- seq(0.32, 0.62, 0.1)
 walk2(
   img_x_pos, beatles_font_mapping,
   function(x, label) {
     grid.text(
       label = label, 
       x = x, y = 0.14,
-      gp = gpar(fontfamily = "JAMON del MAR", cex = 5))
+      gp = gpar(fontfamily = "JAMON del MAR", cex = 2.5))
   }
 )
 dev.off()
