@@ -7,11 +7,32 @@ library(here)
 
 base_path <- here("2024", "07")
 
-#' Source: 
+#' Source A: 
 #' https://earthquake.usgs.gov/earthquakes/search/
 #' API endpoint documentation: https://earthquake.usgs.gov/fdsnws/event/1/
 api_url <- "https://earthquake.usgs.gov/fdsnws/event/1/query?format=csv&starttime=2009-12-31T00:00:00UTC&endtime=2023-12-31T12:00:00UTC&minmagnitude=1&minlatitude=-47.517&maxlatitude=-33.87&minlongitude=165.938&maxlongitude=179.297"
 earthquakes <- read_csv(api_url)
+
+#' Source B:
+#' Thanks to https://bsky.app/profile/thoughtfulnz.bsky.social/post/3kpkrnifauu2k
+#' https://quakesearch.geonet.org.nz/
+start_date <- as_date("2009-01-01")
+end_date <- as_date("2023-12-31")
+start_dates <- seq(start_date, end_date, "1 year")
+
+api_urls <- sprintf(
+  "https://quakesearch.geonet.org.nz/csv?bbox=165.938,-47.517,179.297,-33.87&startdate=%s&enddate=%s",
+  start_dates, c(start_dates[2:length(start_dates)] + duration("1 day"), end_date)
+)
+
+earthquakes_collection <- map(api_urls, read_csv)
+
+earthquakes <- earthquakes_collection |> 
+  map_dfr(function(x) {
+    filter(x, eventtype == "earthquake", magnitude > 0) |> 
+      select(time = origintime, longitude, latitude, mag = magnitude)
+  })
+
 
 
 # Custom theme
@@ -56,7 +77,8 @@ p <- earthquakes |>
   labs(
     title = "Magnitude of Earthquakes in New Zealand",
     subtitle = "\\# of earthquakes between 2009 and 2023",
-    caption = "Source: USGS Earthquake Hazards Program. Visualization: Ansgar Wolsing",
+    # caption = "Source: USGS Earthquake Hazards Program. Visualization: Ansgar Wolsing",
+    caption = "Source: GeoNet Quake Search. Visualization: Ansgar Wolsing",
     x = "Magnitude", 
     y = NULL
   )
@@ -72,9 +94,11 @@ nz <- st_shift_longitude(nz) |>
 # Max. magnitude
 earthquake_max_magnitude <- earthquakes |> 
   filter(mag == max(mag)) |> 
-  select(time, latitude, longitude, mag, place)
+  select(time, latitude, longitude, mag)
 
-earthquake_max_magnitude[rep(1, 3), ]
+earthquakes |> 
+  filter(date(time) == as_date("2016-11-13")) |> 
+  arrange(-mag)
 
 p_map <- ggplot(nz) +
   geom_sf() +
@@ -97,16 +121,16 @@ p +
   annotate(
     "segment",
     x = earthquake_max_magnitude$mag, xend = earthquake_max_magnitude$mag,
-    y = 320, yend = 10,
+    y = 7800, yend = 100,
     linewidth = 0.2, color = "#666666",
     arrow = arrow(length = unit(2, "mm"))
   ) +
   annotate(
     GeomTextBox,
-    x = earthquake_max_magnitude$mag - 0.05, y = 220, width = 0.3,
+    x = earthquake_max_magnitude$mag - 0.05, y = 4000, width = 0.3,
     label = "2016<br>Kaikōura<br>earthquake", family = "Libre Franklin SemiBold", 
     size = 3, box.size = 0, fill = NA, hjust = 1, halign = 1, lineheight = 0.9
   ) +
-  inset_element(p_map, left = 0.85, right = 1, t = 0.6, b = 0.3)
+  inset_element(p_map, left = 0.86, right = 1.01, t = 0.48, b = 0.18)
 
-ggsave(here(base_path, "07-hazards.png"), width = 5, height = 5)  
+ggsave(here(base_path, "07-hazards.png"), width = 5, height = 5)
