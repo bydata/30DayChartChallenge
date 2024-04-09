@@ -15,7 +15,7 @@ Sys.setenv(SPOTIFY_CLIENT_SECRET = cred$client_secret)
 access_token <- get_spotify_access_token()
 
 # Get audio features
-beatles <- get_artist_audio_features('the beatles')
+beatles <- get_artist_audio_features("The Beatles")
 
 # Select relevant album names and order by release date
 beatles_album_names <- beatles |> 
@@ -28,6 +28,14 @@ beatles_album_names <- beatles |>
   arrange(album_name) |> 
   pull(album_name)
 
+beatles_prep <- beatles |> 
+  tibble() |> 
+  filter(album_name %in% beatles_album_names) |> 
+  mutate(
+    album_name = str_remove(album_name, "\\s\\(Remastered\\)$"),
+    album_name = factor(album_name,
+                        levels = str_remove(beatles_album_names, "\\s\\(Remastered\\)$"))
+    )
 
 # Custom theme
 colors <- c("#FCFAFC", "#FFFFFF")
@@ -63,13 +71,7 @@ beatles_font_mapping <- c(
 
 ragg::agg_png(here(base_path, "09-major-minor.png"), width = 6, height = 4.6,
               bg = "grey90", scaling = 1/1.3, units = "in", res = 300)
-beatles |> 
-  tibble() |> 
-  filter(album_name %in% beatles_album_names) |> 
-  mutate(
-    album_name = str_remove(album_name, "\\(Remastered\\)$"),
-    album_name = factor(album_name,
-                        levels = str_remove(beatles_album_names, "\\(Remastered\\)$"))) |> 
+beatles_prep |> 
   count(album_name, mode_name) |> 
   ggplot(aes(fill = mode_name, values = n)) +
   geom_waffle(n_rows = 4, width = 0.8, height = 0.8, radius = unit(0.2, "npc")) +
@@ -88,7 +90,7 @@ beatles |>
   )
 
 # Add the Beatles picture
-img_x_pos <- seq(0.38, 0.68, 0.09)
+img_x_pos <- seq(0.30, 0.60, 0.09)
 walk2(
   img_x_pos, beatles_font_mapping,
   function(x, label) {
