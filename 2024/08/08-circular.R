@@ -1,7 +1,5 @@
 # devtools::install_github("abresler/nbastatR")
 library(nbastatR)
-# pacman::p_load_current_gh("sportsdataverse/hoopR", dependencies = TRUE, update = TRUE)
-library(hoopR)
 library(tidyverse)
 library(ggtext)
 # devtools::install_github("ricardo-bion/ggradar", dependencies = TRUE)
@@ -17,7 +15,6 @@ Sys.setenv("VROOM_CONNECTION_SIZE" = 4 * 131072)
 player_stats <- bref_players_stats(seasons = 2024, tables = c("advanced", "per_game"))
 colnames(player_stats)
 
-season_rosters <- seasons_rosters(seasons = 2024)
 
 # Minimum minutes / games played
 games_played_min_treshold <- 10
@@ -100,7 +97,7 @@ ggradar(df_radar,
     Wembanyama's percentile rank is shown in brackets.
     The higher the percentile rank, the better the player compares to his peers.",
     caption = sprintf("Note: Minimum %d games played.<br><br>
-                      Source: Basketball-Reference (as of Apr 06 2024).
+                      Source: Basketball-Reference (as of April 07, 2024).
                       Visualization: Ansgar Wolsing",
                       games_played_min_treshold)) +
   theme_void(base_family = "Libre Franklin") +
