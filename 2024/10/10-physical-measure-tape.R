@@ -161,5 +161,5 @@ ys_plot +
       width = 0.95, lineheight = 1, hjust = 0.5, margin = margin(t = 12)),
     plot.margin = margin(t = 10, b = 8, l = 5, r = 5)
   )
-ggsave(here(base_path, "10-physical-height-measure-tape.png"), width = 5, height = 5,
+ggsave(here(base_path, "10-physical-measure-tape.png"), width = 5, height = 5,
        scale = 1.25)
