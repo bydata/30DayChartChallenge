@@ -49,7 +49,7 @@ ys_plot <- ggplot() +
     ymin = 0, ymax = measure$max - measure$min,
     fill = measure$bg_color, color = measure$mark_color, size = 0.1
   ) +
-  # Millimeters left and right
+  # mm left and right
   annotate(
     "segment",
     x = measure$xmin, xend = measure$xmin + 0.2,
