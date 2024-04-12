@@ -12,14 +12,17 @@ gradient_fill_bg <- grid::linearGradient(c("#F2F7FE", "#FFFFFF"), group = FALSE)
 gradient_fill_bar <- grid::linearGradient(c("#4527A0", "#5E35B1"), group = FALSE)
 
 p_smartphone <- ggplot() +
-  annotate(
-    ggchicklet:::GeomRrect,
-    xmin = 0, 
-    xmax = 10,
-    ymin = 0, 
-    ymax = 20.7, 
-    fill = "grey60",
-    radius = unit(4, "mm")
+  ggfx::with_shadow(
+    annotate(
+      ggchicklet:::GeomRrect,
+      xmin = 0, 
+      xmax = 10,
+      ymin = 0, 
+      ymax = 20.7, 
+      fill = "grey60",
+      radius = unit(4, "mm")
+    ),
+    sigma = 6, colour = "grey30", x_offset = 4, y_offset = 4
   ) +
   annotate(
     ggchicklet:::GeomRrect,
