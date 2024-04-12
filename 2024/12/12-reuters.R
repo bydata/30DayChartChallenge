@@ -34,6 +34,9 @@ ratings_above_90_n <- ratings |>
   nrow()
 ratings_above_90_n
 
+# Median and mean
+mean(ratings$imdb_rating)
+median(ratings$imdb_rating)
 
 ratings |> 
   ggplot(aes(imdb_rating)) +
