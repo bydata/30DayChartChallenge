@@ -9,19 +9,15 @@ base_path <- here("2024", "12")
 
 data(theoffice)
 
+# Get distinct ratings per episode
 ratings <- theoffice |> 
   distinct(season, episode, imdb_rating)
-
-ratings |> 
-  ggplot(aes(imdb_rating)) +
-  geom_histogram()
 
 # Determine the height of the mode value
 max_height <- ratings |> 
   count(imdb_rating, sort = TRUE) |> 
   head(1) |> 
   pull(n)
-
 
 # Count the number of episodes with a rating below 7.0
 ratings_below_70_n <- ratings |> 
