@@ -47,8 +47,8 @@ ratings |>
     # GeomShadowtext,
     "text",
     x = 6.5, y = 8, label = "Only 2 episodes have\na rating below 7.0",
-    color = "#F3B145", family = "Source Sans Pro SemiBold", lineheight = 1.2, size = 3,
-    hjust = 0, vjust = 0.5
+    color = "#F3B145", family = "Source Sans Pro SemiBold", lineheight = 1.2,
+    size = 3, hjust = 0, vjust = 0.5
   ) +
   annotate(
     "segment",
@@ -59,38 +59,20 @@ ratings |>
   annotate(
     "text",
     x = 9.1, y = 12, label = "13 episodes have\na rating above 9.0",
-    color = "#F3B145", family = "Source Sans Pro SemiBold", lineheight = 1.2, size = 3,
-    hjust = 0, vjust = 0.5
+    color = "#F3B145", family = "Source Sans Pro SemiBold", lineheight = 1.2, 
+    size = 3, hjust = 0, vjust = 0.5
   ) +
   annotate(
     "segment",
     x = 9.3, xend = 9.3, y = 10.5, yend = 7.5,
     color = "#C7C7C7", linewidth = 0.2
   ) +
-  # Custom y axis labels
-  # annotate(
-  #   GeomTextBox,
-  #   x = 6.1, y = seq(0, 25, 5),
-  #   label = seq(0, 25, 5),
-  #   halign = 1, hjust = 0, vjust = 0, family = "Source Sans Pro Light", size = 3,
-  #   box.size = 0, box.padding = unit(0, "mm"), color = "#666666", fill = NA, 
-  #   width = 0.025
-  # ) +
-  # # ... add "episodes"
-  # annotate(
-  #   GeomTextBox,
-  #   x = 6.22, y = 25,
-  #   label = "episodes",
-  #   halign = 0, hjust = 0, vjust = 0, family = "Source Sans Pro Light", size = 3,
-  #   box.size = 0, box.padding = unit(0, "mm"), color = "#666666", fill = NA, 
-  #   width = 0.05
-  # ) +
   annotate(
     "text",
     x = 6.1, y = seq(0, 25, 5),
     label = c(seq(0, 20, 5), "25 episodes"),
-    hjust = 0, vjust = -0.3, family = "Source Sans Pro Light", size = 3.5,
-    color = "#666666"
+    hjust = 0, vjust = -0.4, family = "Source Sans Pro Light", size = 3,
+    color = "#626260"
   ) +
   scale_x_continuous(
     limits = c(NA, 10), breaks = seq(0, 10, 0.5),
@@ -99,7 +81,7 @@ ratings |>
   scale_color_manual(values = c("grey70", "#F3B145")) +
   coord_cartesian(clip = "off") +
   labs(
-    title = "IMDb ratings for each episode from every season The Office",
+    title = "IMDb ratings for each episode from every season of The Office",
     subtitle = "Average IMDb rating per episode. Each square represents one episode.",
     caption = "Source: {schrute} R package. Visualization: Ansgar Wolsing
     (replicating the style of Reuters Graphics).",
@@ -111,11 +93,15 @@ ratings |>
     panel.grid.major.x = element_blank(),
     panel.grid.major.y = element_line(color = "#C7C7C7", linewidth = 0.2),
     panel.grid.minor = element_blank(),
+    # axis.text.x = element_text(family = "Source Sans Pro"),
     axis.text.y = element_blank(),
     axis.line.x = element_line(color = "#31312F", linewidth = 0.3),
     plot.title = element_text(family = "Source Sans Pro", face = "bold"),
+    plot.subtitle = element_text(size = 9),
     plot.title.position = "plot",
-    plot.caption = element_textbox(width = 0.9, hjust = 0, size = 7),
+    plot.caption = element_textbox(
+      family = "Source Sans Pro SemiBold", lineheight = 0.9, width = 0.9, 
+      hjust = 0, size = 7, color = "#444543"),
     plot.caption.position = "plot"
   )
 ggsave(here(base_path, "12-reuters.png"), width = 6, height = 4)  
