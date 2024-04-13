@@ -97,7 +97,7 @@ annotations <- tibble(
 )
 
 titles <- labs(
-  title = "When Jim and Pam met in The Office",
+  title = "When Pam and Jim met in The Office",
   subtitle = "Spearman's rho tells us how closely the appearances of the characters
     Pam Beesly/Halpert and Jim Halpert in the scenes of The Office are related.
     Positive values indicate they often appear together. The higher the value, 
@@ -181,7 +181,7 @@ episode_ids <- characters_scenes |>
 
 # Titles
 titles <- labs(
-title = "When Jim and Pam met in The Office",
+title = "When Pam and Jim met in The Office",
 subtitle = "Spearman's rho tells us how closely the appearances of the characters
   Pam Beesly/Halpert and Jim Halpert in the scenes of The Office are related.
   Positive values indicate they often appear together. The higher the value,
@@ -256,7 +256,7 @@ jim_and_pam_by_episode |>
   annotate(
     GeomTextBox,
     x = max(episode_ids$sequential_episode_id), y = 0.4,
-    label = "Smoothed line<br>(LOESS, bw = 0.2)",
+    label = "Smoothed line<br>(LOESS, bw = 0.10)",
     color = "white", size = 2.5, family = "Outfit Medium", hjust = 1, halign = 0,
     vjust = 0, fill = NA, box.size = 0, width = 0.15, box.padding = unit(0, "mm")
   ) +
