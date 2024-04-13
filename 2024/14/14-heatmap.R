@@ -49,7 +49,17 @@ correlations <- characters_scenes |>
 min_correlation <- min(correlations$correlation)
 max_correlation <- max(correlations$correlation)
 
+# Determine the order of characters by the office setting, e.g. Accouting sitting together
+# First, set the levels by the frequency they appear (that already does some ordering)
+(character_levels_by_setting <- factor(selected_characters, levels = selected_characters))
+character_levels_by_setting <- fct_relevel(character_levels_by_setting, c("Erin", "Angela"), after = 5)
+character_levels_by_setting <- fct_relevel(character_levels_by_setting, "Stanley", after = 10)
+
 correlations |> 
+  mutate(
+    across(c(item1, item2),
+    function(x) factor(x, levels = levels(character_levels_by_setting))),
+    item2 = fct_rev(item2)) |> 
   ggplot(aes(item1, item2, fill = correlation)) +
   # geom_tile(color = "#435774", height = 0.9, width = 0.9) +
   geom_point(
