@@ -28,6 +28,7 @@ df |>
   arrange(avg_age) 
 
 
+# Custom theme
 colors <- c("#FBFAFC", "#FFFFFF")
 gradient_fill <- grid::linearGradient(colors, group = FALSE)
 theme_set(
@@ -58,7 +59,7 @@ theme_set(
     )
 )
 
-
+# Median age
 df |>
   filter(area == "Total", sex %in% c("Male", "Female")) |> 
   mutate(age = ifelse(age == "100 +", "100", age)) |> 
@@ -74,6 +75,7 @@ df |>
   filter(share_cumul >= 0.5) |> 
   summarize(median_age = min(age))
 
+
 df |>
   filter(area == "Total", sex %in% c("Male", "Female")) |> 
   mutate(age = ifelse(age == "100 +", "100", age),) |> 
@@ -88,7 +90,8 @@ df |>
     share = ifelse(sex == "Female", -1, 1) * share) |> 
   ggplot(aes(age, share, fill = sex)) +
   geom_col(
-    aes(col = sex), width = 0.9) +
+    aes(col = sex),
+    width = 0.9) +
   geom_rect(
     data = data.frame(
       country_or_area = c("Japan", "Niger"),
@@ -105,7 +108,7 @@ df |>
       label = "50% of the\npopulation"
     ),
     aes(x, y, label = label),
-    inherit.aes = FALSE, family = "Poppins", lineheight = 0.9, size = 3,
+    inherit.aes = FALSE, family = "Libre Franklin", lineheight = 0.9, size = 3,
     hjust = 0, fill = "#FBFAFC", label.size = 0
   ) +
   scale_x_continuous(
