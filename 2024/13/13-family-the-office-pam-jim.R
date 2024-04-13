@@ -195,16 +195,17 @@ x = "Season",
 y = NULL
 )
 
+
 # Annotations
 episodes_with_annotations <- c(7, 30, 52, 85, 107, 153)
 annotations <- tibble(
   sequential_episode_id = episodes_with_annotations,
   season = c(2:6, 8),
-  label_y = c(0.55, -0.15, 0.55, -0.02, 0.75, -0.02),
+  label_y = c(0.55, -0.2, 0.55, -0.08, 0.75, -0.02),
   segment_x = episodes_with_annotations,
   segment_xend = episodes_with_annotations,
-  segment_y = c(0.419, -0.15, 0.457, -0.022, 0.588, -0.02),
-  segment_yend = c(0.23, 0.04, 0.22, 0.07, 0.44, 0.13),
+  segment_y = c(0.419, -0.2, 0.457, -0.08, 0.584, -0.02),
+  segment_yend = c(0.23, -0.05, 0.23, 0, 0.45, 0.08),
   vjust = 1,
   description = c(
     "First kiss<br>after the \"Dundies\"", 
@@ -241,7 +242,7 @@ jim_and_pam_by_episode |>
   geom_hline(
     aes(yintercept = 0), color = "white", linewidth = 0.2
   ) +
-  geom_smooth(span = 0.2, method = "loess", color = "white", se = FALSE) +
+  geom_smooth(span = 0.1, method = "loess", color = "white", se = FALSE) +
   # Annotations
   geom_richtext(
     data = annotations,
@@ -254,7 +255,7 @@ jim_and_pam_by_episode |>
   ) +
   annotate(
     GeomTextBox,
-    x = max(episode_ids$sequential_episode_id), y = 0.32,
+    x = max(episode_ids$sequential_episode_id), y = 0.4,
     label = "Smoothed line<br>(LOESS, bw = 0.2)",
     color = "white", size = 2.5, family = "Outfit Medium", hjust = 1, halign = 0,
     vjust = 0, fill = NA, box.size = 0, width = 0.15, box.padding = unit(0, "mm")
