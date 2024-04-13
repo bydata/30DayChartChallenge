@@ -171,7 +171,6 @@ transfers |>
   scale_y_continuous(
     labels = scales::number_format(scale_cut = scales::cut_short_scale()),
     breaks = seq(0, 200e6, 50e6)) +
-  # scale_fill_manual(values = c("#1d00db", "#db00be")) +
   scale_fill_manual(values = c("#03DAC5", "#6200EE", "#78909C")) +
   # scale_color_manual(values = c("grey2", "white")) +
   coord_flip(expand = FALSE) +
