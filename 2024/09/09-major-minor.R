@@ -105,3 +105,52 @@ dev.off()
 ## FONTS
 # AHDN font: https://www.fontspace.com/ahdn-font-f5443
 # Beatles icons font: https://www.fontspace.com/jamon-del-mar-font-f5444
+
+
+## Waffle chart with the songs ordered by sequence -----------------------------
+
+beatles_prep |> 
+  filter(album_name == "Please Please Me") |> 
+  ggplot(aes(group = track_number, color = mode_name, 
+             fill = factor(track_number), values = 1)) +
+  geom_waffle(n_rows = 4, size = 1, width = 0.8, height = 0.8, radius = unit(0.2, "npc")) +
+  scale_y_reverse() +
+  coord_equal()
+
+beatles_prep |> 
+  filter(album_name == "Please Please Me") |> 
+  ggplot(aes(group = track_number, fill = mode_name, values = 1)) +
+  geom_waffle(n_rows = 4, width = 0.8, height = 0.8, radius = unit(0.2, "npc")) +
+  coord_equal()
+
+ragg::agg_png(here(base_path, "09-major-minor-beatles-song-sequence.png"), width = 6, height = 4.6,
+              bg = "grey90", scaling = 1/1.3, units = "in", res = 300)
+beatles_prep |> 
+  ggplot(aes(group = track_number, fill = mode_name, values = 1)) +
+  geom_waffle(n_rows = 4, width = 0.8, height = 0.8, radius = unit(0.2, "npc")) +
+  scale_fill_manual(values = c("#FFD600", "#512DA8")) +
+  coord_equal() +
+  facet_wrap(
+    vars(album_name), ncol = 4, labeller = as_labeller(function(x) str_wrap(x, 20))) +
+  guides(fill = "none") +
+  labs(
+    title = "The Beatles Modes",
+    subtitle = "Each box represents a song on an album. 
+    The colour indicates whether a song is in a 
+    <b style='color:#FFD600'>major</b> or <b style='color:#512DA8'>minor</b>
+    key.",
+    caption = "Source: Spotify API. Visualization: Ansgar Wolsing"
+  )
+
+# Add the Beatles picture
+img_x_pos <- seq(0.30, 0.60, 0.09)
+walk2(
+  img_x_pos, beatles_font_mapping,
+  function(x, label) {
+    grid.text(
+      label = label, 
+      x = x, y = 0.14,
+      gp = gpar(fontfamily = "JAMON del MAR", cex = 3))
+  }
+)
+dev.off()
