@@ -201,10 +201,10 @@ episodes_with_annotations <- c(7, 30, 52, 85, 107, 153)
 annotations <- tibble(
   sequential_episode_id = episodes_with_annotations,
   season = c(2:6, 8),
-  label_y = c(0.55, -0.2, 0.55, -0.08, 0.75, -0.02),
+  label_y = c(0.55, -0.2, 0.55, -0.08, 0.77, -0.02),
   segment_x = episodes_with_annotations,
   segment_xend = episodes_with_annotations,
-  segment_y = c(0.419, -0.2, 0.457, -0.08, 0.584, -0.02),
+  segment_y = c(0.419, -0.2, 0.457, -0.08, 0.64, -0.02),
   segment_yend = c(0.23, -0.05, 0.23, 0, 0.45, 0.08),
   vjust = 1,
   description = c(
@@ -212,7 +212,7 @@ annotations <- tibble(
     "Jim works in Stamford,<br>a separate Dunder Mifflin branch",
     "Pam and Jim start dating",
     "Pam studies graphic design<br>in NYC",
-    "Pam and Jim get married<br> in episode 4, their daughter is born<br>
+    "Pam and Jim get married in episode 4,<br>their daughter is born
     in episode 18",
     "Jim is in Tallahassee<br>for a \"Special Project\"")
 )
