@@ -186,7 +186,8 @@ subtitle = "Spearman's rho tells us how closely the appearances of the character
   Pam Beesly/Halpert and Jim Halpert in the scenes of The Office are related.
   Positive values indicate they often appear together. The higher the value,
   the more likely they are to appear in the same scenes. Negative values indicate that
-  when one character appears, the other is more likely not to be in that scene.    A value of 0 signifies there is no relationship between their appearances.
+  when one character appears, the other is more likely not to be in that scene.
+  A value of 0 signifies there is no relationship between their appearances.
   <br><br>
   <span style='font-size:8pt'>\U2193 Correlation (Spearman's rho)</span><br>",
 caption = "Source: kaggle.com, The Office (US) - Complete Dialogue/Transcript.
