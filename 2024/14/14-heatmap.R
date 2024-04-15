@@ -54,8 +54,11 @@ max_correlation <- max(correlations$correlation)
 # Determine the order of characters by the office setting, e.g. Accouting sitting together
 # First, set the levels by the frequency they appear (that already does some ordering)
 (character_levels_by_setting <- factor(selected_characters, levels = selected_characters))
-character_levels_by_setting <- fct_relevel(character_levels_by_setting, c("Erin", "Angela"), after = 5)
-character_levels_by_setting <- fct_relevel(character_levels_by_setting, "Stanley", after = 10)
+character_levels_by_setting <- fct_relevel(character_levels_by_setting, 
+                                           c("Erin", "Angela"), after = 5)
+character_levels_by_setting <- fct_relevel(character_levels_by_setting, 
+                                           c("Stanley", "Meredith", "Creed", "Kelly"), 
+                                           after = 10)
 
 correlations |> 
   mutate(
@@ -146,7 +149,7 @@ p_base <- correlations |>
     size = "none", 
     fill = guide_colorsteps(title.position = "top")) +
   labs(
-    title = "Who Appears With Whom in The Office",
+    title = "Scranton Shuffle: Who Interacts With Whom?",
     subtitle = "Spearman's rho tells us how closely the appearances of 
     two characters in the scenes of The Office are related. 
     Positive values indicate they often appear together. The higher the value,
