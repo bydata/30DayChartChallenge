@@ -1,7 +1,6 @@
 library(tidyverse)
 library(ggtext)
 library(here)
-library(lubridate)
 
 base_path <- here("2024", "21")
 
