@@ -2,7 +2,7 @@ library(tidyverse)
 library(ggtext)
 library(here)
 
-base_path <- here("2024", "21")
+base_path <- here("2024", "22")
 
 
 #' Source: Kraftfahrtbundesamt
@@ -69,7 +69,7 @@ theme_set(
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_textbox(
-        hjust = 0, color = "grey35", size = 8, width = 1, lineheight = 1.2,
+        hjust = 0, color = "grey35", size = 7.5, width = 0.97, lineheight = 1.2,
         margin = margin(b = 0)),
       plot.caption = element_markdown(hjust = 0, lineheight = 1.1, size = 6),
       plot.margin = margin(rep(4, 4)),
@@ -81,7 +81,7 @@ theme_set(
       strip.text = element_text(
         family = "Libre Franklin Medium", size = 7, color = "grey25",
         margin = margin(t = -1, b = 1)),
-      panel.spacing.x = unit(2, "mm") 
+      panel.spacing.x = unit(0, "mm") 
     )
 )
 
@@ -95,9 +95,10 @@ report_prep |>
     across(c(elektro_total, elektro_elektro), 
            function(x) x / lag(x, 12) - 1, .names = "{.col}_yoy")) |> 
   filter(!is.na(elektro_elektro_yoy)) |> 
-  ggplot(aes(factor(month))) +
+  ggplot(aes(month)) +
   geom_col(aes(y = elektro_elektro_yoy, fill = elektro_elektro_yoy > 0),
            alpha = 0.9, show.legend = FALSE) +
+  scale_x_continuous(expand = expansion(add = c(1.75, 1.75))) +
   scale_y_continuous(
     labels = scales::percent_format(), breaks = seq(-10, 10, 1)) +
   scale_fill_manual(values = c("#d602ee", "#021aee")) +
@@ -111,7 +112,7 @@ report_prep |>
     When the federal government abruptly cancelled the EV purchase subsidies for 
     businesses in September 2023, the
     <span style='color:#d602ee;font-family:\"Libre Franklin SemiBold\"'>
-    registration numbers plumetted immediately</span>. 
+    registration numbers plummeted immediately</span>. 
     Later in 2023, the government also ended the subsidies for private customers.
     <br><br>
     <span style='font-size:7pt;font-family:\"Libre Franklin SemiBold\"'>\U2193
@@ -120,4 +121,4 @@ report_prep |>
     Visualization: Ansgar Wolsing",
     x = NULL, y = NULL
   )
-ggsave(here(base_path, "21-green-energy.png"), width = 5, height = 5)
+ggsave(here(base_path, "22-mobility.png"), width = 5, height = 5)
