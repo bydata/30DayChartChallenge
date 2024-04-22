@@ -52,7 +52,7 @@ report_prep <- report %>%
 
 
 # Custom theme
-colors <- c("#EBEAEC", "#FFFFFF")
+colors <- c("#FBFAFC", "#FFFFFF")
 gradient_fill <- grid::linearGradient(colors, group = FALSE)
 theme_set(
   theme_minimal(base_family = "Libre Franklin") +
