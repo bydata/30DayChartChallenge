@@ -1,5 +1,6 @@
 library(tidyverse)
 library(ggtext)
+library(grid)
 library(here)
 
 base_path <- here("2024", "22")
@@ -86,6 +87,8 @@ theme_set(
 )
 
 
+ragg::agg_png(here(base_path, "22-mobility.png"), width = 5, height = 5, 
+              res = 300, units = "in")
 report_prep |> 
   arrange(date) |> 
   transmute(
@@ -121,4 +124,22 @@ report_prep |>
     Visualization: Ansgar Wolsing",
     x = NULL, y = NULL
   )
-ggsave(here(base_path, "22-mobility.png"), width = 5, height = 5)
+grid.text(
+  label = "Subsidies cancelled\nfor businesses",
+  x = 0.84, y = 0.29,
+  hjust = 0, vjust = 0,
+  gp = gpar(fontfamily = "Libre Franklin", lineheight = 0.8, cex = 0.5)
+)
+grid.lines(x = c(0.845, 0.836), y = c(0.285, 0.16), 
+           gp = gpar(lwd = 0.3),
+           arrow = arrow(length = unit(1, "mm")))
+grid.text(
+  label = "... and for\neveryone",
+  x = 0.89, y = 0.19,
+  hjust = 0, vjust = 0,
+  gp = gpar(fontfamily = "Libre Franklin", lineheight = 0.8, cex = 0.5)
+)
+grid.lines(x = c(0.885, 0.86), y = c(0.18, 0.145), 
+           gp = gpar(lwd = 0.3),
+           arrow = arrow(length = unit(1, "mm")))
+dev.off()
