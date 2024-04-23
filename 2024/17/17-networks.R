@@ -139,10 +139,13 @@ plots <- map2(graphs_per_season, seq_along(graphs_per_season), plot_graph)
   plot_annotation(
     title = "Michael Scott's Network in The Office",
     subtitle= "The thickness of the edges is proportional to the share of scenes
-    the characters appear together with Michael. The top 5 characters per season
-    are shown.",
+    the characters appear together with Michael. 
+    The top 5 characters per season are shown.",
     caption = "Source: kaggle.com, The Office (US) - Complete Dialogue/Transcript.
     Visualization: Ansgar Wolsing") & 
   theme(plot.margin = margin(t = 20, b = 12, l = 20, r = 20)) 
 ggsave(here(base_path, "17-networks.png"),
-       width = 6.5, height = 8.5, scale = 1, dpi = 500)
+       width = 5, height = 6, scale = 1.4, dpi = 500)
+
+
+
