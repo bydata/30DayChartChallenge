@@ -20,9 +20,24 @@ unzip(local_zipfile, exdir = base_path)
 list.files(base_path)
 
 un_pop <- read_csv(local_file)
-chatgpt <- read_csv(here(base_path, "world-population-chatgpt-3.5.csv"))
-gemini <- read_csv(here(base_path, "world-population-gemini.csv"))
+chatgpt <- read_tsv(here(base_path, "world-population-predictions-chatgpt-3.5.tsv"))
+gemini <- read_tsv(here(base_path, "world-population-predictions-gemini.tsv"))
 
+chatgpt_long <- chatgpt |> 
+  pivot_longer(cols = starts_with("run"), names_to = "variant", values_to = "population") |> 
+  transmute(
+    time = year, 
+    source = "ChatGPT-3.5", 
+    variant, 
+    population = 1e9 * population)
+
+gemini_long <- gemini |> 
+  pivot_longer(cols = starts_with("run"), names_to = "variant", values_to = "population") |> 
+  transmute(
+    time = year, 
+    source = "Gemini", 
+    variant, 
+    population = 1e9 * population)
 
 selected_variants <- c("Median PI", "Upper 95 PI", "Lower 95 PI")
 
@@ -32,15 +47,8 @@ df_prep <- un_pop |>
   mutate(
     population = population * 1e3,
     source = "UN World Population Prospects") |> 
-  bind_rows(transmute(chatgpt, time = year, 
-                      source = "ChatGPT-3.5", 
-                      variant = "ChatGPT-3.5", 
-                      population = 1e9 * prediction)) |> 
-  bind_rows(transmute(gemini, 
-                      time = year, 
-                      source = "Gemini",
-                      variant = "Gemini",
-                      population = 1e9 * prediction))
+  bind_rows(chatgpt_long) |> 
+  bind_rows(gemini_long)
 
 
 df_un_pop_ribbon <- un_pop |> 
@@ -91,7 +99,7 @@ theme_set(
 
 df_prep |> 
   filter(!variant %in% c("Lower 95 PI", "Upper 95 PI")) |> 
-  ggplot(aes(time, population, group = variant, color = source)) +
+  ggplot(aes(time, population, group = paste(source, variant), color = source)) +
   geom_ribbon(
     data = df_un_pop_ribbon,
     aes(time, ymin = lower_95_pi, ymax = upper_95_pi, fill = "UN World Population Prospects"),
@@ -108,21 +116,32 @@ df_prep |>
     aes(time, upper_95_pi, color = "UN World Population Prospects"),
     inherit.aes = FALSE,
     linewidth = 0.2, linetype = "dashed") +
-  geom_line(linewidth = 1) +
+  geom_line(
+    aes(linewidth = ifelse(source == "UN World Population Prospects", 0.8, 0.3))) +
+  # Direct labels
   annotate(
     "text",
-    x = c(2065, 2090, 2090),
-    y = c(12.2, 11.2, 10.25) * 1e9,
+    x = c(2065, 2090, 2070),
+    y = c(12.2, 11.2, 10.0) * 1e9,
     label = c("ChatGPT 3.5", "Gemini", "UN"),
     color = c("#26A69A", "#5E35B1", "grey50"),
     family = "Libre Franklin SemiBold"
+  ) +
+  # Nonsense warning
+  annotate(
+    "richtext",
+    x = 2040, y = 14e9,
+    label = "JUST FOR FUN",
+    family = "Libre Franklin", fontface = "bold", size = 7,
+    fill = "#FF0266", color = "white", angle = 10, vjust = 0.5,
+    label.padding = unit(8, "mm")
   ) +
   scale_x_continuous(
     breaks = seq(2020, 2100, 10),
     expand = c(0, 0)
   ) +
   scale_y_continuous(
-    breaks = seq(1, 13, 1) * 1e9,
+    breaks = seq(1, 15, 1) * 1e9,
     expand = expansion(mult = c(0, 0.1)),
     labels = function(x) {
       x <- x / 1e9
@@ -132,21 +151,20 @@ df_prep |>
   scale_color_manual(
     values = c("#26A69A", "#5E35B1", "grey50"),
     aesthetics = c("color", "fill")) +
+  scale_linewidth_identity() +
   coord_cartesian(clip = "off") +
   guides(color = "none", fill = "none") +
   labs(
     title = "Gen AI predicts the world population",
-    subtitle = "Population projections for
-    <span style='font-family:\"Libre Franklin SemiBold\";color:#EC407A'>Africa</span>
-    and <span style='font-family:\"Libre Franklin SemiBold\";color:#26C6DA'>Asia</span>.
-    The <span style='font-family:\"Libre Franklin SemiBold\"'>lines</span> 
-    show the median prediction for each continent, the
-    <span style='font-family:\"Libre Franklin SemiBold\"'>ribbons</span> indicate the 
-    95 % prediction interval.",
+    subtitle = "Predictions from 
+    <span style='font-family:\"Libre Franklin SemiBold\";color:#26A69A'>ChatGPT-3.5</span> (OpenAI)
+    and <span style='font-family:\"Libre Franklin SemiBold\";color:#5E35B1'>Gemini</span> (Google).
+    The <span style='font-family:\"Libre Franklin SemiBold\"'>grey ribbon</span> indicates the 
+    95 % prediction interval and the line the median from the UN World Population Prospects.",
     caption = "<i>Prompt used: \"Predict the world population from 2025 to 2100 in 5 year intervals. 
     Provide a dataset with 2 columns: year, prediction.\"
-    \"Do not use web search\" was added for Gemini.<br><br>
-    Data: UN World Population Prospects 2022. 
+    \"[NO_WEB_SEARCH]\" was added for Gemini.</i><br><br>
+    Data: UN World Population Prospects 2022, ChatGPT-3.5, Gemini. 
     Visualization: Ansgar Wolsing",
     x = NULL, y = NULL
   ) 
