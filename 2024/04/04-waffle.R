@@ -19,12 +19,13 @@ theme_set(
       axis.line = element_blank(),
       plot.title = element_text(
         color = "grey8",
-        family = "Libre Franklin SemiBold", hjust = 0, size = 16,
+        family = "Libre Franklin SemiBold", hjust = 0, size = 14,
         margin = margin(t = 4, b = 4)),
       plot.title.position = "plot",
       plot.subtitle = element_text(
         hjust = 0, color = "grey35", 
         margin = margin(b = 8)),
+      plot.caption = element_markdown(hjust = 0),
       plot.margin = margin(rep(4, 4)),
       legend.position = "top",
       panel.grid = element_blank(),
@@ -74,7 +75,7 @@ df_plot |>
   facet_wrap(vars(category), labeller = as_labeller(toupper)) +
   guides(fill = "none") +
   labs(
-    title = "The top 0.1% have 5 times more total wealth than the bottom 50%",
+    title = "The top 0.1% have 5 times more total wealth than the bottom 50% combined",
     subtitle = "Net worth distribution in the U.S. (2023 Q3)",
     caption = "Source: Federal Reserve. Visualization: Ansgar Wolsing"
   )
