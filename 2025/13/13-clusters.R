@@ -59,7 +59,9 @@ df_kpi |>
 
 df_kpi_standings <- df_kpi |> 
   inner_join(df_standings, by = join_by(Verein == Club)) |> 
-  filter(!Verein %in% c("Holstein Kiel", "FC St. Pauli"))
+  # Remove Kiel and St. Pauli (2nd division during the period covered) and 
+  # Eintracht Frankfurt (only 6 months)
+  filter(!Verein %in% c("Holstein Kiel", "FC St. Pauli", "Eintracht Frankfurt"))
  
 # Regression model
 mod <- lm(Pts ~ log(Personalaufwand), data = df_kpi_standings)
@@ -86,7 +88,7 @@ df_kpi_standings_clusters <- df_kpi_standings_fitted |>
   bind_cols(cluster = km_result$cluster) 
 
 
-color_pal <- c(MetBrewer::met.brewer("Egypt", direction = 1)[c(1, 2, 4, 3)], "grey50")
+color_pal <- c(MetBrewer::met.brewer("Egypt", direction = 1)[c(2, 4, 1, 3)], "grey50")
 current_matchday <- max(df_standings$MP)
 
 # Calculations for the background area
@@ -108,8 +110,7 @@ ragg::agg_png(here(base_path, "13-clusters.png"), width = 5,
 df_kpi_standings_clusters |> 
   mutate(cluster2 = case_when(
     Verein %in% c("Borussia Mönchengladbach", "SC Freiburg", "VfB Stuttgart",
-                  "RB Leipzig", "FC Bayern München", "FC Heidenheim",
-                  "Werder Bremen") ~ 5, 
+                  "RB Leipzig", "FC Bayern München", "FC Heidenheim") ~ 5, 
     Verein %in% c("Bayer 04 Leverkusen") ~ 4,
     TRUE ~ cluster)) |> 
   ggplot(aes(Personalaufwand * 1e3, Pts)) +
@@ -129,7 +130,7 @@ df_kpi_standings_clusters |>
     aes(label = str_wrap(Verein, 14)), 
     size = 2, segment.size = 0.1, min.segment.length = 0.3,  hjust = 0,
     label.padding = unit(0, "mm"), family = "Roboto Condensed", lineheight = 0.8,
-    fill = NA, # fill = alpha("#F8F8F8", 0.9), 
+    fill = NA, 
     label.size = 0, seed = 1) +
   annotate(
     "label",
@@ -141,7 +142,7 @@ df_kpi_standings_clusters |>
         "Overperforming / above EUR 100M",
         "Overperforming teams with personnel costs below EUR 100M"), 
       24),
-    fill = color_pal[c(3, 2, 4, 1)],
+    fill = color_pal[c(2, 1, 4, 3)],
     col = c("black", "white", "white", "white"),
     size = 2.75, hjust = 0.5, family = "Roboto Condensed Medium", lineheight = 0.9,
     alpha = 0.9, label.size = 0
@@ -156,7 +157,7 @@ df_kpi_standings_clusters |>
     x = 210e6, y = 53, 
     label = sprintf("Regression line: clubs above<br>perform above average 
     (Adj. R<sup>2</sup>: %s)", scales::percent(adj_r2)),
-    color = "grey20", angle = 23, lineheight = 0.9, fill = NA,
+    color = "grey20", angle = 26, lineheight = 0.9, fill = NA,
     family = "Roboto Condensed", hjust = 0, vjust = 1, size = 2, label.size = 0
   ) +
   scale_x_continuous(
