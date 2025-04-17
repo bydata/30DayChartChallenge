@@ -166,8 +166,7 @@ df_kpi_standings_clusters |>
   scale_color_manual(values = color_pal) +
   coord_cartesian(xlim = c(25e6, NA), ylim = c(15, NA), expand = FALSE, clip = "off") +
   labs(
-    title = "Some Bundesliga clubs are more efficient at turning spending into 
-    points than others",
+    title = "How far does a Euro go? Bundesliga spending efficiency",
     subtitle = sprintf("Budget spent on personnel vs. points gained in Bundesliga 2024-25 
     (matchday %d)", current_matchday),
     caption = sprintf("**Note:** Promoted Holstein Kiel and FC St.Pauli are excluded 
@@ -196,6 +195,7 @@ df_kpi_standings_clusters |>
     plot.caption = element_textbox(
       lineheight = 1.1, margin = margin(t = 10, b = 6), hjust = 0, size = 7, width = 1),
     legend.position = "none",
-    plot.margin = margin(t = 4, r = 20, b = 4, l = 8)
+    plot.margin = margin(t = 4, r = 20, b = 4, l = 8),
+    axis.title.x = element_text(size = 9)
   )
 dev.off()
