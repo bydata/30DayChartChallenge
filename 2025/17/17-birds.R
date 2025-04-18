@@ -138,7 +138,7 @@ p <- df_birds |>
     3 days in May 2024. Chart limited to species with more than 5,000 observations.
     1.21 millions birds were counted in total.*
     <br><br>
-    **Source:** NABU, Gärten der Vögel 2024.
+    **Source:** NABU, Stunde der Gartenvögel 2024.
     **Image credit:** Arnold Paul (CC BY-SA 2.5), Bengt Nyman (CC BY-SA 2.0),
     Luc Viatour (CC BY-SA 2.0), Sławek Staszczuk (CC BY-SA 3.0), 
     Marek Szczepanek (CC BY-SA 3.0).
