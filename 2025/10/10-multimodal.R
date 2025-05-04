@@ -41,12 +41,6 @@ df_ess11_prep |>
   facet_grid(rows = vars(cntry), cols = vars(gndr))
 
 
-countries_ordered <- df_ess11_prep |> 
-  group_by(cntry_name) |> 
-  summarize(mean_height = weighted.mean(height)) |> 
-  arrange(-mean_height) |> 
-  pull(cntry_name)
-
 countries_height_by_gender <- df_ess11_prep |> 
   mutate(cntry_name = factor(cntry_name, levels = countries_ordered)) |> 
   group_by(cntry_name, gndr) |> 
@@ -55,6 +49,19 @@ countries_height_by_gender <- df_ess11_prep |>
     .groups = "drop") |> 
   mutate(gndr = case_when(gndr == 1 ~ "male", gndr == 2 ~ "female"))
 
+countries_ordered <- countries_height_by_gender |> 
+  filter(gndr == "female") |> 
+  arrange(-mean_height) |> 
+  pull(cntry_name)
+
+countries_ordered <- countries_height_by_gender |> 
+  mutate(mean_height = round(mean_height)) |> 
+  pivot_wider(id_cols = cntry_name, names_from = "gndr", values_from = "mean_height") |> 
+  arrange(-female, -male) |> 
+  pull(cntry_name)
+
+countries_height_by_gender <- countries_height_by_gender |> 
+  mutate(cntry_name = factor(cntry_name, levels = countries_ordered))
 
 p <- df_ess11_prep |> 
   filter(height >= 110) |> 
@@ -78,7 +85,7 @@ p <- df_ess11_prep |>
     data = countries_height_by_gender,
     aes(mean_height, y = 0, 
         label = paste0(round(mean_height, 0), ifelse(gndr == "male", " cm", "")),
-        hjust = ifelse(gndr == "male", 0.33, 0.67),
+        hjust = ifelse(gndr == "male", 0.3, 0.7),
         col = gndr),
     family = "Roboto Condensed SemiBold", size = 3, vjust = 1.5,
     inherit.aes = FALSE
@@ -104,7 +111,7 @@ p <- df_ess11_prep |>
     <b style='color:#730C6D'>female</b> and
     <b style='color:#18A0AA'>male</b> respondents in the European Social Survey 
     (2023).<br>Vertical lines mark average height by gender.
-    Countries are sorted by average height across genders.",
+    Countries are sorted by average female height.",
     caption = "**Source:** ESS 11 (2023). 
     **Visualization:** Ansgar Wolsing"
   ) +
