@@ -26,13 +26,6 @@ index_mapping <- c(
   "v2x_freexp" = "Freedom of expression"
 )
 
-#' v2x_partipdem Participatory democracy
-#' v2x_delibdem Deliberative democracy
-#' v2x_egaldem Egalitarian democracy
-
-#' v2x_jucon Judicial constraints on the executive
-#' v2xlg_legcon Legislative Constraints
-
 df_vdem_us <-  df_vdem |> 
   filter(country_text_id == "USA", year %in% c(2016, 2017, 2024, 2025)) |> 
   select(country_text_id, year, 
@@ -43,33 +36,6 @@ df_vdem_us <-  df_vdem |>
   mutate(
     index_label = index_mapping[index]
   )
-
-
-#' v2x_polyarchy Electoral democracy
-#' v2x_libdem Liberal democracy
-#' v2x_partipdem Participatory democracy
-#' v2x_delibdem Deliberative democracy
-#' v2x_egaldem Egalitarian democracy
-
-
-# Vergleich Trump I zu Trump II - ggf. 3 Charts: 1) Trump I vs. II LibDem, 2) Trump II detailed indicators, 3) Trump II detailed indicators
-# Vergleich Trump II zu Ungarn, Polen, Türkiye, Serbia
-
-# Als Kontext: Welche Länder waren 2024 auf ähnlichem Niveau? Welche 2025?
-
-df_vdem_us$value[df_vdem_us$index == "v2x_libdem"]
-
-## 2024: Iceland, Netherlands, Canada, Spain, UK
-df_vdem |>
-  filter(year == 2024) |> 
-  select(country_name, country_text_id, v2x_libdem) |> 
-  filter(v2x_libdem >= 0.71 & v2x_libdem <= 0.78)
-
-## 2024: Colombia, Israel, Slovakia
-df_vdem |>
-  filter(year == 2025) |> 
-  select(country_name, country_text_id, v2x_libdem) |> 
-  filter(v2x_libdem >= 0.54 & v2x_libdem <= 0.60)
 
 
 # str_wrap with <br> instead of \n
@@ -89,20 +55,19 @@ str_wrap_html <- function(string, width = 80, indent = 0, exdent = 0, whitespace
 
 
 plot_titles <- list(
-  title = "U.S. Democracy on a slippery slope",
+  title = "Democratic backsliding in the United States",
   subtitle = "The rate at which American democracy is currently being dismantled
     is **without precedent in modern history**.
     Trump's second term has seen a rapid and aggressive concentration of power
     in the presidency. Most severely affected are
     **legislative constraints**, which reached their **lowest point in over 100 years**. 
-    Civil rights and equality before the law, as well as freedom of expression and media,
+    Civil rights and equality before the law, as well as freedom of expression,
     are now at their **lowest levels in 60 years**.
     Autocratizing countries in recent history have taken about a decade
     to experience such a significant decline.",
   caption = "Source: Varieties of Democracy (V-Dem) Project, v16 - March 2026.
     Visualization: Ansgar Wolsing"
 )
-
 
 df_vdem_us |> 
   mutate(admin = ifelse(year %in% c(2016, 2017), "Trump I", "Trump II")) |> 
@@ -121,21 +86,9 @@ df_vdem_us |>
   geom_point(
     aes(size = ifelse(index == "v2x_libdem", 3.5, 2))
   ) +
-  # ggrepel::geom_text_repel(
-  #   data = ~filter(., year %in% c(2017, 2025)) |> 
-  #     mutate(index_label_with_change = sprintf(
-  #       # "%s (%.2f)", index_label, change)),
-  #       "%s (\U0394%.2f)", index_label, change)),
-  #   aes(label = str_wrap(index_label_with_change, 20)),
-  #   hjust = 0, lineheight = 0.9,
-  #   family = "Instrument Sans SemiBold",
-  #   nudge_x = 0.01, direction = "y", force = 0.2,
-  #   min.segment.length = 1
-  # ) +
   geom_richtext(
     data = ~filter(., year %in% c(2017, 2025)) |> 
       mutate(index_label_with_change = sprintf(
-        # "%s (%.2f)", index_label, change)),
         "**\U0394%.2f** | %s", change, index_label)),
     aes(
       y = value + case_when(
@@ -153,7 +106,7 @@ df_vdem_us |>
   ) +
   scale_x_discrete(expand = expansion(mult = c(0.025, 0.9))) +
   scale_y_continuous(expand = expansion(add = c(0.02, 0.005))) +
-  scale_color_manual(values = c("grey30", "#BF0A30", "grey50", "grey10"))+
+  scale_color_manual(values = c("grey25", "#BF0A30", "grey40", "grey10"))+
   scale_size_identity() +
   scale_linewidth_identity() +
   coord_cartesian(ylim = c(0.55, 1), clip = "off") +
@@ -174,116 +127,16 @@ df_vdem_us |>
     plot.subtitle = element_textbox(
       lineheight = 1.25, width = 0.95,
       margin = margin(t = 4, b = 12)),
-    plot.caption = element_markdown(hjust = 1),
+    plot.caption = element_markdown(
+      hjust = 1, margin = margin(t = 6)),
     axis.title.y = element_text(hjust = 1),
     strip.text = element_text(
       family = "Instrument Sans SemiBold", size = 14, hjust = 0.2, color = "grey40"),
     panel.grid = element_blank(),
+    panel.background = element_rect(color = NA, fill = "#F8F8F8"),
+    panel.spacing.x = unit(5, "mm"),
     axis.ticks.y = element_line(linewidth = 0.1),
     axis.ticks.length = unit(0.2, "cm"),
     axis.text.x = element_text(family = "Instrument Sans SemiBold", size = 10, color = "grey40")
   )
 ggsave(here("2026", "04", "04-slope.png"), width = 7.2, height = 6)
-
-# library(patchwork)
-
-# p_subtitle <- ggplot() +
-#   # annotate(
-#   #   GeomTextBox,
-#   #   x = 0, y = 0,
-#   #   label = plot_titles["subtitle"],
-#   #   hjust = 0,
-#   #   family = "Instrument Sans", fill = NA, box.size = 0,
-#   #   box.padding = unit(0, "mm")
-#   # ) +
-#   # coord_cartesian(clip = "off", expand = FALSE) +
-#   labs(
-#     subtitle = plot_titles["subtitle"]
-#   ) +
-#   theme_void() +
-#   theme(
-#     plot.margin = margin(0, 0, 0, 0),
-#     # panel.background = element_rect(color = "blue"),
-#     plot.subtitle = element_textbox(
-#       lineheight = 1.25, width = 0.95)
-#   )
-
-# p <- df_vdem_us |> 
-#   mutate(admin = ifelse(year %in% c(2016, 2017), "Trump I", "Trump II")) |> 
-#   arrange(admin, year) |> 
-#   group_by(admin, index) |> 
-#   mutate(change = last(value) - first(value)) |> 
-#   ungroup() |> 
-#   ggplot(aes(factor(year), value, col = index, group = index)) +
-#   geom_vline(
-#     aes(xintercept = factor(year)),
-#     linewidth = 1.2, col = "grey80"
-#   ) +
-#   geom_line(
-#     aes(linewidth = ifelse(index == "v2x_libdem", 1.8, 0.8))
-#   ) +
-#   geom_point(
-#     aes(size = ifelse(index == "v2x_libdem", 3.5, 2))
-#   ) +
-#   geom_richtext(
-#     data = ~filter(., year %in% c(2017, 2025)) |> 
-#       mutate(index_label_with_change = sprintf(
-#         # "%s (%.2f)", index_label, change)),
-#         "**\U0394%.2f** | %s", change, index_label)),
-#     aes(
-#       y = value + case_when(
-#         admin == "Trump I" & index == "v2xcl_rol" ~ 0.01,
-#         admin == "Trump I" & index == "v2x_jucon" ~ -0.01,
-#         admin == "Trump II" & index == "v2xcl_rol" ~ -0.01,
-#         TRUE ~ 0
-#       ),
-#       label = str_wrap_html(index_label_with_change, 25)
-#     ),
-#     hjust = 0, lineheight = 0.9, fill = NA, label.size = 0, 
-#     nudge_x = 0.02,
-#     family = "Instrument Sans"
-#   ) +
-#   scale_x_discrete(expand = expansion(mult = c(0.025, 0.9))) +
-#   scale_y_continuous(expand = expansion(add = c(0.02, 0.005))) +
-#   scale_color_manual(values = c("grey30", "#BF0A30", "grey50", "grey10"))+
-#   scale_size_identity() +
-#   scale_linewidth_identity() +
-#   coord_cartesian(ylim = c(0.55, 1), clip = "off") +
-#   facet_wrap(vars(admin), scales = "free_x") +
-#   guides(col = "none", size = "none") + 
-#   labs(
-#     x = NULL,
-#     y = "High index value \U2192"
-#   ) +
-#   theme_minimal(base_family = "Instrument Sans") +
-#   theme(
-#     # plot.background = element_rect(fill = "blue"),
-#     plot.title = element_text(
-#       family = "Instrument Sans SemiBold", size = 18),
-#     plot.title.position = "plot",
-#     plot.caption = element_markdown(hjust = 1),
-#     axis.title.y = element_text(hjust = 1),
-#     strip.text = element_text(
-#       family = "Instrument Sans SemiBold", size = 14, hjust = 0.2, color = "grey40"),
-#     panel.grid = element_blank(),
-#     axis.ticks.y = element_line(linewidth = 0.1),
-#     axis.ticks.length = unit(0.2, "cm"),
-#     axis.text.x = element_text(family = "Instrument Sans SemiBold", size = 10, color = "grey40")
-#   )
-  
-
-# p_subtitle + p +
-#   plot_layout(
-#     widths = c(0.33, 0.67)
-#   ) &
-#   plot_annotation(
-#     title = plot_titles["title"],
-#     caption = plot_titles["caption"]
-#   ) &
-#   theme(
-#     plot.title = element_text(
-#       family = "Instrument Sans SemiBold", size = 18),
-#     plot.title.position = "plot",
-#     plot.caption = element_markdown(hjust = 1),
-#     panel.spacing.x = unit(20, "mm"))
-# ggsave(here("2026", "04", "04-slope.png"), width = 8, height = 5)
