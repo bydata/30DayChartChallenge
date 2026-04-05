@@ -30,6 +30,10 @@ p_anim <- df_plot |>
   ggplot() +
   geom_segment(
     aes(x = 0, xend = id, y = type, yend = type),
+    linewidth = 6.5, col = "black"
+  ) +
+  geom_segment(
+    aes(x = 0, xend = id, y = type, yend = type),
     linewidth = 6, col = "white"
   ) +
   geom_vline(
@@ -77,5 +81,5 @@ p_anim <- df_plot |>
   ) +
   transition_states(id_scene)
 
-animate(p_anim, width = 1000, height = 720, res = 150, units = "px", end_pause = 20)
+animate(p_anim, width = 1000, height = 720, res = 150, units = "px", end_pause = 10, rewind = FALSE)
 anim_save(here("2026", "05", "05-experimental.gif"))
