@@ -16,8 +16,9 @@ df_plot <- df |>
     type,
     id_scene = row_number(),
     id = ifelse(id_scene > n, n, id_scene),
-    img = sprintf("<img src='%s' width='50'>",
-      file.path("2026", "05", ifelse(type == "E-Bike", "e-bike.png", "bike.png"))
+    img = sprintf("<img src='%s' width='%d'>",
+      file.path("2026", "05", ifelse(type == "E-Bike", "e-bike.png", "bike.png")),
+      ifelse(type == "E-Bike", 45, 50)
     ),
     label_pos_x = ifelse(id_scene == max(id_scene), n, ""),
     .by = type
