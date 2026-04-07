@@ -72,7 +72,9 @@ df_selected_player_stats <- df_plot |>
   mutate(stat_label = as.character(stat_label))
 
 facet_labels <- df_selected_player_stats |> 
-  mutate(label = paste(pg, paste0("**", stat_label, "**"), "per game")) |> 
+  mutate(label = paste(
+    scales::number(pg, accuracy = 0.1),
+    paste0("**", stat_label, "**"), "per game")) |> 
   select(stat_label, label) |> 
   deframe() 
 
