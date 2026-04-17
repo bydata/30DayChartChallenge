@@ -46,23 +46,23 @@ df |>
 
 # Custom axis labels
 skill_level_labels = c(
-  "<b style='color:#1D2D44;'>Confident swimmer</b>",
-  levels(df$skill_level)[2:3]
+  levels(df$skill_level)[1:2],
+  "<b style='color:#1D2D44;'>Non-swimmer</b>"
 )
 names(skill_level_labels) <- levels(df$skill_level)
 
 df |> 
-  ggplot(aes(fct_rev(skill_level), share)) +
+  ggplot(aes(skill_level, share)) +
   geom_hline(yintercept = 0, linewidth = 0.3, col = "grey30") +
   geom_col(
-    aes(fill = skill_level == "Confident swimmer"),
+    aes(fill = skill_level == "Non-swimmer"),
     width = 0.55
   ) +
   geom_text(
     aes(
       label = scales::percent(share),
       hjust = ifelse(share > 0.20, 1.2, -0.2),
-      col = ifelse(skill_level == "Confident swimmer", "white", "grey2")
+      col = ifelse(skill_level == "Non-swimmer" & share > 0.20, "white", "grey2")
     ),
     family = "Roboto Mono SemiBold"
   ) +
@@ -76,9 +76,12 @@ df |>
   labs(
     title = "In Germany, the swimming ability of children is
     correlated with their parents' income",
-    subtitle = "Almost twice as many children in higher-income households (62%)
-      are <b style='color:#1D2D44'>confident swimmers</b> as in lower-income households (34%).",
-    caption = "***Note:** Household net income (in EUR)*<br><br>
+    subtitle = "Half of the children aged 6 to 10 living in lower-income households
+      <b style='color:#1D2D44'>cannot swim</b> (49%). In higher-income households, it is
+      only about one in eight (12%).",
+    caption = "***Notes:** Household net income (in EUR).
+    Due to rounding, shares within two of the groups do not add up to 100 %.*
+    <br><br>
       **Source:** DLRG/Forsa (2022), Telephone interviews with parents or carers
     of children aged between 6 and 10 in Germany; assessing their children's swimming 
     skills (N=500).
