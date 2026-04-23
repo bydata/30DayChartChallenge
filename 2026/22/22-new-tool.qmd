@@ -1,8 +1,6 @@
 ---
-title: "Untitled"
-format:
-  html:
-    css: styles.css
+title: "Day 22 | New Tool"
+format: html
 ---
 
 Source: Kraftfahrtbundesamt (KBA)
@@ -52,14 +50,15 @@ VISUALISE x AS x, y AS y
 -- lightgrey fill
 DRAW segment
   MAPPING month_date AS x, month_date AS xend, 0 AS y, share_bev AS yend FROM raw
-  SETTING col => '#CCCCCC', linewidth => 4
+  SETTING col => '#8eeffacc', linewidth => 4.5
 -- paths
 DRAW path
+  SETTING color => '#08abbd', linewidth => 1
   ORDER BY x, ord
 -- Tesla contribution
 DRAW segment
   MAPPING month_date AS x, month_date AS xend, 0 AS y, share_tesla AS yend FROM tesla
-  SETTING col => '#333333', linewidth => 3
+  SETTING color => '#333333', linewidth => 3
 -- Annotations
 DRAW text
   MAPPING date AS x, y, label FROM annotations
