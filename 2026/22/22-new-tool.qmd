@@ -1,0 +1,86 @@
+---
+title: "Untitled"
+format:
+  html:
+    css: styles.css
+---
+
+Source: Kraftfahrtbundesamt (KBA)
+https://www.kba.de/DE/Statistik/Produktkatalog/produkte/Fahrzeuge/fz28/fz28_gentab.html?nn=864666
+
+
+```{ggsql}
+WITH raw AS (
+  SELECT
+    month_date,
+    100 * share_bev AS share_bev
+  FROM '../19/df_registrations_combined.csv'
+),
+tesla AS (
+  SELECT
+    month_date,
+    100 * share_tesla::DOUBLE AS share_tesla
+  FROM '../19/df_registrations_combined.csv' 
+  WHERE year >= 2021
+),
+raw_with_prev AS (
+  SELECT
+    month_date,
+    share_bev,
+    LAG(share_bev) OVER (ORDER BY month_date) AS prev_bev
+  FROM raw
+),
+steps AS (
+  SELECT month_date - 15 AS x, share_bev AS y, 1 AS ord FROM raw
+  UNION ALL
+  SELECT month_date - 15 AS x, prev_bev AS y, 0 AS ord
+  FROM raw_with_prev
+  WHERE prev_bev IS NOT NULL
+),
+annotations(date, y, label) AS (VALUES
+  (DATE '2019-07-01', 10,  'June 2020:\nPurchase\nincentive\nintroduced'),
+  (DATE '2020-10-01', 25, 'Fall 2021: Rush before\nscheduled 2021 expiry\nand government change.'),
+  (DATE '2022-09-01', 35.5,  'Dec 2022: Last chance for maximum incentive\nbefore rates decreased in Jan 2023.'),
+  (DATE '2023-10-01', 31.5,  'Aug 2023: Final month for\nincentive for commercial buyers.'),
+  (DATE '2023-12-01', 26,  'Dec 2023: Immediate termination\nof all EV subsidies following\nfederal budget ruling.'),
+  (DATE '2024-01-01', 6.25,  'Black bars: Share of newly\nregistered Tesla cars\n(starting from Jan 2021)')
+)
+
+SELECT x, y, ord FROM steps
+
+VISUALISE x AS x, y AS y
+-- lightgrey fill
+DRAW segment
+  MAPPING month_date AS x, month_date AS xend, 0 AS y, share_bev AS yend FROM raw
+  SETTING col => '#CCCCCC', linewidth => 4
+-- paths
+DRAW path
+  ORDER BY x, ord
+-- Tesla contribution
+DRAW segment
+  MAPPING month_date AS x, month_date AS xend, 0 AS y, share_tesla AS yend FROM tesla
+  SETTING col => '#333333', linewidth => 3
+-- Annotations
+DRAW text
+  MAPPING date AS x, y, label FROM annotations
+  SETTING 
+    fontsize => 7, 
+    typeface => 'Instrument Sans',
+    hjust => 'left',
+    vjust => 'bottom'
+SCALE CONTINUOUS x 
+  VIA date 
+  RENAMING * => '{:time %Y}'
+SCALE CONTINUOUS y
+  RENAMING * => '{}%'
+LABEL
+  title => 'BEV sales driven by government subsidy deadlines and customer anticipations',
+  subtitle => 'Monthly share of battery electric vehicles (BEV) among new car registrations in Germany (in %)',
+  caption => 'Source: Kraftfahrtbundesamt (March 2026). Visualization: Ansgar Wolsing',
+  x => NULL, 
+  y => NULL
+```
+
+<p style="font-size: 0.75em; color: grey; margin-top: 0.25em; padding-left: 2.7em">
+Source: Kraftfahrtbundesamt (March 2026). Visualization: Ansgar Wolsing
+</p>
