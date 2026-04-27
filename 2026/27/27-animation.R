@@ -68,11 +68,12 @@ p <- df_simulated_points |>
       plotting 100 simulated results within the margin of error.
       <br><br>
       *Projected vote share (in %)*",
-    caption = "***Note:** Based on the margin of error reported by the institute
+    caption = "***Notes:** Based on the margin of error reported by the institute
     for a projected vote share of 40% (3%-p) and 10% (2%-p), the margins of error
-    were interpolated linearly.*
+    were interpolated linearly. Missing to 100%: other parties, all below 3%.*
     <br><br>
-    **Source:** Politbarometer April 2026 (Forschungsgruppe Wahlen).
+    **Source:** Politbarometer April 2026 (Forschungsgruppe Wahlen), 
+    N = 1,355 randomly selected German voters, surveyed by telephone and online.
     <br>
     **Visualization:** Ansgar Wolsing",
     x = NULL, y = NULL
@@ -87,7 +88,7 @@ p <- df_simulated_points |>
       width = 0.95, size = 10, lineheight = 1.4),
     plot.caption = element_textbox(
       width = 0.95, hjust = 0, lineheight = 1.3,
-      margin = margin(t = 6, b = 2)),
+      margin = margin(t = 6, b = 8)),
     plot.title.position = "plot",
     plot.caption.position = "plot",
     axis.text.y = element_text(
