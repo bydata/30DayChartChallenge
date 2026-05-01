@@ -12,9 +12,9 @@ library(here)
 
 quintile_labels <- c("0-20", "20-40", "40-60", "60-80", "80-100")
 quintile_labels_long <- c(
-  "1st quintile</span><br><span style='font-family:\"Instrument Sans Medium\"'>(lowest)</span>", 
+  "1st quintile\n(lowest)", 
   "2nd quintile", "3rd quintile", "4th quintile", 
-  "5th quintile</span><br><span style='font-family:\"Instrument Sans Medium\"'>(highest)</span>"
+  "5th quintile\n(highest)"
 )
 names(quintile_labels_long) <- quintile_labels_long
 
@@ -34,52 +34,7 @@ df <- data.frame(
   )
 )
 
-
-## CHART TYPE 1: Transition matrix / Heatmap
-
-df |> 
-  ggplot(aes(quintiles_2023, fct_rev(quintiles_2011))) +
-  geom_tile(
-    aes(fill = share),
-    height = 0.75, width = 0.9, col = "grey10"
-  ) +
-  geom_label(
-    aes(
-      col = ifelse(share > 0.4, "white", "grey4"),
-      label = scales::percent(share)),
-    fill = "#FFFFFF11", label.size = 0,
-    family = "Roboto Mono Medium"
-  ) +
-  scale_x_discrete(position = "top", expand = expansion(mult = c(0.05, 0.05))) +
-  scale_y_discrete(expand = expansion(mult = c(0.05, 0.05))) +
-  scale_color_identity() +
-  scale_fill_distiller(
-    palette = "Greys", direction = 1,
-    breaks = seq(0.1, 1, 0.1),
-    labels = scales::label_percent()
-  ) +
-  guides(fill = guide_legend(nrow = 1)) +
-  labs(
-    x = "2023 \U2192", y = "2011 \U2193",
-    fill = "Share of 2011 quintile"
-  ) +
-  theme_minimal(base_family = "Instrument Sans", paper = "white") +
-  theme(
-    axis.title.x = element_text(hjust = 0),
-    axis.title.y = element_text(angle = 0),
-    legend.position = "top",
-    legend.justification = "right",
-    panel.grid = element_blank()
-  )
-
-
-# caption = "***Notes:** Household net income (in EUR).
-#     Due to rounding, shares within two of the groups do not add up to 100 %.*
-#     <br><br>"
-
-
-## CHART TYPE 2: ALLUVIAL PLOT
-
+# Alluvial plot
 p_alluvial <- df |> 
   mutate(
     across(c(quintiles_2011, quintiles_2023), function(x) quintile_labels_long[x]),
@@ -89,18 +44,31 @@ p_alluvial <- df |>
     aes(axis1 = quintiles_2011, axis2 = quintiles_2023, y = share)) +
   geom_alluvium(
     aes(fill = quintiles_2011),
-    alpha = 0.75, width = 0.25, knot.pos = 0.33, discern = TRUE
+    alpha = 0.6, width = 0.25, knot.pos = 0.33, discern = TRUE
   ) +
   geom_stratum(
     aes(fill = after_stat(stratum)),
     width = 0.25, color = "white", linewidth = 0.4
   ) +
-  geom_richtext(
+  shadowtext::geom_shadowtext(
     aes(label = str_remove(after_stat(stratum), "\\.\\d")),
     stat = "stratum",
-    size = 4, color = "white", family = "Instrument Sans Bold",
+    size = 4.5, color = "white", family = "Instrument Sans Bold",
     fill = NA, label.size = 0,
     discern = TRUE
+  ) +
+  # Label quintile streams
+  annotate(
+    "label",
+    x = 1.5,
+    y = c(0.3, 4.75), 
+    label = c(
+      "63% remain in lowest quintile",
+      "57% remain in highest quintile"
+    ),
+    family = "Instrument Sans SemiBold",
+    color = "grey2", fill = "#FFFFFF66",
+    linewidth = 0
   ) +
   scale_x_discrete(
     limits = c("2011", "2023"), position = "top",
@@ -174,8 +142,8 @@ paper = "white") +
   theme(
     axis.title.x = element_text(hjust = 0),
     axis.title.y = element_text(angle = 0),
-    axis.text.x.top = element_markdown(),
-    axis.text.y.left = element_markdown(),
+    axis.text.x.top = element_text(),
+    axis.text.y.left = element_text(),
     legend.position = "top",
     legend.justification = "right",
     panel.grid = element_blank(),
