@@ -80,7 +80,7 @@ p_alluvial <- df |>
   labs(
     title = "Most wealth mobility occurs in the middle of the wealth distribution",
     subtitle = "The chart tracks the movement of households
-    across the **wealth distribution in Germany** over a **twelve-year period**.
+    across the **wealth distribution in Germany** over a **12-year period**.
     The wealth quintiles divide all surveyed households into
     5 equal-sized groups based on their net wealth - ranging from the 
     20% of households with the lowest wealth (1st quintile) to the 
@@ -138,7 +138,7 @@ p_tab <- df |>
     x = "2023 \U2192", y = "2011 \U2193"
   ) +
   theme_minimal(base_family = "Instrument Sans", base_size = 12, 
-paper = "white") +
+    paper = "white") +
   theme(
     axis.title.x = element_text(hjust = 0),
     axis.title.y = element_text(angle = 0),
