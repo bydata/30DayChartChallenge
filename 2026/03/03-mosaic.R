@@ -3,20 +3,6 @@ library(ggtext)
 library(jsonlite)
 library(here)
 
-# df_astronauts <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-07-14/astronauts.csv")
-
-# df_astronauts <- df_astronauts |> 
-#   select(name, nationality, sex, year_of_birth, mission_number, year_of_mission) |> 
-#   mutate(decade_of_mission = paste0(year_of_mission %/% 10 * 10, "s"))
-
-# df_decades <- df_astronauts |> 
-#   count(decade_of_mission, sex) |> 
-#   mutate(
-#     share = n / sum(n), 
-#     total_n_decade = sum(n),
-#     .by = decade_of_mission)
-
-
 # Source: https://github.com/cosmos-book/cosmos-book.github.io/tree/master/human-spaceflight/data/processed
 df_astronauts <- read_tsv(
   "https://raw.githubusercontent.com/cosmos-book/cosmos-book.github.io/refs/heads/master/human-spaceflight/data/processed/astronauts.tsv",
