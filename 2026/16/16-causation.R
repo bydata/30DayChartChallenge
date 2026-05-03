@@ -65,7 +65,7 @@ df_prep_long <- df_prep |>
   )
 
 
-df_annotations <- tibble(
+df_annotations_timeline <- tibble(
   year = c(1968, 1988, 1996),
   y = c(rep(max(df_prep$notifications_per_100k), 2), 
         max(df_prep$notifications_per_100k) - 150),
@@ -83,19 +83,27 @@ df_prep |>
     span = 0.3, se = FALSE, col = "#021146",
     linewidth = 1.75
   ) +
-  # geom_point(size = 0.5, col = "grey60") +
   geom_vline(
-    data = df_annotations,
+    data = df_annotations_timeline,
     aes(xintercept = year),
     linetype = "dotted"
   ) +
   geom_textbox(
-    data = df_annotations,
+    data = df_annotations_timeline,
     aes(y = y, label = label),
     width = 0.2, fill = "white", box.size = 0,
     family = "Instrument Sans", size = 3.25,
     lineheight = 0.9, hjust = 0, vjust = 1, nudge_x = 0.1,
     box.padding = unit(1, "mm")
+  ) +
+  annotate(
+    "label",
+    x = c(1940, 2010),
+    y = c(1300, 50),
+    label = c("Annual cases", "Smoothed trendline"),
+    fill  = c("grey50", "#021146"),
+    family = "Instrument Sans Medium", col = "white", size = 2.5,
+    hjust = 0
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
