@@ -115,12 +115,15 @@ p <- df_plot |>
     hjust = 0.5, lineheight = 0.9
   ) +
   scale_y_continuous(breaks = seq(0, 100, 10)) +
-  coord_cartesian(clip = "off") +
+  coord_cartesian(ylim = c(NA, 80), clip = "off") +
   labs(
-    title = "The <span style='color: #FFFF00; font-family:\"Instrument Sans Bold\"'>median age</span>
-      of astronauts has increased by 11 years between the 1960s and 2010s",
-    subtitle = "The yellow dots show the median age of astronauts in the year of their mission per decade.
-    Each of the smaller dots represent one astronaut's age.",
+    title = "Experience takes flight",
+    subtitle = "The median age
+      of astronauts increased by 11 years between the 1960s and 2010s.
+      The yellow dots show the
+    <b style='color: #FFFF00; font-family:\"Instrument Sans Bold\"'>median age
+      of astronauts</b> in the year of their mission per decade.
+    Each of the smaller dots represent one astronaut.",
     caption = "**Source:** Mariya Stavnichuk & Tatsuya Corlett (2020). 
     **Visualization:** Ansgar Wolsing"
   ) +
