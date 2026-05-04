@@ -107,8 +107,8 @@ p <- df_plot |>
   annotate(
     GeomTextBox,
     x = 4.2, y = 74,
-    label = "John Glenn was 77 years old when he returned to space in 1998",
-    width = 0.25, col = "grey72", family = "Instrument Sans Medium",
+    label = "<b>John Glenn</b> was 77 years old when he returned to space in 1998",
+    width = 0.25, col = "grey72", family = "Instrument Sans",
     size = 2.5, lineheight = 0.85, fill = NA, box.size = 0,
     vjust = 1
   ) +
