@@ -24,7 +24,6 @@ df_prep <- df |>
     decade_of_mission = year_of_mission %/% 10 * 10
   ) 
 
-
 # Plausibility check
 df_prep |> 
   filter(years_from_selection_to_mission < 0)
@@ -49,21 +48,6 @@ df_prep |>
 df_prep |> 
   summarize(mean(age_first_mission), .by = decade_of_mission) |>
   arrange(decade_of_mission)
-
-df_prep |> 
-  ggplot(aes(years_from_selection_to_mission, factor(decade_of_mission))) +
-  geom_jitter()
-
-df_prep |> 
-  ggplot(aes(years_from_selection_to_mission, factor(decade_of_mission))) +
-  geom_jitter()
-
-
-
-df_prep |> 
-  ggplot(aes(factor(decade_of_mission), years_from_selection_to_mission)) +
-  stat_halfeye()
-
 
  df |> 
    mutate(
@@ -133,7 +117,7 @@ p <- df_plot |>
   scale_y_continuous(breaks = seq(0, 100, 10)) +
   coord_cartesian(clip = "off") +
   labs(
-    title = "The <span style='color: #FFFF00CC; font-family:\"Instrument Sans Bold\"'>median age</span>
+    title = "The <span style='color: #FFFF00; font-family:\"Instrument Sans Bold\"'>median age</span>
       of astronauts has increased by 11 years between the 1960s and 2010s",
     subtitle = "The yellow dots show the median age of astronauts in the year of their mission per decade.
     Each of the smaller dots represent one astronaut's age.",
