@@ -1,7 +1,6 @@
 library(tidyverse)
 library(ggtext)
 library(rmangal)
-# library(igraph)
 library(ggraph)
 library(tidygraph)
 library(here)
